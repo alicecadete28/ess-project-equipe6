@@ -22,7 +22,8 @@ Feature: Publicando Acomodação
     And envio as fotos "foto1.png" e "photo2.png"
     And preencho a descrição da propriedade com "Hotel confortável e relaxante beira-mar"
     And envio as informações preenchidas
-    Then um alerta aparece com a mensagem: "Acomodação não foi publicada com sucesso. Por favor, preencha todos os campos antes de publicar a acomodação."
+    Then um alerta aparece com a mensagem: "Acomodação não foi publicada com sucesso.
+  Por favor, preencha todos os campos antes de publicar a acomodação."
 
 
   Scenario: Acomodação não publicada devido à ausência de foto
@@ -32,7 +33,8 @@ Feature: Publicando Acomodação
     And preencho o preço da propriedade com "R$100,00"
     And preencho a descrição da propriedade com "Hotel confortável e relaxante beira-mar"
     And envio as informações preenchidas
-    Then um alerta aparece com a mensagem: "Acomodação não foi publicada com sucesso. Por favor, envie pelo menos uma foto."
+    Then um alerta aparece com a mensagem: "Acomodação não foi publicada com sucesso.
+  Por favor, envie pelo menos uma foto."
 
   Scenario: Acomodação não publicada devido a erro no preço
     Given that que estou na página "publicar reserva"
@@ -43,4 +45,5 @@ Feature: Publicando Acomodação
     And preencho a descrição da propriedade com "Hotel confortável e relaxante beira-mar"
     And defino um preço inferior ao preço mínimo permitido pelo sistema
     And envio as informações preenchidas
-    Then um alerta aparece com a mensagem: "Acomodação não foi publicada com sucesso. O preço inserido é inferior ao preço mínimo permitido pelo nosso sistema."
+    Then um alerta aparece com a mensagem: "Acomodação não foi publicada com sucesso.
+O preço inserido é inferior ao preço mínimo permitido pelo nosso sistema."
