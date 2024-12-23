@@ -71,3 +71,5 @@ Feature: Publicando Acomodação
     And envio as informações preenchidas
     Then um alerta aparece com a mensagem: "Acomodação não foi publicada com sucesso.
 Por favor, lembre-se de preencher todos os campos antes de publica-la."
+
+#mudanca feita para questao 15
