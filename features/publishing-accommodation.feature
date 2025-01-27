@@ -1,7 +1,11 @@
+#feature
+
 Feature: Publicando Acomodação
   As a Pessoa Jurídica
   I want to publicar minha acomodação
   So that eu posso receber reservas para a minha acomodação
+
+  #scenarios GUI
 
   Scenario: Acomodação Publicada com sucesso
     Given that estou na página "publicar reserva"
@@ -52,6 +56,25 @@ Feature: Publicando Acomodação
   Scenario: Tentativa de preenchimento do preço de uma acomodação com caracteres inválidos
     Given o usuário “Hotel Fazenda” com CNPJ apto está cadastrado no sistema como Pessoa Jurídica
     And o usuário “Hotel Fazenda” está na página “Publicar Acomodação”
-    When o usuário “Hotel Fazenda” preenche o preço com o caracter "#"
+    When o usuário “Hotel Fazenda” preenche o preço com o carácter "#"
     And o usuário tenta enviar as informações
     Then o sistema não permite o usuário enviar a publicação
+
+  #new scenario
+
+  Scenario: Acomodação não publicada com sucesso devido a campos incompletos
+    Given that estou na página "publicar reserva"
+    When preencho os detalhes da propriedade com a opção "wifi" e "tv"
+    And seleciono a opção "2" no número de pessoas acomodadas
+    And preencho o preço da propriedade com o valor "100"
+    And envio as fotos "foto1.png" e "photo2.png"
+    And envio as informações preenchidas
+    Then um alerta aparece com a mensagem: "Acomodação não foi publicada com sucesso.
+  Por favor, lembre-se de preencher todos os campos antes de publica-la."
+
+  Scenario: Tentativa de selecionar uma foto em formato invalido
+    Given o usuário “Hotel Fazenda” com CNPJ apto está cadastrado no sistema como Pessoa Jurídica
+    And o usuário “Hotel Fazenda” está na página “Publicar Acomodação”
+    When o usuário “Hotel Fazenda” tenta selecionar o documento "imagem.pdf"
+    Then o sistema não permite o usuário selecionar esse documento
+
