@@ -70,6 +70,11 @@ Feature: Publicando Acomodação
     And envio as fotos "foto1.png" e "photo2.png"
     And envio as informações preenchidas
     Then um alerta aparece com a mensagem: "Acomodação não foi publicada com sucesso.
-Por favor, lembre-se de preencher todos os campos antes de publica-la."
+  Por favor, lembre-se de preencher todos os campos antes de publica-la."
 
-#mudanca feita para questao 15
+  Scenario: Tentativa de selecionar uma foto em formato invalido
+    Given o usuário “Hotel Fazenda” com CNPJ apto está cadastrado no sistema como Pessoa Jurídica
+    And o usuário “Hotel Fazenda” está na página “Publicar Acomodação”
+    When o usuário “Hotel Fazenda” tenta selecionar o documento "imagem.pdf"
+    Then o sistema não permite o usuário selecionar esse documento
+
