@@ -1,6 +1,6 @@
-import BaseEntity from './base.entity';
+import BaseModel from './base.model';
 
-export default class RoomEntity extends BaseEntity {
+export default class RoomEntity extends BaseModel {
   pj_id: string;
   description: string;
   type: string;
