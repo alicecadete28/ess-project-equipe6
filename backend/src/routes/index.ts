@@ -2,7 +2,7 @@ import { Express, Router } from 'express';
 import { di } from '../di';
 import TestController from '../controllers/test.controller';
 import TestService from '../services/test.service';
-import { buscarAcomodacoes } from '../controllers/reservation.controller';
+import { buscarAcomodacoes } from '../controllers/findReservation.controller';
 import { filtrarAcomodacoes } from '../controllers/filter.controller';
 import { ordenarAcomodacoes } from '../controllers/order.controller';
 
