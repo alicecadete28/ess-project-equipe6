@@ -78,3 +78,7 @@ The following dependencies are used in the project:
 ## Architecture
 
 To understand and learn more details about the structure of the project, click [here](./docs/architecture-pattern.md) to be redirected to the README that contains this information.
+
+
+## Node version
+-  v22.13.1
