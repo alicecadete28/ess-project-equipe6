@@ -19,9 +19,9 @@ class TestController {
       this.getTests(req, res)
     );
 
-    this.router.get(`${this.prefix}/others`, (req: Request, res: Response) =>
-      this.getOthersTests(req, res)
-    );
+    // this.router.get(`${this.prefix}/others`, (req: Request, res: Response) =>
+    //   this.getOthersTests(req, res)
+    // );
 
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.getTest(req, res)
@@ -46,14 +46,14 @@ class TestController {
     }).handle(res);
   }
 
-  private async getOthersTests(req: Request, res: Response) {
-    const tests = await this.testService.getOtherTests();
+  // private async getOthersTests(req: Request, res: Response) {
+  //   const tests = await this.testService.getOtherTests();
 
-    return new SuccessResult({
-      msg: Result.transformRequestOnMsg(req),
-      data: tests,
-    }).handle(res);
-  }
+  //   return new SuccessResult({
+  //     msg: Result.transformRequestOnMsg(req),
+  //     data: tests,
+  //   }).handle(res);
+  // }
 
   private async getTest(req: Request, res: Response) {
     const test = await this.testService.getTest(req.params.id);

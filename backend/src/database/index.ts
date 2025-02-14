@@ -1,3 +1,4 @@
+import RoomEntity from '../entities/room.entity';
 import TestEntity from '../entities/test.entity';
 
 export default class Database {
@@ -22,10 +23,11 @@ export default class Database {
   static seed() {
     Database.getInstance().data = {
       tests: [
-        new TestEntity({
-          id: '89ecc32a-aec7-4b71-adfd-03287e4ca74f',
-          name: 'Test Seed',
-        }),
+        // new TestEntity({
+        //   id: '89ecc32a-aec7-4b71-adfd-03287e4ca74f',
+        //   name: 'Test Seed',
+        //   cpf: '8888',
+        // }),
       ],
     };
   }

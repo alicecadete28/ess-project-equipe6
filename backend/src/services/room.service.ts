@@ -12,12 +12,8 @@ class RoomService {
   private roomRepository: RoomRepository;
   private otherRepository: OtherRepository;
 
-  constructor(
-    roomRepository: RoomRepository,
-    otherRepository: OtherRepository
-  ) {
+  constructor(roomRepository: RoomRepository) {
     this.roomRepository = roomRepository;
-    this.otherRepository = otherRepository;
   }
 
   public async getRooms(): Promise<RoomEntity[]> {
@@ -43,18 +39,9 @@ class RoomService {
     return roomModel;
   }
 
-  public async createRoom(data: any): Promise<RoomModel> {
-    const roomEntity = new RoomEntity({
-      id: data.id || '',
-      pj_id: data.pj_id,
-      description: data.description,
-      type: data.type,
-      price: data.price,
-      capacity: data.capacity,
-      caracteristics_ids: data.caracteristics_ids || [],
-    });
-    const createdRoomEntity = await this.roomRepository.createRoom(roomEntity);
-    const roomModel = new RoomModel(createdRoomEntity);
+  public async createRoom(data: RoomEntity): Promise<RoomModel> {
+    const roomEntity = await this.roomRepository.createRoom(data);
+    const roomModel = new RoomModel(roomEntity);
 
     return roomModel;
   }

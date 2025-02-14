@@ -10,14 +10,14 @@ class TestServiceMessageCode {
 
 class TestService {
   private testRepository: TestRepository;
-  private otherRepository: OtherRepository;
+  // private otherRepository: OtherRepository;
 
   constructor(
     testRepository: TestRepository,
     otherRepository: OtherRepository
   ) {
     this.testRepository = testRepository;
-    this.otherRepository = otherRepository;
+    // this.otherRepository = otherRepository;
   }
 
   public async getTests(): Promise<TestModel[]> {
@@ -28,13 +28,13 @@ class TestService {
     return testsModel;
   }
 
-  public async getOtherTests(): Promise<TestModel[]> {
-    const testsEntity = await this.otherRepository.getTests();
+  // public async getOtherTests(): Promise<TestModel[]> {
+  //   const testsEntity = await this.otherRepository.getTests();
 
-    const testsModel = testsEntity.map((test) => new TestModel(test));
+  //   const testsModel = testsEntity.map((test) => new TestModel(test));
 
-    return testsModel;
-  }
+  //   return testsModel;
+  // }
 
   public async getTest(id: string): Promise<TestModel> {
     const testEntity = await this.testRepository.getTest(id);
