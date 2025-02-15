@@ -1,6 +1,6 @@
-import BaseEntity from './base.entity';
+import BaseModel from './base.model';
 
-export default class RoomEntity extends BaseEntity {
+export default class RoomEntity extends BaseModel {
   pj_id: string;
   description: string;
   type: string;
@@ -11,9 +11,9 @@ export default class RoomEntity extends BaseEntity {
   stars: number;
   ar_condicionado: boolean;
   tv: boolean;
-  wifi: boolean;  
+  wifi: boolean;
   petFriendly: boolean;
-  cafeDaManha: boolean; 
+  cafeDaManha: boolean;
   estacionamento: boolean;
   avaliacao: number;
 
@@ -28,12 +28,12 @@ export default class RoomEntity extends BaseEntity {
     this.caracteristics_ids = data.caracteristics_ids;
     this.local = data.local;
     this.stars = data.stars;
-    this.ar_condicionado = data.ar_condicionado;  
+    this.ar_condicionado = data.ar_condicionado;
     this.tv = data.tv;
     this.wifi = data.wifi;
     this.petFriendly = data.petFriendly;
     this.cafeDaManha = data.cafeDaManha;
-    this.estacionamento = data.estacionamento
+    this.estacionamento = data.estacionamento;
     this.avaliacao = data.avaliacao;
   }
 }
