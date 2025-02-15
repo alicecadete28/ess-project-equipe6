@@ -1,6 +1,5 @@
 import ReservationEntity from '../entities/reservation.entity';
 import RoomEntity from '../entities/room.entity';
-import TestEntity from '../entities/test.entity';
 
 export default class Database {
   data: { [key: string]: any[] };
@@ -28,19 +27,19 @@ export default class Database {
           id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
           pf_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
           room_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
-          check_in: new Date ('2025-03-09'),
-          check_out: new Date ('2025-03-29'),
+          check_in: new Date('2025-03-09'),
+          check_out: new Date('2025-03-29'),
           guests: 2,
           total: 100,
           status: 'Pending',
           rating: 0,
         }),
-        new ReservationEntity({ 
+        new ReservationEntity({
           id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
           pf_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
           room_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
-          check_in: new Date ('2025-03-09'),
-          check_out: new Date ('2025-03-29'),
+          check_in: new Date('2025-03-09'),
+          check_out: new Date('2025-03-29'),
           guests: 2,
           total: 100,
           status: 'Pending',
@@ -86,10 +85,11 @@ export default class Database {
         }),
       ],
       tests: [
-        new TestEntity({
-          id: '89ecc32a-aec7-4b71-adfd-03287e4ca74f',
-          name: 'Test Seed',
-        }),
+        // new TestEntity({
+        //   id: '89ecc32a-aec7-4b71-adfd-03287e4ca74f',
+        //   name: 'Test Seed',
+        //   cpf: '8888',
+        // }),
       ],
     };
   }
