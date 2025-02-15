@@ -14,7 +14,9 @@ export const filtrarAcomodacoes = async (req: Request, res: Response) => {
         const checkOutDate = parseISO(data_volta as string) || addDays(new Date(), 2);
         const numHospedes = Number(num_pessoas) || 2;
 
-        const roomsAdequados = await RoomService.buscarAcomodacoes(destino as string, checkInDate, checkOutDate, numHospedes);
+        
+        const roomService = new RoomService(new RoomRepository());
+        const roomsAdequados = await roomService.buscarAcomodacoes(destino as string, checkInDate, checkOutDate, numHospedes);
 
         const quartosFiltrados = FilterService.filtrarAcomodacoes(roomsAdequados, filtros);
 

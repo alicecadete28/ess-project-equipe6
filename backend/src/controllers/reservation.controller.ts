@@ -10,7 +10,7 @@ export async function createReservation(req: Request, res: Response) {
     const newReservation = await reservationService.createReservation({
       pf_id,
       room_id,
-      availability_id,
+     // availability_id, --> erro aqui
       check_in: new Date(check_in),
       check_out: new Date(check_out),
       guests,

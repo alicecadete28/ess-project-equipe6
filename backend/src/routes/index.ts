@@ -13,16 +13,14 @@ import RoomService from '../services/room.service';
 const router = Router();
 const prefix = '/api';
 
-router.get('/buscar-acomodacoes', buscarAcomodacoes);
-router.get('/filtrar-acomodacoes', filtrarAcomodacoes);
-router.get('/ordenar-acomodacoes', ordenarAcomodacoes);
+router.get('/api/buscar-acomodacoes', buscarAcomodacoes);
+router.get('/api/filtrar-acomodacoes', filtrarAcomodacoes);
+router.get('/api/ordenar-acomodacoes', ordenarAcomodacoes);
 
 export default (app: Express) => {
   app.use('/', new AuthController(router, di.getService(AuthService)).router);
 
-  app.use(prefix, AuthController.authenticate, (req, res) =>
-    res.json({ test: 'logado' })
-  );
+  app.use(prefix, AuthController.authenticate);
 
   app.use('/api', reservationRoutes);
 };
