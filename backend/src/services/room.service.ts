@@ -2,6 +2,7 @@ import RoomEntity from '../entities/room.entity';
 import RoomModel from '../models/room.model';
 import RoomRepository from '../repositories/room.repository';
 import ReservationRepository from '../repositories/findReservation.repository';
+import PjRepository from '../repositories/pj.repository';
 
 import { HttpNotFoundError } from '../utils/errors/http.error';
 
@@ -11,9 +12,11 @@ class RoomServiceMessageCode {
 
 class RoomService {
   private roomRepository: RoomRepository;
+  private pjRepository: PjRepository;
 
-  constructor(roomRepository: RoomRepository) {
+  constructor(roomRepository: RoomRepository, pjRepository: PjRepository) {
     this.roomRepository = roomRepository;
+    this.pjRepository = pjRepository;
   }
 
   public async getRooms(): Promise<RoomEntity[]> {
@@ -30,6 +33,21 @@ class RoomService {
     if (!roomEntity) {
       throw new HttpNotFoundError({
         msg: 'Room not found',
+        msgCode: RoomServiceMessageCode.room_not_found,
+      });
+    }
+
+    const roomModel = new RoomModel(roomEntity);
+
+    return roomModel;
+  }
+
+  public async getRoomsByPj(id_pj: string): Promise<RoomModel> {
+    const roomEntity = await this.roomRepository.getRoomsByPj(id_pj);
+
+    if (!roomEntity) {
+      throw new HttpNotFoundError({
+        msg: 'No room found',
         msgCode: RoomServiceMessageCode.room_not_found,
       });
     }
@@ -66,7 +84,7 @@ class RoomService {
   }
 
   //BUSCA COM FILTROS
-  async buscarAcomodacoes(
+  static async buscarAcomodacoes(
     destino: string,
     checkIn: Date,
     checkOut: Date,

@@ -45,8 +45,9 @@ if (!checkOut || isNaN(checkOut.getTime())) {
     res.status(400).json({ message: 'Data de ida maior que data de volta' });
   }
   // Chama o Service para buscar as acomodações
-    const roomsAdequados = await RoomService.buscarAcomodacoes(destino as string, checkIn, checkOut, qntHospedes);
-
+  const roomService = new RoomService(new RoomRepository());
+  const roomsAdequados = await roomService.buscarAcomodacoes(destino as string, checkIn, checkOut, qntHospedes);
+  
   console.log('Destino:', destino);
   console.log('Data de ida:', checkIn);
   console.log('Data de volta:', checkOut);

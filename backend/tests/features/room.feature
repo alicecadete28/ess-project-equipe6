@@ -1,0 +1,25 @@
+Feature: Tests
+
+  # API
+  Scenario: Create a room
+    Given o TestRepository não tem um test com nome "room"
+    When uma requisição POST for enviada para "/api/rooms" com o corpo da requisição sendo um JSON com pj_id "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d",
+    description "Room Seed", type "Seed", price "100", capacity "2",  caracteristics_ids ["Seed"],local "Recife", stars "5",
+    ar_condicionado "true",
+    tv "true",
+    wifi "true",
+    petFriendly "true",
+    cafeDaManha "true",
+    estacionamento "true",
+    avaliacao "5"
+
+    Then o status da resposta deve ser "200"
+    And o JSON da resposta deve conter o pj_id "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d",
+description "Room Seed", type "Seed", price "100", capacity "2",  caracteristics_ids ["Seed"],local "Recife", stars "5",
+ar_condicionado "true",
+tv "true",
+wifi "true",
+petFriendly "true",
+cafeDaManha "true",
+estacionamento "true",
+avaliacao "5"

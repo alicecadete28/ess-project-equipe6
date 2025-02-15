@@ -6,7 +6,7 @@ const reservationService = new ReservationService();
 //Criar uma reserva
 export async function createReservation(req: Request, res: Response) {
   try {
-    const { pf_id, room_id, availability_id, check_in, check_out, guests, total } = req.body;
+    const { pf_id, room_id, check_in, check_out, guests, total } = req.body;
     const newReservation = await reservationService.createReservation({
       pf_id,
       room_id,
@@ -14,7 +14,7 @@ export async function createReservation(req: Request, res: Response) {
       check_in: new Date(check_in),
       check_out: new Date(check_out),
       guests,
-      total
+      total,
     });
 
     res.status(201).json(newReservation);
@@ -27,9 +27,12 @@ export async function createReservation(req: Request, res: Response) {
 export async function confirmReservation(req: Request, res: Response) {
   try {
     const { reservationId } = req.params;
-    const updatedReservation = await reservationService.confirmReservation(reservationId);
+    const updatedReservation = await reservationService.confirmReservation(
+      reservationId
+    );
 
-    if (!updatedReservation) return res.status(404).json({ error: 'Reserva não encontrada' });
+    if (!updatedReservation)
+      return res.status(404).json({ error: 'Reserva não encontrada' });
 
     res.json(updatedReservation);
   } catch (error) {
@@ -43,9 +46,14 @@ export async function updateReservationDates(req: Request, res: Response) {
     const { reservationId } = req.params;
     const { check_in, check_out } = req.body;
 
-    const updatedReservation = await reservationService.updateReservationDates(reservationId, new Date(check_in), new Date(check_out));
+    const updatedReservation = await reservationService.updateReservationDates(
+      reservationId,
+      new Date(check_in),
+      new Date(check_out)
+    );
 
-    if (!updatedReservation) return res.status(404).json({ error: 'Reserva não encontrada' });
+    if (!updatedReservation)
+      return res.status(404).json({ error: 'Reserva não encontrada' });
 
     res.json(updatedReservation);
   } catch (error) {
@@ -59,9 +67,13 @@ export async function updateReservationGuests(req: Request, res: Response) {
     const { reservationId } = req.params;
     const { guests } = req.body;
 
-    const updatedReservation = await reservationService.updateReservationGuests(reservationId, guests);
+    const updatedReservation = await reservationService.updateReservationGuests(
+      reservationId,
+      guests
+    );
 
-    if (!updatedReservation) return res.status(404).json({ error: 'Reserva não encontrada' });
+    if (!updatedReservation)
+      return res.status(404).json({ error: 'Reserva não encontrada' });
 
     res.json(updatedReservation);
   } catch (error) {

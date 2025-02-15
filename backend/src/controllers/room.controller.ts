@@ -19,13 +19,14 @@ class RoomController {
       this.getRooms(req, res)
     );
 
-    // this.router.get(`${this.prefix}/others`, (req: Request, res: Response) =>
-    //   this.getOthersTests(req, res)
-    // );
-
     this.router.get(`${this.prefix}/:id`, (req: Request, res: Response) =>
       this.getRoom(req, res)
     );
+
+    this.router.get(`${this.prefix}/pj/:id_pj`, (req: Request, res: Response) =>
+      this.getRoomsByPj(req, res)
+    );
+
     this.router.post(this.prefix, (req: Request, res: Response) =>
       this.createRoom(req, res)
     );
@@ -46,14 +47,14 @@ class RoomController {
     }).handle(res);
   }
 
-  // private async getOthersTests(req: Request, res: Response) {
-  //   const tests = await this.testService.getOtherTests();
+  private async getRoomsByPj(req: Request, res: Response) {
+    const rooms = await this.roomService.getRoomsByPj(req.params.id_pj);
 
-  //   return new SuccessResult({
-  //     msg: Result.transformRequestOnMsg(req),
-  //     data: tests,
-  //   }).handle(res);
-  // }
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: rooms,
+    }).handle(res);
+  }
 
   private async getRoom(req: Request, res: Response) {
     const room = await this.roomService.getRoom(req.params.id);
