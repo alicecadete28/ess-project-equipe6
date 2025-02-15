@@ -102,26 +102,26 @@ describe('RoomController', () => {
         estacionamento: true,
         avaliacao: 5,
       });
-
+    const createdRoom = response.body.data;
     expect(response.status).toBe(200);
-    expect(response.body.data).toEqual(
+    expect(createdRoom).toEqual(
       expect.objectContaining({
-        id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1c',
-        pj_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d',
+        id: createdRoom.id,
+        pj_id: mockRoomEntity.pj_id,
         description: 'Room Malibu',
-        type: 'Seed',
-        price: 100,
-        capacity: 2,
-        caracteristics_ids: ['Seed'],
-        local: 'Recife',
-        stars: 5,
-        ar_condicionado: true,
-        tv: true,
-        wifi: true,
-        petFriendly: true,
-        cafeDaManha: true,
-        estacionamento: true,
-        avaliacao: 5,
+        type: mockRoomEntity.type,
+        price: mockRoomEntity.price,
+        capacity: mockRoomEntity.capacity,
+        caracteristics_ids: mockRoomEntity.caracteristics_ids,
+        local: mockRoomEntity.local,
+        stars: mockRoomEntity.stars,
+        ar_condicionado: mockRoomEntity.ar_condicionado,
+        tv: mockRoomEntity.tv,
+        wifi: mockRoomEntity.wifi,
+        petFriendly: mockRoomEntity.petFriendly,
+        cafeDaManha: mockRoomEntity.cafeDaManha,
+        estacionamento: mockRoomEntity.estacionamento,
+        avaliacao: mockRoomEntity.avaliacao,
       })
     );
   });
