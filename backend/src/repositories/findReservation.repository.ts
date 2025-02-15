@@ -1,27 +1,27 @@
-import ReservationEntity from '../entities/reservation.entity';
+import FindReservationsEntity from '../entities/reservation.entity';
 import BaseRepository from './base.repository';
 
-class ReservationRepository extends BaseRepository<ReservationEntity> {
+class FindReservationRepository extends BaseRepository<FindReservationsEntity> {
   constructor() {
     super('Reservation');
   }
 
-  public async getReservations(): Promise<ReservationEntity[]> {
+  public async getReservations(): Promise<FindReservationsEntity[]> {
     return await this.findAll();
   }
 
-  public async getReservation(id: string): Promise<ReservationEntity | null> {
+  public async getReservation(id: string): Promise<FindReservationsEntity | null> {
     return await this.findOne((item) => item.id === id);
   }
 
-  public async createReservation(data: ReservationEntity): Promise<ReservationEntity> {
+  public async createReservation(data: FindReservationsEntity): Promise<FindReservationsEntity> {
     return await this.add(data);
   }
 
   public async updateReservation(
     id: string,
-    data: ReservationEntity
-  ): Promise<ReservationEntity | null> {
+    data: FindReservationsEntity
+  ): Promise<FindReservationsEntity | null> {
     return await this.update((item) => item.id === id, data);
   }
 
@@ -30,4 +30,5 @@ class ReservationRepository extends BaseRepository<ReservationEntity> {
   }
 }
 
-export default ReservationRepository;
+export default FindReservationRepository;
+

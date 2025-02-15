@@ -6,18 +6,9 @@ const reservationService = new ReservationService();
 //Criar uma reserva
 export async function createReservation(req: Request, res: Response) {
   try {
-    const {
-      pf_id,
-      room_id,
-      // availability_id,
-      check_in,
-      check_out,
-      guests,
-      total,
-    } = req.body;
+    const { pf_id, room_id, check_in, check_out, guests, total } = req.body;
     const newReservation = await reservationService.createReservation({
       pf_id,
-      // availability_id,
       room_id,
       check_in: new Date(check_in),
       check_out: new Date(check_out),
