@@ -68,3 +68,26 @@ export async function updateReservationGuests(req: Request, res: Response) {
     res.status(400).json({ error: (error as Error).message });
   }
 }
+
+//Listar reservas de um quarto
+export async function getReservationsByRoom(req: Request, res: Response){
+  try{
+    const { roomId } = req.params;
+
+    const reservations = await reservationService.getReservationByRoomId(roomId as string);
+    res.json(reservations);
+  } catch (error) {
+    res.status(400).json({error : (error as Error).message});
+  }
+}
+
+export async function getReservationsByPF(req: Request, res: Response){
+  try{
+    const { pfId } = req.params;
+
+    const reservations = await reservationService.getReservationByPFId(pfId as string);
+    res.json(reservations);
+  } catch (error) {
+    res.status(400).json({error : (error as Error).message});
+  }
+}

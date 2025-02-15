@@ -44,4 +44,13 @@ export default class ReservationService {
       { guests }
     );
   }
+
+  public async getReservationByRoomId(roomId: string): Promise<ReservationEntity[] | null> {
+    // console.log(this.reservationRepository.getReservationByRoomId(roomId), "nao entrou");
+    return this.reservationRepository.getReservationByRoomId(roomId);
+  }
+
+  public async getReservationByPFId(pfId: string): Promise<ReservationEntity[] | null> {
+    return this.reservationRepository.getReservationByPFId(pfId);
+  }
 }
