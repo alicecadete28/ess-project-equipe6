@@ -20,13 +20,19 @@ export const filtrarAcomodacoes = async (req: Request, res: Response) => {
 
         const quartosFiltrados = FilterService.filtrarAcomodacoes(roomsAdequados, filtros);
 
-        console.table(quartosFiltrados);
-        res.json(quartosFiltrados);
+if (quartosFiltrados.length === 0) {
+    return res.status(200).json({ message: 'Nenhuma acomodação atende aos filtros selecionados.' });
+}
+
+console.table(quartosFiltrados);
+return res.status(200).json(quartosFiltrados);
+
+        
     } catch (error: unknown) { 
         if (error instanceof Error) { 
-            res.status(500).json({ message: error.message });
+            return res.status(500).json({ message: error.message });
         } else {
-            res.status(500).json({ message: 'Erro desconhecido' });
+            return res.status(500).json({ message: 'Erro desconhecido' });
         }
     }
 };
