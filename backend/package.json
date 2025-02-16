@@ -6,16 +6,19 @@
     "start": "env-cmd -f .env nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "build": "tsc -p .",
     "prod": "node dist/src/index.js",
-    "test": "env-cmd -f .env.test jest --verbose --coverage  --config ./jest.config.js --detectOpenHandles",
+    "test": "env-cmd -f .env.test jest --verbose --coverage --config ./jest.config.js --detectOpenHandles",
     "prettier": "prettier --write 'src/**/*.{ts,js}'",
     "lint": "eslint '**/*.ts' --report-unused-disable-directives --max-warnings 0 --fix",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/jsonwebtoken": "^9.0.8",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "env-cmd": "^10.1.0",
@@ -30,6 +33,7 @@
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.0",
+    "@types/jsonwebtoken": "^9.0.8",
     "@types/node": "^20.3.1",
     "@types/prettier": "^2.7.2",
     "@types/supertest": "^2.0.12",
@@ -37,12 +41,12 @@
     "@typescript-eslint/parser": "^5.51.0",
     "eslint-plugin-no-unused-expressions": "^0.1.0",
     "husky": "^8.0.3",
-    "jest": "^29.5.0",
+    "jest": "^29.7.0",
     "jest-cucumber": "^3.0.1",
     "nodemon": "^2.0.20",
     "prettier": "^2.8.4",
     "supertest": "^6.3.3",
-    "ts-jest": "^29.1.0",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0"
   }
