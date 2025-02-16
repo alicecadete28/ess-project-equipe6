@@ -6,8 +6,7 @@ import { EmailService } from '../services/email.service';
 import RoomRepository from '../repositories/room.repository';
 import RoomService from '../services/room.service';
 import Injector from './injector';
-import FavoriteService from '../services/favorite.service'
-import PfRepository from '../repositories/pf.repository';
+import FavoriteService from '../services/favorite.service';
 import SavedService from '../services/saved.service';
 
 export const di = new Injector();
@@ -41,10 +40,8 @@ di.registerRepository(PfRepository, new PfRepository());
 di.registerService(
   FavoriteService,
   new FavoriteService(di.getRepository(PfRepository))
-  
 );
 di.registerService(
   SavedService,
   new SavedService(di.getRepository(PfRepository))
-  
 );
