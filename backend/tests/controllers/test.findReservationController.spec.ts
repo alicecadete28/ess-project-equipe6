@@ -16,6 +16,29 @@ describe('FindReservationController', () => {
     mockRoomRepository = di.getRepository<RoomRepository>(RoomRepository);
     mockRoomService = new RoomService(mockRoomRepository);
   
+    jest.spyOn(RoomService.prototype, 'buscarAcomodacoes').mockImplementation(async () => [
+        {
+          id: '1',
+          pj_id: 'PJ123',
+          description: 'Quarto confortável com vista para o mar',
+          type: 'Luxo',
+          price: 500,
+          capacity: 2,
+          caracteristics_ids: [],
+          local: 'Recife',
+          stars: 4,
+          ar_condicionado: true,
+          tv: true,
+          wifi: true,
+          petFriendly: false,
+          cafeDaManha: true,
+          estacionamento: true,
+          avaliacao: 4.5,
+        },
+      ]);
+      
+
+    // 🔥 Garante que a função 'buscarAcomodacoes' retorna a acomodação mockada
     jest.spyOn(mockRoomService, 'buscarAcomodacoes').mockImplementation(async () => [
       {
         id: '1',
@@ -111,4 +134,4 @@ expect(resposta.body).toEqual({ message: 'Erro ao buscar acomodações no banco 
 });
 
 // npx jest --verbose --coverage  --config ./jest.config.js --detectOpenHandles ./tests/controllers/test.findReservationController.spec.ts
-// erro 
+
