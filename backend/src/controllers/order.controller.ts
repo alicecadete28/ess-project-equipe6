@@ -1,7 +1,7 @@
 import Database from '../database';
 import { Request, Response } from 'express';
 import RoomRepository from '../repositories/room.repository';
-import ReservationRepository from '../repositories/findReservation.repository';
+import ReservationRepository from '../repositories/reservation.repository';
 import { addDays, parseISO } from 'date-fns';
 
 export const ordenarAcomodacoes = async (req: Request, res: Response) => {

@@ -1,5 +1,5 @@
 import RoomRepository from '../repositories/room.repository';
-import ReservationRepository from '../repositories/findReservation.repository';
+import ReservationRepository from '../repositories/reservation.repository';
 
 class RoomService {
   async buscarAcomodacoes(destino: string, checkIn: Date, checkOut: Date, qntHospedes: number) {

@@ -1,23 +1,21 @@
-import PfRepository from '../repositories/pf.repository';
-import PjRepository from '../repositories/pj.repository';
-import UserRepository from '../repositories/user.repository';
-import { AuthService } from '../services/auth.service';
-import { EmailService } from '../services/email.service';
+import OtherRepository from '../repositories/other.repository';
+import TestRepository from '../repositories/test.repository';
+import TestService from '../services/test.service';
+import ReservationRepository from '../repositories/reservation.repository'; // Import the ReservationRepository
 import Injector from './injector';
 
 export const di = new Injector();
 
-di.registerRepository(UserRepository, new UserRepository());
-di.registerService(EmailService, new EmailService());
-di.registerRepository(PjRepository, new PjRepository());
-di.registerRepository(PfRepository, new PfRepository());
+// Register repositories
+di.registerRepository(TestRepository, new TestRepository());
+di.registerRepository(OtherRepository, new OtherRepository());
+di.registerRepository(ReservationRepository, new ReservationRepository()); // Register the ReservationRepository
 
+// Register services
 di.registerService(
-  AuthService,
-  new AuthService(
-    di.getRepository(UserRepository),
-    di.getRepository(PfRepository),
-    di.getRepository(PjRepository),
-    di.getService(EmailService)
+  TestService,
+  new TestService(
+    di.getRepository(TestRepository),
+    di.getRepository(OtherRepository)
   )
 );
