@@ -19,8 +19,7 @@ export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly pfRepository: PfRepository,
-    private readonly pjRepository: PjRepository,
-    private readonly emailService: EmailService
+    private readonly pjRepository: PjRepository
   ) {}
 
   async login(email: string, password: string): Promise<string> {

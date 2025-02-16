@@ -24,8 +24,7 @@ di.registerService(
   new AuthService(
     di.getRepository(UserRepository),
     di.getRepository(PfRepository),
-    di.getRepository(PjRepository),
-    di.getService(EmailService)
+    di.getRepository(PjRepository)
   )
 );
 
