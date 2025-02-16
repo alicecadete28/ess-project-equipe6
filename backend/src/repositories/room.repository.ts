@@ -14,8 +14,8 @@ class RoomRepository extends BaseRepository<RoomEntity> {
     return await this.findOne((item) => item.id === id);
   }
 
-  public async getRoomsByPj(id_pj: string): Promise<RoomEntity | null> {
-    return await this.findOne((item) => item.pj_id === id_pj);
+  public async getRoomsByPj(id_pj: string): Promise<RoomEntity[] | null> {
+    return await this.findAll((item) => item.pj_id === id_pj);
   }
 
   public async createRoom(data: RoomEntity): Promise<RoomEntity> {
