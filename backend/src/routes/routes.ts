@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { buscarAcomodacoes } from '../controllers/findReservation.controller';
+import { buscarAcomodacoes } from '../controllers/reservation.controller';
 
 const router = Router();
 

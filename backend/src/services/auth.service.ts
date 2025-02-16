@@ -15,7 +15,6 @@ import {
 } from '../utils/errors/http.error';
 
 export class AuthService {
-  // Implementation of the interface properties
   constructor(
     private readonly userRepository: UserRepository,
     private readonly pfRepository: PfRepository,

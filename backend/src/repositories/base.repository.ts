@@ -40,8 +40,9 @@ export default class BaseRepository<T extends BaseEntity> {
       }
       const item = this.db.data[this.prefix].find(filter);
       if (item) {
-        delete data.id;
-        Object.assign(item, data);
+        // Ensure the id is preserved
+        const updatedItem = { ...item, ...data, id: item.id };
+        Object.assign(item, updatedItem);
         return item;
       }
       return null;

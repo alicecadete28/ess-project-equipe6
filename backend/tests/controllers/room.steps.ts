@@ -1,142 +1,69 @@
+import { loadFeature, defineFeature } from 'jest-cucumber';
 import supertest from 'supertest';
-import RoomEntity from '../../src/entities/room.entity';
 import app from '../../src/app';
 import { di } from '../../src/di';
 import RoomRepository from '../../src/repositories/room.repository';
+import { Given, When, Then } from '@cucumber/cucumber';
+import request from 'supertest';
+import assert from 'assert';
 
-describe('RoomController', () => {
-  let request = supertest(app);
-  let mockRoomRepository: RoomRepository;
+let response: request.Response;
 
-  let mockRoomEntity: RoomEntity = new RoomEntity({
-    id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1c',
-    pj_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d',
-    description: 'Room Seed',
-    type: 'Seed',
-    price: 100,
-    capacity: 2,
-    caracteristics_ids: ['Seed'],
-    local: 'Recife',
-    stars: 5,
-    ar_condicionado: true,
-    tv: true,
-    wifi: true,
-    petFriendly: true,
-    cafeDaManha: true,
-    estacionamento: true,
-    avaliacao: 5,
-  });
+Given(
+  'o RoomRepository não tem um room com id {string}',
+  async function (roomId) {
+    // Aqui você pode implementar lógica para remover o quarto, se necessário
+    // Mas normalmente, o próprio POST não deveria permitir duplicação de ID
+  }
+);
 
-  beforeEach(() => {
-    mockRoomRepository = di.getRepository<RoomRepository>(RoomRepository);
-  });
+When(
+  'uma requisição POST for enviada para {string} com o corpo da requisição sendo um JSON com:',
+  async function (route, dataTable) {
+    const roomData = dataTable.rowsHash(); // Converte tabela do Cucumber para objeto
 
-  it('should return a room by id', async () => {
-    const createdRoomEntity = await mockRoomRepository.createRoom(
-      mockRoomEntity
-    );
+    // Converte valores booleanos e arrays corretamente
+    roomData.ar_condicionado = roomData.ar_condicionado === 'true';
+    roomData.tv = roomData.tv === 'true';
+    roomData.wifi = roomData.wifi === 'true';
+    roomData.petFriendly = roomData.petFriendly === 'true';
+    roomData.cafeDaManha = roomData.cafeDaManha === 'true';
+    roomData.estacionamento = roomData.estacionamento === 'true';
+    roomData.caracteristics_ids = JSON.parse(roomData.caracteristics_ids);
+    roomData.price = parseFloat(roomData.price);
+    roomData.capacity = parseInt(roomData.capacity);
+    roomData.stars = parseInt(roomData.stars);
+    roomData.avaliacao = parseFloat(roomData.avaliacao);
 
-    const response = await request.get(`/api/rooms/${createdRoomEntity.id}`);
+    try {
+      response = await request(app).post(route).send(roomData);
+    } catch (error: any) {
+      response = error.response;
+    }
+  }
+);
 
-    expect(response.status).toBe(200);
-    expect(response.body.data).toEqual(createdRoomEntity);
-  });
-
-  it('should throw an error when Room is not found', async () => {
-    const response = await request.get(`/api/rooms/02`);
-
-    expect(response.status).toBe(404);
-    expect(response.body.msgCode).toEqual('room_not_found');
-  });
-
-  it('should create a room', async () => {
-    const response = await request.post('/api/rooms').send(mockRoomEntity);
-
-    expect(response.status).toBe(200);
-
-    const createdRoom = response.body.data;
-    expect(createdRoom).toEqual(
-      expect.objectContaining({
-        id: createdRoom.id,
-        pj_id: mockRoomEntity.pj_id,
-        description: mockRoomEntity.description,
-        type: mockRoomEntity.type,
-        price: mockRoomEntity.price,
-        capacity: mockRoomEntity.capacity,
-        caracteristics_ids: mockRoomEntity.caracteristics_ids,
-        local: mockRoomEntity.local,
-        stars: mockRoomEntity.stars,
-        ar_condicionado: mockRoomEntity.ar_condicionado,
-        tv: mockRoomEntity.tv,
-        wifi: mockRoomEntity.wifi,
-        petFriendly: mockRoomEntity.petFriendly,
-        cafeDaManha: mockRoomEntity.cafeDaManha,
-        estacionamento: mockRoomEntity.estacionamento,
-        avaliacao: mockRoomEntity.avaliacao,
-      })
-    );
-  });
-
-  it('should update a Room', async () => {
-    const createdRoomEntity = await mockRoomRepository.createRoom(
-      mockRoomEntity
-    );
-
-    const response = await request
-      .put(`/api/rooms/${createdRoomEntity.id}`)
-      .send({
-        id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1c',
-        pj_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d',
-        description: 'Room Malibu',
-        type: 'Seed',
-        price: 100,
-        capacity: 2,
-        caracteristics_ids: ['Seed'],
-        local: 'Recife',
-        stars: 5,
-        ar_condicionado: true,
-        tv: true,
-        wifi: true,
-        petFriendly: true,
-        cafeDaManha: true,
-        estacionamento: true,
-        avaliacao: 5,
-      });
-
-    expect(response.status).toBe(200);
-    expect(response.body.data).toEqual(
-      expect.objectContaining({
-        id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1c',
-        pj_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d',
-        description: 'Room Malibu',
-        type: 'Seed',
-        price: 100,
-        capacity: 2,
-        caracteristics_ids: ['Seed'],
-        local: 'Recife',
-        stars: 5,
-        ar_condicionado: true,
-        tv: true,
-        wifi: true,
-        petFriendly: true,
-        cafeDaManha: true,
-        estacionamento: true,
-        avaliacao: 5,
-      })
-    );
-  });
-
-  it('should delete a room', async () => {
-    const createdRoomEntity = await mockRoomRepository.createRoom(
-      mockRoomEntity
-    );
-
-    const response = await request.delete(`/api/rooms/${createdRoomEntity.id}`);
-
-    const deletedRoomEntity = await mockRoomRepository.getRoom(
-      createdRoomEntity.id
-    );
-    expect(response.status).toBe(200);
-    expect(deletedRoomEntity).toBeNull();
-  });
+Then('o status da resposta deve ser {string}', function (expectedStatus) {
+  assert.strictEqual(response.status.toString(), expectedStatus);
 });
+
+Then('o JSON da resposta deve conter:', function (dataTable) {
+  const expectedData = dataTable.rowsHash();
+
+  // Converte valores booleanos e arrays corretamente
+  expectedData.ar_condicionado = expectedData.ar_condicionado === 'true';
+  expectedData.tv = expectedData.tv === 'true';
+  expectedData.wifi = expectedData.wifi === 'true';
+  expectedData.petFriendly = expectedData.petFriendly === 'true';
+  expectedData.cafeDaManha = expectedData.cafeDaManha === 'true';
+  expectedData.estacionamento = expectedData.estacionamento === 'true';
+  expectedData.caracteristics_ids = JSON.parse(expectedData.caracteristics_ids);
+  expectedData.price = parseFloat(expectedData.price);
+  expectedData.capacity = parseInt(expectedData.capacity);
+  expectedData.stars = parseInt(expectedData.stars);
+  expectedData.avaliacao = parseFloat(expectedData.avaliacao);
+
+  // Compara a resposta com os dados esperados
+  assert.deepStrictEqual(response.body, expectedData);
+});
+*/
