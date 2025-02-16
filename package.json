@@ -9,5 +9,9 @@
   "devDependencies": {
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.8"
-  }
+  },
+  "scripts": {
+  "test:steps": "cucumber-js tests/controllers/filterController.steps.ts"
+}
+
 }

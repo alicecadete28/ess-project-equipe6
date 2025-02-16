@@ -117,6 +117,8 @@ describe('filtrarAcomodacoes', () => {
         await filtrarAcomodacoes(mockRequest as Request, mockResponse as Response);
 
         expect(statusMock).toHaveBeenCalledWith(500);
-        expect(jsonMock).toHaveBeenCalledWith({ message: 'Erro ao buscar acomodações' });
+        expect(jsonMock).toHaveBeenCalledWith({ message: 'Erro ao buscar acomodações no banco de dados.' });
     });
 });
+
+// npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/services/test.filterService.spec.ts

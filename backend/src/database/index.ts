@@ -77,7 +77,7 @@ export default class Database {
           stars: 5,
           ar_condicionado: true,
           tv: true,
-          wifi: true,
+          wifi: false,
           petFriendly: true,
           cafeDaManha: true,
           estacionamento: true,

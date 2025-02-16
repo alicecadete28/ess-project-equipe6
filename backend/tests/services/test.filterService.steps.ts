@@ -92,7 +92,7 @@ defineFeature(feature, test => {
 
         and('o JSON da resposta deve ser uma lista vazia', () => {
             expect(jsonMock).toHaveBeenCalledWith({ message: "Nenhuma acomodação atende aos filtros selecionados." });
-        });
+        });              
         
         and(/^a mensagem "(.*)" deve ser retornada$/, (message) => {
             expect(jsonMock).toHaveBeenCalledWith({ message });
@@ -203,3 +203,5 @@ defineFeature(feature, test => {
         });
     });
 });
+
+// npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/services/test.filterService.steps.ts
