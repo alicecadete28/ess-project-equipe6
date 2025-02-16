@@ -8,6 +8,11 @@ import PFEntity from '../entities/pf.entity';
 import PJEntity from '../entities/pj.entity';
 import PfRepository from '../repositories/pf.repository';
 import PjRepository from '../repositories/pj.repository';
+import {
+  HttpBadRequestError,
+  HttpNotFoundError,
+  HttpUnauthorizedError,
+} from '../utils/errors/http.error';
 
 export class AuthService {
   // Implementation of the interface properties
@@ -18,22 +23,31 @@ export class AuthService {
     private readonly emailService: EmailService
   ) {}
 
-  // Implementation of the interface methods
   async login(email: string, password: string): Promise<string> {
-    // Implementation
     const user = await this.userRepository.getUserByEmail(email);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new HttpNotFoundError({
+        msg: 'Usuário não encontrado',
+        msgCode: 'user_not_found',
+      });
     }
 
     const isValidPassword = User.isPasswordValid(password, user);
 
-    if (!isValidPassword) throw new Error('Senha inválida');
+    if (!isValidPassword)
+      throw new HttpUnauthorizedError({
+        msg: 'Senha inválida',
+        msgCode: 'invalid_password',
+      });
 
-    const token = jwt.sign({ id: user.id, email }, Env.JWT_SECRET, {
-      expiresIn: '1h',
-    });
+    const token = jwt.sign(
+      { id: user.id, email, type: user.type },
+      Env.JWT_SECRET,
+      {
+        expiresIn: '1h',
+      }
+    );
 
     return token;
   }
@@ -44,7 +58,11 @@ export class AuthService {
   ): Promise<void> {
     const exists = await this.userRepository.getUserByEmail(data.user.email);
 
-    if (exists) throw new Error('Email já cadastrado');
+    if (exists)
+      throw new HttpBadRequestError({
+        msg: 'Email já cadastrado',
+        msgCode: 'email_already_registered',
+      });
 
     const user = await this.userRepository.createUser({
       ...data.user,

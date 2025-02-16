@@ -22,20 +22,21 @@ router.get('/api/filtrar-acomodacoes', filtrarAcomodacoes);
 router.get('/api/ordenar-acomodacoes', ordenarAcomodacoes);
 
 export default (app: Express) => {
-  // app.use('/', new AuthController(router, di.getService(AuthService)).router);
-
-  // app.use(prefix, AuthController.authenticate, (req, res) =>
-  //   res.json({ test: 'logado' })
-  // );
-
   app.use(
     prefix,
-    new RoomController(router, di.getService(RoomService)).router
+    new AuthController(router, di.getService(AuthService)).router
   );
+
+  router.use(AuthController.authenticate); // all routes below line is authenticate, if you want to remove authtetication place the function above this line
 
   app.use(
     prefix,
     new FavoritesController(router, di.getService(FavoriteService)).router
+  );
+
+  app.use(
+    prefix,
+    new RoomController(router, di.getService(RoomService)).router
   );
 
   app.use(
@@ -45,5 +46,11 @@ export default (app: Express) => {
   app.use(prefix, AuthController.authenticate);
 
   app.use('/api', reservationRoutes);
-};
 
+  app.use(
+    prefix,
+    new FavoritesController(router, di.getService(FavoriteService)).router
+  );
+
+  app.use('/api', reservationRoutes);
+};
