@@ -84,7 +84,7 @@ class RoomService {
   }
 
   //BUSCA COM FILTROS
-  static async buscarAcomodacoes(
+  public async buscarAcomodacoes(
     destino: string,
     checkIn: Date,
     checkOut: Date,

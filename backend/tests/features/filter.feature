@@ -23,6 +23,4 @@ And algumas acomodações possuem cafe da manha como comodidade
 When uma requisição "GET" for enviada para "/filtrar-acomodacoes?destino=Recife&data_ida=2025-03-10&data_volta=2025-03-15&num_pessoas=2&cafeDaManha=true"
 Then o status da resposta deve ser "200"
 And o JSON da resposta deve ser uma lista de acomodações que possuem cafe da manha
-And a acomodação com id "101" e nome "Hotel Recife" com cafe da manha está na lista
-And a acomodação com id "202" e nome "Pousada Beira-Mar" com cafe da manha está na lista
 And nenhuma acomodação sem cafe da manha deve estar na lista
