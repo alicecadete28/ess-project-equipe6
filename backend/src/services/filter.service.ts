@@ -16,7 +16,7 @@ class FilterService {
         });
         
         if (quartosFiltrados.length === 0) {
-            throw new Error('Nenhuma acomodação atende aos filtros selecionados.');
+            return[]; // Agora retorna lista vazia corretamente
         }
         
         // Ordena os quartos filtrados do menor preço para o maior

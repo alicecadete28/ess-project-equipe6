@@ -1,5 +1,9 @@
 import { Express, Router } from 'express';
 import { di } from '../di';
+import FavoritesController from '../controllers/favorites.controller';
+import FavoriteService from '../services/favorite.service';
+import SavedController from '../controllers/saved.controller';
+import SavedService from '../services/saved.service';
 
 import { buscarAcomodacoes } from '../controllers/findReservation.controller';
 import { filtrarAcomodacoes } from '../controllers/filter.controller';
@@ -28,7 +32,18 @@ export default (app: Express) => {
     prefix,
     new RoomController(router, di.getService(RoomService)).router
   );
+
+  app.use(
+    prefix,
+    new FavoritesController(router, di.getService(FavoriteService)).router
+  );
+
+  app.use(
+    prefix,
+    new SavedController(router, di.getService(SavedService)).router
+  );
   app.use(prefix, AuthController.authenticate);
 
   app.use('/api', reservationRoutes);
 };
+
