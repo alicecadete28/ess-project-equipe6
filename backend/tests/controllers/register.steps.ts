@@ -108,7 +108,6 @@ defineFeature(feature, (test) => {
           user: { email, password },
           client: { name, cpf, birth_date, phone },
         });
-        console.log(response.body);
       }
     );
 
@@ -184,7 +183,6 @@ defineFeature(feature, (test) => {
             stars,
           },
         });
-        console.log(response.body);
       }
     );
     then(
@@ -259,7 +257,6 @@ defineFeature(feature, (test) => {
             stars,
           },
         });
-        console.log(response.body);
       }
     );
     then(
