@@ -22,6 +22,7 @@ class PfRepository extends BaseRepository<PfEntity> {
     return await this.add(data);
   }
 
+
   public async updatePf(id: string, data: PfEntity): Promise<PfEntity | null> {
     return await this.update((item) => item.id === id, data);
   }
