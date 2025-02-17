@@ -28,7 +28,7 @@ class ReservationRepository extends BaseRepository<ReservationEntity> {
   }
 
   public async deleteReservation(id: string): Promise<void> {
-    await this.delete((item) => item.id !== id);
+    await this.delete((item) => item.id === id);
   }
 
   public async getReservationByRoomId(roomId: string): Promise<ReservationEntity[] | null> {
@@ -37,6 +37,10 @@ class ReservationRepository extends BaseRepository<ReservationEntity> {
 
   public async getReservationByPFId(roomId: string): Promise<ReservationEntity[] | null> {
     return await this.findAll((item) => item.pf_id === roomId);
+  }
+
+  public async cancelReservation(reservationId: string, data: ReservationEntity): Promise<ReservationEntity | null> {
+    return await this.update((item) => item.id === reservationId, data);
   }
 }
 export default ReservationRepository;

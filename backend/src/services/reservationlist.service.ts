@@ -20,11 +20,8 @@ export default class ReservationService {
     return this.reservationRepository.getReservationByPFId(pfId);
   }
 
-//   public async cancelReservation(reservationId: string): Promise<ReservationEntity | null> {
-//     const reservation = await this.reservationRepository.findById(reservationId);
-//     return this.reservationRepository.update(
-//       (reservation) => reservation.id === reservationId,
-//       {  }
-//     );
-//   }
+  //Cancelar reservas
+  public async cancelReservation(reservationId: string): Promise<void> {
+    return this.reservationRepository.deleteReservation(reservationId);
+  }
 }

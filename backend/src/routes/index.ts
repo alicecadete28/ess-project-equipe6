@@ -15,6 +15,7 @@ import { AuthController } from '../controllers/auth.controller';
 import { AuthService } from '../services/auth.service';
 import RoomController from '../controllers/room.controller';
 import RoomService from '../services/room.service';
+import { getReservationsByRoom, getReservationsByPF } from '../controllers/reservationlist.controller';
 
 const router = Router();
 const prefix = '/api';
@@ -24,6 +25,8 @@ router.get('/api/filtrar-acomodacoes', filtrarAcomodacoes);
 router.get('/api/ordenar-acomodacoes', ordenarAcomodacoes);
 router.get('/avaliar-acomodacao', AvaliarAcomodacao);
 router.post('/avaliacoes', AvaliarAcomodacao);
+router.get('/api/reservations/:roomId/room', getReservationsByRoom);
+router.get('/api/reservations/:pfId/pf', getReservationsByPF);
 
 export default (app: Express) => {
   app.use('/', new AuthController(router, di.getService(AuthService)).router);

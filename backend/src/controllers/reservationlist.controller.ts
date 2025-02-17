@@ -34,3 +34,13 @@ export async function getReservationsByPF(req: Request, res: Response){
     res.status(400).json({error : (error as Error).message});
   }
 }
+
+export async function cancelReservation(req: Request, res: Response){
+    try{
+      const { reservationId } = req.params;
+      await reservationService.cancelReservation(reservationId);
+      res.status(204).send();
+    } catch (error) {
+      res.status(400).json({error : (error as Error).message});
+    }
+  }

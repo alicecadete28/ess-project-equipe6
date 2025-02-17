@@ -56,4 +56,11 @@ export default class ReservationService {
     return this.reservationRepository.getReservationByPFId(pfId);
   }
 
+  //Cancelar reservas
+  public async cancelReservation(reservationId: string): Promise<ReservationEntity | null> {
+    return this.reservationRepository.update(
+      (reservation) => reservation.id === reservationId,
+      { status: 'canceled' }
+    );
+  }
 }

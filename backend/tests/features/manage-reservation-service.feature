@@ -19,3 +19,8 @@ Scenario: Return reservations by pj_id
     Given o método getRoomsbyPJ do RoomService chamado para o usuário de pj_id "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d" retorna um array a qual possui o seguinte quarto: room_id "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1c", pj_id "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d", description "Room Seed", type "Seed", price "100", capacity "2",  caracteristics_ids ["Seed"],local "Recife", stars "5", ar_condicionado "true", tv "true", wifi "true", petFriendly "true", cafeDaManha "true", estacionamento "true", avaliacao "5"
     When o método getRoomsByPj do RoomService for chamado com o id "12345678901234"
     Then o array de retorno deve conter o seguinte quarto: room_id "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1c", pj_id "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d", description "Room Seed", type "Seed", price "100", capacity "2",  caracteristics_ids ["Seed"],local "Recife", stars "5", ar_condicionado "true", tv "true", wifi "true", petFriendly "true", cafeDaManha "true", estacionamento "true", avaliacao "5"
+
+Scenario: Cancel reservation
+    Given existe uma reserva de id "1" com status "confirmed"
+    When o método cancelReservation do ReservationService for chamado com o id "1"
+    Then a reserva de id "1" deve ter status "canceled"
