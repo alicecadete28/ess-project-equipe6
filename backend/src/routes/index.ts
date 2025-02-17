@@ -1,9 +1,11 @@
+
 import { Express, Router } from 'express';
 import { di } from '../di';
 import FavoritesController from '../controllers/favorites.controller';
 import FavoriteService from '../services/favorite.service';
 import SavedController from '../controllers/saved.controller';
 import SavedService from '../services/saved.service';
+import { AvaliarAcomodacao } from '../controllers/avaliation.controller';
 
 import { buscarAcomodacoes } from '../controllers/findReservation.controller';
 import { filtrarAcomodacoes } from '../controllers/filter.controller';
@@ -20,6 +22,8 @@ const prefix = '/api';
 router.get('/api/buscar-acomodacoes', buscarAcomodacoes);
 router.get('/api/filtrar-acomodacoes', filtrarAcomodacoes);
 router.get('/api/ordenar-acomodacoes', ordenarAcomodacoes);
+router.get('/avaliar-acomodacao', AvaliarAcomodacao);
+router.post('/avaliacoes', AvaliarAcomodacao);
 
 export default (app: Express) => {
   // app.use('/', new AuthController(router, di.getService(AuthService)).router);
@@ -46,4 +50,3 @@ export default (app: Express) => {
 
   app.use('/api', reservationRoutes);
 };
-

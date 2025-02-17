@@ -1,3 +1,4 @@
+import Database from '../database';
 import { Request, Response } from 'express';
 import ReservationService from '../services/reservation.service';
 
