@@ -1,5 +1,9 @@
 import { Express, Router } from 'express';
 import { di } from '../di';
+import FavoritesController from '../controllers/favorites.controller';
+import FavoriteService from '../services/favorite.service';
+import SavedController from '../controllers/saved.controller';
+import SavedService from '../services/saved.service';
 
 import { buscarAcomodacoes } from '../controllers/findReservation.controller';
 import { filtrarAcomodacoes } from '../controllers/filter.controller';
@@ -13,9 +17,9 @@ import RoomService from '../services/room.service';
 const router = Router();
 const prefix = '/api';
 
-router.get('/buscar-acomodacoes', buscarAcomodacoes);
-router.get('/filtrar-acomodacoes', filtrarAcomodacoes);
-router.get('/ordenar-acomodacoes', ordenarAcomodacoes);
+router.get('/api/buscar-acomodacoes', buscarAcomodacoes);
+router.get('/api/filtrar-acomodacoes', filtrarAcomodacoes);
+router.get('/api/ordenar-acomodacoes', ordenarAcomodacoes);
 
 export default (app: Express) => {
   // app.use('/', new AuthController(router, di.getService(AuthService)).router);
@@ -29,5 +33,17 @@ export default (app: Express) => {
     new RoomController(router, di.getService(RoomService)).router
   );
 
+  app.use(
+    prefix,
+    new FavoritesController(router, di.getService(FavoriteService)).router
+  );
+
+  app.use(
+    prefix,
+    new SavedController(router, di.getService(SavedService)).router
+  );
+  app.use(prefix, AuthController.authenticate);
+
   app.use('/api', reservationRoutes);
 };
+

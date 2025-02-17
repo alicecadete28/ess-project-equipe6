@@ -1,3 +1,4 @@
+import PFEntity from '../entities/pf.entity';
 import ReservationEntity from '../entities/reservation.entity';
 import RoomEntity from '../entities/room.entity';
 
@@ -108,6 +109,18 @@ export default class Database {
         //   name: 'Test Seed',
         //   cpf: '8888',
         // }),
+      ],
+      pfs: [
+        new PFEntity({
+          id: '12732',
+          user_id: '1',
+          name: 'bia',
+          birth_date: new Date(2000, 0, 9),
+          cpf: '28173891',
+          phone: '98171-2882',
+          favorites: ['12', '22', '32'],
+          savedRooms:  ['12', '222', '32'],
+        }),
       ],
     };
   }
