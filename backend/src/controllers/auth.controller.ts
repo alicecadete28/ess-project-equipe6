@@ -50,7 +50,7 @@ export class AuthController {
 
     if (!token) return res.status(401).json({ error: 'Token not provided' });
 
-    const { id } = AuthService.validateToken(token);
+    const { id } = AuthService.validateToken(token.split(' ')[1]);
 
     req.body.userId = id;
 

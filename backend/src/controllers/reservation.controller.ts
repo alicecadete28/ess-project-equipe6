@@ -1,59 +1,82 @@
 import Database from '../database';
 import { Request, Response } from 'express';
-import RoomRepository from '../repositories/room.repository';
-import ReservationRepository from '../repositories/reservation.repository';
-import { addDays, parseISO } from 'date-fns';
-import RoomService from '../services/room.service';
+import ReservationService from '../services/reservation.service';
 
-export const buscarAcomodacoes = async (req: Request, res: Response) => {
-  const { destino, data_ida, data_volta, num_pessoas} = req.query;
+const reservationService = new ReservationService();
 
-  if (!destino) {
-    res.status(400).json({ error: 'O destino é obrigatório.' });
+//Criar uma reserva
+export async function createReservation(req: Request, res: Response) {
+  try {
+    const { pf_id, room_id,check_in, check_out, guests, total } = req.body;
+    const newReservation = await reservationService.createReservation({
+      pf_id,
+      room_id,
+      check_in: new Date(check_in),
+      check_out: new Date(check_out),
+      guests,
+      total,
+    });
+
+    res.status(201).json(newReservation);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
   }
-
-let checkIn: Date;
-if (data_ida) {
-  checkIn = new Date(data_ida as string);
-} else {
-  checkIn = addDays(new Date(), 1);
 }
 
-let checkOut: Date;
-if (data_volta) {
-  checkOut = new Date(data_volta as string);
-} else {
-  checkOut = addDays(new Date(), 2);
-}
+//Confirmar uma reserva
+export async function confirmReservation(req: Request, res: Response) {
+  try {
+    const { reservationId } = req.params;
+    const updatedReservation = await reservationService.confirmReservation(
+      reservationId
+    );
 
-let qntHospedes: number;
-if(num_pessoas){
-  qntHospedes = parseInt(num_pessoas as string);
-}
-else{
-  qntHospedes = 2;
-}
+    if (!updatedReservation)
+      return res.status(404).json({ error: 'Reserva não encontrada' });
 
- // Agora verificamos corretamente se `checkIn` e `checkOut` foram atribuídos corretamente
-if (!checkIn || isNaN(checkIn.getTime())) {
-  return res.status(400).json({ message: 'Data de ida inválida' });
-}
-if (!checkOut || isNaN(checkOut.getTime())) {
-  return res.status(400).json({ message: 'Data de volta inválida' });
-}
-  if(checkIn >= checkOut){
-    res.status(400).json({ message: 'Data de ida maior que data de volta' });
+    res.json(updatedReservation);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
   }
-  // Chama o Service para buscar as acomodações
-    const roomsAdequados = await RoomService.buscarAcomodacoes(destino as string, checkIn, checkOut, qntHospedes);
+}
 
-  console.log('Destino:', destino);
-  console.log('Data de ida:', checkIn);
-  console.log('Data de volta:', checkOut);
-  console.log('Numero de Pessoas:', qntHospedes);
+//Alterar datas da reserva
+export async function updateReservationDates(req: Request, res: Response) {
+  try {
+    const { reservationId } = req.params;
+    const { check_in, check_out } = req.body;
 
-  console.table(roomsAdequados);
-  res.json(roomsAdequados);
-};
+    const updatedReservation = await reservationService.updateReservationDates(
+      reservationId,
+      new Date(check_in),
+      new Date(check_out)
+    );
 
+    if (!updatedReservation)
+      return res.status(404).json({ error: 'Reserva não encontrada' });
 
+    res.json(updatedReservation);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+}
+
+//Alterar quantidade de hóspedes
+export async function updateReservationGuests(req: Request, res: Response) {
+  try {
+    const { reservationId } = req.params;
+    const { guests } = req.body;
+
+    const updatedReservation = await reservationService.updateReservationGuests(
+      reservationId,
+      guests
+    );
+
+    if (!updatedReservation)
+      return res.status(404).json({ error: 'Reserva não encontrada' });
+
+    res.json(updatedReservation);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+}
