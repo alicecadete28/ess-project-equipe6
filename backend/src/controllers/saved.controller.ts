@@ -33,7 +33,7 @@ class SavedController {
   }
 
   private async addSaved(req: Request, res: Response) {
-    const saved = await this.savedService.updateSaved(req.body.saved, req.params.id);
+    const saved = await this.savedService.updateSaved(req.body.savedRooms, req.params.id);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),

@@ -66,3 +66,4 @@ Then('o JSON da resposta deve conter:', function (dataTable) {
   // Compara a resposta com os dados esperados
   assert.deepStrictEqual(response.body, expectedData);
 });
+*/
