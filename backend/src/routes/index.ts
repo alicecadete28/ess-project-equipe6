@@ -37,14 +37,6 @@ export default (app: Express) => {
     prefix,
     new RoomController(router, di.getService(RoomService)).router
   );
-<<<<<<< HEAD
-  //app.use(prefix, AuthController.authenticate);
-
-
-  app.use('/api', reservationRoutes);
-};
-
-=======
 
   app.use(
     prefix,
@@ -59,4 +51,3 @@ export default (app: Express) => {
 
   app.use('/api', reservationRoutes);
 };
->>>>>>> upstream/develop

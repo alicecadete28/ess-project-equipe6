@@ -1,4 +1,4 @@
-/*import { loadFeature, defineFeature } from 'jest-cucumber';
+import { loadFeature, defineFeature } from 'jest-cucumber';
 import { Request, Response } from 'express';
 import RoomService from '../../src/services/room.service';
 import FilterService from '../../src/services/filter.service';
@@ -203,10 +203,8 @@ defineFeature(feature, test => {
         });
     });
 });
-<<<<<<< HEAD
 
 // npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/services/test.filterService.steps.ts
+
 // ok
-=======
-*/
->>>>>>> upstream/develop
+

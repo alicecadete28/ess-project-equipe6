@@ -1,4 +1,4 @@
-/*import { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { parseISO } from 'date-fns';
 import RoomService from '../../src/services/room.service';
 import RoomRepository from '../../src/repositories/room.repository';
@@ -127,11 +127,7 @@ describe('filtrarAcomodacoes', () => {
         expect(jsonMock).toHaveBeenCalledWith({ message: 'Erro ao buscar acomodações no banco de dados.' });
     });
 });
-<<<<<<< HEAD
 
 
 // npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/services/test.filterService.spec.ts
 /// ok
-=======
-*/
->>>>>>> upstream/develop
