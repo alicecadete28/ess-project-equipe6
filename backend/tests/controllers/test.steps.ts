@@ -4,16 +4,17 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import TestRepository from '../../src/repositories/test.repository';
 
-const feature = loadFeature('tests/features/tests.feature');
+
+const feature = loadFeature('tests/features/Saved.feature');
 const request = supertest(app);
 
 defineFeature(feature, (test) => {
   // mocking the repository
-  let mockTestRepository: TestRepository;
+  let mockPfRepository: TestRepository;
   let response: supertest.Response;
 
   beforeEach(() => {
-    mockTestRepository = di.getRepository<TestRepository>(TestRepository);
+    mockPfRepository = di.getRepository<TestRepository>(TestRepository);
   });
 
   test('Create a test', ({ given, when, then, and }) => {
