@@ -8,6 +8,7 @@ import RoomService from '../services/room.service';
 import Injector from './injector';
 import FavoriteService from '../services/favorite.service';
 import SavedService from '../services/saved.service';
+import ReservationRepository from '../repositories/reservation.repository';
 
 export const di = new Injector();
 
@@ -18,6 +19,7 @@ di.registerRepository(PfRepository, new PfRepository());
 
 //Room
 di.registerRepository(RoomRepository, new RoomRepository());
+di.registerRepository(ReservationRepository, new ReservationRepository());
 
 di.registerService(
   AuthService,
