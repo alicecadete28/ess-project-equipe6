@@ -42,19 +42,19 @@ class RoomService {
     return roomModel;
   }
 
-  public async getRoomsByPj(id_pj: string): Promise<RoomModel> {
-    const roomEntity = await this.roomRepository.getRoomsByPj(id_pj);
+  public async getRoomsByPj(id_pj: string): Promise<RoomEntity[]> {
+    const roomsPjEntity = await this.roomRepository.getRoomsByPj(id_pj);
 
-    if (!roomEntity) {
+    if (!roomsPjEntity) {
       throw new HttpNotFoundError({
         msg: 'No room found',
         msgCode: RoomServiceMessageCode.room_not_found,
       });
     }
 
-    const roomModel = new RoomModel(roomEntity);
+    const roomsPjModel = roomsPjEntity.map((room) => new RoomModel(room));
 
-    return roomModel;
+    return roomsPjModel;
   }
 
   public async createRoom(data: RoomEntity): Promise<RoomModel> {
@@ -84,7 +84,7 @@ class RoomService {
   }
 
   //BUSCA COM FILTROS
-  static async buscarAcomodacoes(
+  public async buscarAcomodacoes(
     destino: string,
     checkIn: Date,
     checkOut: Date,

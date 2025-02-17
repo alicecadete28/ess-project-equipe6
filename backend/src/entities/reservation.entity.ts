@@ -9,8 +9,7 @@ export default class ReservationEntity extends BaseEntity {
   guests: number;
   total: number;
   status: string;
-  rating: number;
-  //availability_id:string;
+  rating : {stars: number , comment: string};
 
   constructor(data: ReservationEntity) {
     super(data.id || '');

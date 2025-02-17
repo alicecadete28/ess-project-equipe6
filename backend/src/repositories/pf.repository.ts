@@ -22,11 +22,6 @@ class PfRepository extends BaseRepository<PfEntity> {
     return await this.add(data);
   }
 
-  // public async updatePfFavorite(id:string,data:Array<string>):Promise<void>{
-  //    const pf = await this.getPfById(id);
-  //    pf.favorite = data;
-  //    await this.updatePf(id,pf);
-  // }
 
   public async updatePf(id: string, data: PfEntity): Promise<PfEntity | null> {
     return await this.update((item) => item.id === id, data);

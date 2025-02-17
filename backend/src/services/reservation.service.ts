@@ -15,7 +15,7 @@ export default class ReservationService {
       id: uuidv4(),
       ...data,
       status: 'pending', // Padrão ao criar
-      rating: 0, // Inicializa sem avaliação
+      rating: {stars: 0, comment:""} // Inicializa sem avaliação
     });
 
     return this.reservationRepository.add(newReservation);

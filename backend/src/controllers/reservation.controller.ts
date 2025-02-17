@@ -1,3 +1,4 @@
+import Database from '../database';
 import { Request, Response } from 'express';
 import ReservationService from '../services/reservation.service';
 
@@ -6,7 +7,7 @@ const reservationService = new ReservationService();
 //Criar uma reserva
 export async function createReservation(req: Request, res: Response) {
   try {
-    const { pf_id, room_id, check_in, check_out, guests, total } = req.body;
+    const { pf_id, room_id,check_in, check_out, guests, total } = req.body;
     const newReservation = await reservationService.createReservation({
       pf_id,
       room_id,
