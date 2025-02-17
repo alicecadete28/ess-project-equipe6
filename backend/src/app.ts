@@ -6,6 +6,8 @@ import setupRoutes from './routes/index';
 import { HttpError } from './utils/errors/http.error';
 import { FailureResult } from './utils/result';
 import Database from './database';
+import routes from './routes';
+//import reservationRoutes from './routes/reservation.routes';
 
 const app: express.Express = express();
 app.use(express.json());
@@ -17,6 +19,10 @@ app.use(
 );
 
 setupRoutes(app);
+
+//app.use('/api', reservationRoutes);
+routes(app);
+
 
 app.use(
   (
@@ -36,6 +42,8 @@ app.use(
     }).handle(res);
   }
 );
+
+
 
 // e.g. Seed database with initial data;
 Database.seed();

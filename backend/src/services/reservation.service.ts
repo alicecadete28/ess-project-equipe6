@@ -1,47 +1,56 @@
-import ReservationRepository from '../repositories/reservation.repository';
 import ReservationEntity from '../entities/reservation.entity';
-import { v4 as uuidv4 } from 'uuid';
+import ReservationModel from '../models/reservation.model';
+import ReservationRepository from '../repositories/reservation.repository';
+import { HttpNotFoundError } from '../utils/errors/http.error';
 
-export default class ReservationService {
+class ReservationServiceMessageCode {
+  public static readonly reservation_not_found = 'reservation_not_found';
+}
+
+class ReservationService {
   private reservationRepository: ReservationRepository;
 
-  constructor() {
-    this.reservationRepository = new ReservationRepository();
+  constructor(reservationRepository: ReservationRepository) {
+    this.reservationRepository = reservationRepository;
   }
 
-//Criar uma nova reserva
-  public async createReservation(data: Omit<ReservationEntity, 'id' | 'status' | 'rating'>): Promise<ReservationEntity> {
-    const newReservation = new ReservationEntity({
-      id: uuidv4(),
-      ...data,
-      status: 'pending', // Padrão ao criar
-      rating: 0, // Inicializa sem avaliação
-    });
-
-    return this.reservationRepository.add(newReservation);
+  public async createReservation(data: ReservationEntity): Promise<ReservationModel> {
+    const reservationEntity = await this.reservationRepository.createReservation(data);
+    return new ReservationModel(reservationEntity);
   }
 
-  //Confirmar reserva 
-  public async confirmReservation(reservationId: string): Promise<ReservationEntity | null> {
-    return this.reservationRepository.update(
-      (reservation) => reservation.id === reservationId, // função de filtro procurando a reserva certa pra mudar o status
-      { status: 'confirmed' }
-    );
+  public async confirmReservation(id: string): Promise<ReservationModel> {
+    const reservationEntity = await this.reservationRepository.confirmReservation(id);
+    if (!reservationEntity) {
+      throw new HttpNotFoundError({
+        msg: 'Reservation not found',
+        msgCode: ReservationServiceMessageCode.reservation_not_found,
+      });
+    }
+    return new ReservationModel(reservationEntity);
   }
 
-  //Alterar datas da reserva
-  public async updateReservationDates(reservationId: string, checkIn: Date, checkOut: Date): Promise<ReservationEntity | null> {
-    return this.reservationRepository.update(
-      (reservation) => reservation.id === reservationId,
-      { check_in: checkIn, check_out: checkOut } 
-    );
+  public async updateReservationDates(id: string, check_in: Date, check_out: Date): Promise<ReservationModel> {
+    const reservationEntity = await this.reservationRepository.updateReservationDates(id, check_in, check_out);
+    if (!reservationEntity) {
+      throw new HttpNotFoundError({
+        msg: 'Reservation not found',
+        msgCode: ReservationServiceMessageCode.reservation_not_found,
+      });
+    }
+    return new ReservationModel(reservationEntity);
   }
 
-  //Alterar número de hóspedes
-  public async updateReservationGuests(reservationId: string, guests: number): Promise<ReservationEntity | null> {
-    return this.reservationRepository.update(
-      (reservation) => reservation.id === reservationId,
-      { guests }
-    );
+  public async updateReservationGuests(id: string, guests: number): Promise<ReservationModel> {
+    const reservationEntity = await this.reservationRepository.updateReservationGuests(id, guests);
+    if (!reservationEntity) {
+      throw new HttpNotFoundError({
+        msg: 'Reservation not found',
+        msgCode: ReservationServiceMessageCode.reservation_not_found,
+      });
+    }
+    return new ReservationModel(reservationEntity);
   }
 }
+
+export default ReservationService;

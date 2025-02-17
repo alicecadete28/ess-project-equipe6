@@ -1,82 +1,56 @@
-import { Request, Response } from 'express';
+import { Router, Request, Response } from 'express';
+import { Result, SuccessResult } from '../utils/result';
 import ReservationService from '../services/reservation.service';
 
-const reservationService = new ReservationService();
+class ReservationController {
+  private prefix: string = '/reservations';
+  public router: Router;
+  private reservationService: ReservationService;
 
-//Criar uma reserva
-export async function createReservation(req: Request, res: Response) {
-  try {
-    const { pf_id, room_id,check_in, check_out, guests, total } = req.body;
-    const newReservation = await reservationService.createReservation({
-      pf_id,
-      room_id,
-      //availability_id,
-      check_in: new Date(check_in),
-      check_out: new Date(check_out),
-      guests,
-      total,
-    });
-
-    res.status(201).json(newReservation);
-  } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
+  constructor(router: Router, reservationService: ReservationService) {
+    this.router = router;
+    this.reservationService = reservationService;
+    this.initRoutes();
   }
-}
 
-//Confirmar uma reserva
-export async function confirmReservation(req: Request, res: Response) {
-  try {
-    const { reservationId } = req.params;
-    const updatedReservation = await reservationService.confirmReservation(
-      reservationId
-    );
-
-    if (!updatedReservation)
-      return res.status(404).json({ error: 'Reserva não encontrada' });
-
-    res.json(updatedReservation);
-  } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
+  private initRoutes() {
+    this.router.post(this.prefix, (req: Request, res: Response) => this.createReservation(req, res));
+    this.router.patch(`${this.prefix}/:reservationId/confirm`, (req: Request, res: Response) => this.confirmReservation(req, res));
+    this.router.patch(`${this.prefix}/:reservationId/dates`, (req: Request, res: Response) => this.updateReservationDates(req, res));
+    this.router.patch(`${this.prefix}/:reservationId/guests`, (req: Request, res: Response) => this.updateReservationGuests(req, res));
   }
-}
 
-//Alterar datas da reserva
-export async function updateReservationDates(req: Request, res: Response) {
-  try {
-    const { reservationId } = req.params;
+  private async createReservation(req: Request, res: Response) {
+    const { pf_id, room_id, check_in, check_out, guests, total } = req.body;
+    const newReservation = await this.reservationService.createReservation({ 
+      pf_id, 
+      room_id, 
+      check_in: new Date(check_in), 
+      check_out: new Date(check_out), 
+      guests, total, 
+      status: 'pending', 
+      rating: 0, 
+      confirmed: false, 
+      id:''});
+    return new SuccessResult({ msg: Result.transformRequestOnMsg(req), data: newReservation }).handle(res);
+  }
+
+  private async confirmReservation(req: Request, res: Response) {
+    const updatedReservation = await this.reservationService.confirmReservation(req.params.reservationId);
+    return new SuccessResult({ msg: Result.transformRequestOnMsg(req), data: updatedReservation }).handle(res);
+  }
+
+  private async updateReservationDates(req: Request, res: Response) {
     const { check_in, check_out } = req.body;
-
-    const updatedReservation = await reservationService.updateReservationDates(
-      reservationId,
-      new Date(check_in),
-      new Date(check_out)
-    );
-
-    if (!updatedReservation)
-      return res.status(404).json({ error: 'Reserva não encontrada' });
-
-    res.json(updatedReservation);
-  } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
+    const updatedReservation = await this.reservationService.updateReservationDates(req.params.reservationId, new Date(check_in), new Date(check_out));
+    return new SuccessResult({ msg: Result.transformRequestOnMsg(req), data: updatedReservation }).handle(res);
   }
-}
 
-//Alterar quantidade de hóspedes
-export async function updateReservationGuests(req: Request, res: Response) {
-  try {
-    const { reservationId } = req.params;
+  private async updateReservationGuests(req: Request, res: Response) {
     const { guests } = req.body;
-
-    const updatedReservation = await reservationService.updateReservationGuests(
-      reservationId,
-      guests
-    );
-
-    if (!updatedReservation)
-      return res.status(404).json({ error: 'Reserva não encontrada' });
-
-    res.json(updatedReservation);
-  } catch (error) {
-    res.status(400).json({ error: (error as Error).message });
+    const updatedReservation = await this.reservationService.updateReservationGuests(req.params.reservationId, guests);
+    return new SuccessResult({ msg: Result.transformRequestOnMsg(req), data: updatedReservation }).handle(res);
   }
 }
+
+export default ReservationController;

@@ -1,11 +1,12 @@
-import express from 'express';
-import { createReservation, confirmReservation, updateReservationDates, updateReservationGuests } from '../controllers/reservation.controller';
+////import express from 'express';
+//import { createReservation, confirmReservation, updateReservationDates, updateReservationGuests } from '../controllers/reservation.controller';
+//import { AuthController } from '../controllers/auth.controller';
 
-const router = express.Router();
+//const router = express.Router();
 
-router.post('/reservations', createReservation);
-router.patch('/reservations/:reservationId/confirm', confirmReservation);
-router.patch('/reservations/:reservationId/dates', updateReservationDates);
-router.patch('/reservations/:reservationId/guests', updateReservationGuests);
+//router.post('/api/reservations', createReservation);
+//router.patch('/api/reservations/confirm', confirmReservation);
+//router.patch('/api/reservations/dates', updateReservationDates);
+//router.patch('/api/reservations/guests',updateReservationGuests);
 
-export default router;
+//export default router;

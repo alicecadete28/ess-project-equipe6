@@ -53,6 +53,8 @@ export class AuthController {
     const { id } = AuthService.validateToken(token.split(' ')[1]);
 
     req.body.userId = id;
+    console.log('User ID:', id);
+
 
     next();
   }

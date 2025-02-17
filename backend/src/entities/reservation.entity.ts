@@ -3,14 +3,13 @@ import BaseEntity from './base.entity';
 export default class ReservationEntity extends BaseEntity {
   pf_id: string;
   room_id: string;
-  // availability_id: string;
   check_in: Date;
   check_out: Date;
   guests: number;
   total: number;
   status: string;
   rating: number;
-  //availability_id:string;
+  confirmed: boolean;  // Adiciona a propriedade confirmed
 
   constructor(data: ReservationEntity) {
     super(data.id || '');
@@ -22,5 +21,6 @@ export default class ReservationEntity extends BaseEntity {
     this.total = data.total;
     this.status = data.status;
     this.rating = data.rating;
+    this.confirmed = data.confirmed || false;  // Inicializa como false por padrão
   }
 }
