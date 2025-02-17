@@ -1,3 +1,4 @@
+
 import User from '../entities/user.entity';
 import jwt from 'jsonwebtoken';
 import { EmailService } from './email.service';
@@ -17,7 +18,7 @@ export class AuthService {
     private readonly pjRepository: PjRepository,
     private readonly emailService: EmailService
   ) {}
-
+  
   // Implementation of the interface methods
   async login(email: string, password: string): Promise<string> {
     // Implementation
@@ -27,9 +28,9 @@ export class AuthService {
       throw new Error('User not found');
     }
 
-    const isValidPassword = User.isPasswordValid(password, user);
+    //const isValidPassword = User.isPasswordValid(password, user);
 
-    if (!isValidPassword) throw new Error('Senha inválida');
+    //if (!isValidPassword) throw new Error('Senha inválida');
 
     const token = jwt.sign({ id: user.id, email }, Env.JWT_SECRET, {
       expiresIn: '1h',

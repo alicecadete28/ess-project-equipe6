@@ -1,7 +1,7 @@
 import PfRepository from '../repositories/pf.repository';
 import PjRepository from '../repositories/pj.repository';
 import UserRepository from '../repositories/user.repository';
-import { AuthService } from '../services/auth.service';
+//import { AuthService } from '../services/auth.service';
 import { EmailService } from '../services/email.service';
 import RoomRepository from '../repositories/room.repository';
 import RoomService from '../services/room.service';
@@ -20,7 +20,7 @@ di.registerRepository(ReservationRepository, new ReservationRepository()); // Re
 
 //Room
 di.registerRepository(RoomRepository, new RoomRepository());
-
+/*
 di.registerService(
   AuthService,
   new AuthService(
@@ -29,7 +29,7 @@ di.registerService(
     di.getRepository(PjRepository),
     di.getService(EmailService)
   )
-);
+);*/
 
 di.registerService(
   RoomService,

@@ -46,32 +46,32 @@ defineFeature(feature, (test) => {
     jest.resetAllMocks();
   });
 
-  test('Register an accommodation review successfully', ({ given, when, then }) => {
-    given(/^the ReservationRepository has a reservation with id "(.*)"$/, async (reservationId) => {
+  test('Registrar uma avaliação de acomodação com sucesso', ({ given, when, then }) => {
+    given(/^o Repositório de Reservas tem uma reserva com id "(.*)"$/, async (reservationId) => {
       const existingReservation = await mockReservationRepository.getReservation!(reservationId);
       if (!existingReservation) {
         await mockReservationRepository.createReservation!(mockReservationEntity);
       }
     });
 
-    when(/^a POST request is sent to "(.*)" with the request body being a JSON with stars "(.*)" and comment "(.*)"$/, async (url, stars, comment) => {
+    when(/^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e comentário "(.*)"$/, async (url, stars, comment) => {
       response = await service.avaliarAcomodacao(mockReservationEntity.id, parseInt(stars, 10), comment);
     });
 
-    then(/^the response should contain the message "(.*)"$/, (message) => {
+    then(/^a resposta deve conter a mensagem "(.*)"$/, (message) => {
       expect(response).toEqual(mockReservationEntity);
     });
   });
 
-  test('Return an error when the rating is not between 1 and 5', ({ given, when, then }) => {
-    given(/^the ReservationRepository has a reservation with id "(.*)"$/, async (reservationId) => {
+  test('Retornar um erro quando a nota não estiver entre 1 e 5', ({ given, when, then }) => {
+    given(/^o Repositório de Reservas tem uma reserva com id "(.*)"$/, async (reservationId) => {
       const existingReservation = await mockReservationRepository.getReservation!(reservationId);
       if (!existingReservation) {
         await mockReservationRepository.createReservation!(mockReservationEntity);
       }
     });
 
-    when(/^a POST request is sent to "(.*)" with the request body being a JSON with stars "(.*)" and comment "(.*)"$/, async (url, stars, comment) => {
+    when(/^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e comentário "(.*)"$/, async (url, stars, comment) => {
       try {
         response = await service.avaliarAcomodacao(mockReservationEntity.id, parseInt(stars, 10), comment);
       } catch (error) {
@@ -79,20 +79,20 @@ defineFeature(feature, (test) => {
       }
     });
 
-    then(/^the response should contain the error "(.*)"$/, (error) => {
+    then(/^a resposta deve conter o erro "(.*)"$/, (error) => {
       expect(response.message).toEqual(error);
     });
   });
 
-  test('Limit the comment length to 500 characters', ({ given, when, then }) => {
-    given(/^the ReservationRepository has a reservation with id "(.*)"$/, async (reservationId) => {
+  test('Limitar o comprimento do comentário a 500 caracteres', ({ given, when, then }) => {
+    given(/^o Repositório de Reservas tem uma reserva com id "(.*)"$/, async (reservationId) => {
       const existingReservation = await mockReservationRepository.getReservation!(reservationId);
       if (!existingReservation) {
         await mockReservationRepository.createReservation!(mockReservationEntity);
       }
     });
 
-    when(/^a POST request is sent to "(.*)" with the request body being a JSON with stars "(.*)" and a long comment$/, async (url, stars) => {
+    when(/^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e um comentário longo$/, async (url, stars) => {
       const longComment = 'a'.repeat(600);
       try {
         response = await service.avaliarAcomodacao(mockReservationEntity.id, parseInt(stars, 10), longComment);
@@ -101,7 +101,7 @@ defineFeature(feature, (test) => {
       }
     });
 
-    then(/^the response should contain the error "(.*)"$/, (error) => {
+    then(/^a resposta deve conter o erro "(.*)"$/, (error) => {
       expect(response.message).toEqual(error);
     });
   });
