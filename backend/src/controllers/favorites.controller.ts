@@ -36,7 +36,7 @@ class FavoritesController {
   }
 
   private async addFavorite(req: Request, res: Response) {
-    const favorite = await this.favoriteService.updateFavorite(req.body.favorite, req.params.id);
+    const favorite = await this.favoriteService.updateFavorite(req.body.favorites, req.params.id);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
