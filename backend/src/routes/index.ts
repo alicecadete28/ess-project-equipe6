@@ -1,4 +1,3 @@
-
 import { Express, Router } from 'express';
 import { di } from '../di';
 import FavoritesController from '../controllers/favorites.controller';
@@ -29,16 +28,12 @@ router.get('/api/reservations/:roomId/room', getReservationsByRoom);
 router.get('/api/reservations/:pfId/pf', getReservationsByPF);
 
 export default (app: Express) => {
-  app.use('/', new AuthController(router, di.getService(AuthService)).router);
-
-  // app.use(prefix, AuthController.authenticate, (req, res) =>
-  //   res.json({ test: 'logado' })
-  // );
-
   app.use(
     prefix,
-    new RoomController(router, di.getService(RoomService)).router
+    new AuthController(router, di.getService(AuthService)).router
   );
+
+  router.use(AuthController.authenticate); // all routes below line is authenticate, if you want to remove authtetication place the function above this line
 
   app.use(
     prefix,
@@ -47,9 +42,21 @@ export default (app: Express) => {
 
   app.use(
     prefix,
+    new RoomController(router, di.getService(RoomService)).router
+  );
+
+  app.use(
+    prefix,
     new SavedController(router, di.getService(SavedService)).router
   );
   //app.use(prefix, AuthController.authenticate);
+
+  app.use('/api', reservationRoutes);
+
+  app.use(
+    prefix,
+    new FavoritesController(router, di.getService(FavoriteService)).router
+  );
 
   app.use('/api', reservationRoutes);
 };
