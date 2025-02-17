@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 import { addDays } from 'date-fns';
 import RoomRepository from '../repositories/room.repository';
 import RoomService from '../services/room.service';
+import PjRepository from '../repositories/pj.repository';
 
 export const buscarAcomodacoes = async (req: Request, res: Response) => {
+
   try {
     const { destino, data_ida, data_volta, num_pessoas } = req.query;
     console.log("Parâmetros recebidos:", req.query);
@@ -36,8 +38,13 @@ export const buscarAcomodacoes = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Número de hóspedes inválido.' });
     }
 
-    // Buscar acomodações no serviço
-    const roomService = new RoomService(new RoomRepository());
+    // ✅ Criando instâncias dos repositórios
+    const roomRepository = new RoomRepository();
+    const pjRepository = new PjRepository(); // ✅ Criando instância do PjRepository
+
+    // ✅ Passando os dois repositórios corretamente para RoomService
+    const roomService = new RoomService(roomRepository, pjRepository);
+
     const roomsAdequados = await roomService.buscarAcomodacoes(
       destino as string,
       checkIn,
@@ -67,4 +74,3 @@ export const buscarAcomodacoes = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Erro ao buscar acomodações no banco de dados." });
   }
 };
-

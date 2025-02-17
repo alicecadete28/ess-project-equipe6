@@ -29,5 +29,8 @@ di.registerService(
 
 di.registerService(
   RoomService,
-  new RoomService(di.getRepository(RoomRepository))
+  new RoomService(
+    di.getRepository(RoomRepository),
+    di.getRepository(PjRepository)
+  )
 );

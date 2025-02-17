@@ -5,6 +5,7 @@ import ReservationRepository from '../repositories/findReservation.repository';
 import { addDays, parseISO } from 'date-fns';
 import RoomService from '../services/room.service';
 import FilterService from '../services/filter.service';
+import PjRepository from '../repositories/pj.repository';
 
 export const filtrarAcomodacoes = async (req: Request, res: Response) => {
     try {
@@ -24,12 +25,17 @@ export const filtrarAcomodacoes = async (req: Request, res: Response) => {
 
         const numHospedes = Number(num_pessoas) || 2;
 
-        const roomService = new RoomService(new RoomRepository());
+        //Criando instâncias dos repositórios
+        const roomRepository = new RoomRepository();
+        const pjRepository = new PjRepository();  // Criando instância do PjRepository
+
+        // Passando ambos os repositórios para o RoomService
+        const roomService = new RoomService(roomRepository, pjRepository);
+
         let roomsAdequados;
 
         try {
             roomsAdequados = await roomService.buscarAcomodacoes(destino as string, checkInDate, checkOutDate, numHospedes);
-            console.log("Acomodações encontradas:", roomsAdequados);
         } catch (error) {
             console.error('Erro ao buscar acomodações:', error);
             return res.status(500).json({ message: 'Erro ao buscar acomodações no banco de dados.' });
@@ -40,7 +46,7 @@ export const filtrarAcomodacoes = async (req: Request, res: Response) => {
         }
         
         if (!Array.isArray(roomsAdequados)) {
-            return res.status(500).json({ message: 'nao tem acomod Erro ao processar acomodações.' });
+            return res.status(500).json({ message: 'Erro ao processar acomodações.' });
         }
 
         const quartosFiltrados = FilterService.filtrarAcomodacoes(roomsAdequados, filtros);

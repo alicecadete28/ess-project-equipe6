@@ -3,6 +3,7 @@ import BaseEntity from './base.entity';
 export default class ReservationEntity extends BaseEntity {
   pf_id: string;
   room_id: string;
+  // availability_id: string;
   check_in: Date;
   check_out: Date;
   guests: number;
