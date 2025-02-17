@@ -16,3 +16,4 @@ export default class PFEntity extends BaseEntity {
     this.phone = data.phone;
   }
 }
+

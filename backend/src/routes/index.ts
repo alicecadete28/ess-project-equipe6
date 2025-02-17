@@ -24,3 +24,4 @@ export default (app: Express) => {
 
   app.use('/api', reservationRoutes);
 };
+

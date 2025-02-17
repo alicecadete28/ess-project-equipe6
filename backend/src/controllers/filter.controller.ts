@@ -9,6 +9,7 @@ import FilterService from '../services/filter.service';
 export const filtrarAcomodacoes = async (req: Request, res: Response) => {
     try {
         const { destino, data_ida, data_volta, num_pessoas, ...filtros } = req.query;
+        console.log("Parâmetros recebidos:", req.query);
 
         if (!destino) {
             return res.status(400).json({ message: 'Parâmetros obrigatórios ausentes.' });
@@ -28,6 +29,7 @@ export const filtrarAcomodacoes = async (req: Request, res: Response) => {
 
         try {
             roomsAdequados = await roomService.buscarAcomodacoes(destino as string, checkInDate, checkOutDate, numHospedes);
+            console.log("Acomodações encontradas:", roomsAdequados);
         } catch (error) {
             console.error('Erro ao buscar acomodações:', error);
             return res.status(500).json({ message: 'Erro ao buscar acomodações no banco de dados.' });
@@ -38,12 +40,7 @@ export const filtrarAcomodacoes = async (req: Request, res: Response) => {
         }
         
         if (!Array.isArray(roomsAdequados)) {
-            return res.status(500).json({ message: 'Erro ao processar acomodações.' });
-        }
-        
-
-        if (!Array.isArray(roomsAdequados)) {
-            return res.status(500).json({ message: 'Erro ao processar acomodações.' });
+            return res.status(500).json({ message: 'nao tem acomod Erro ao processar acomodações.' });
         }
 
         const quartosFiltrados = FilterService.filtrarAcomodacoes(roomsAdequados, filtros);
@@ -58,8 +55,8 @@ export const filtrarAcomodacoes = async (req: Request, res: Response) => {
 
         return res.status(200).json(quartosFiltrados);
 
-    } catch (error: unknown) { 
-        console.error('Erro no servidor:', error);
+    } catch (error: any) { 
+        console.error('Erro no servidor:', error.message);
         return res.status(500).json({ message: 'Erro interno no servidor.' });
     }
 };

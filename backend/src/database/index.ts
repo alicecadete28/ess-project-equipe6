@@ -48,23 +48,23 @@ export default class Database {
       ],
       rooms: [
         new RoomEntity({
-          id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
-          pj_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
-          description: 'Room Seed',
-          price: 100,
-          type: 'Seed',
-          capacity: 2,
-          caracteristics_ids: ['Seed'],
-          local: 'Recife',
-          stars: 5,
-          ar_condicionado: true,
-          tv: true,
-          wifi: true,
-          petFriendly: true,
-          cafeDaManha: true,
-          estacionamento: true,
-          avaliacao: 5,
-        }),
+          id: '101',
+            pj_id: 'PJ123',
+            description: 'Hotel Recife',
+            type: 'deluxe',
+            price: 250,
+            capacity: 2,
+            caracteristics_ids: [],
+            local: 'Recife',
+            stars: 4.5,
+            ar_condicionado: true,
+            tv: true,
+            wifi: true,
+            petFriendly: false,
+            cafeDaManha: true,
+            estacionamento: true,
+            avaliacao: 9.0,
+      }),
         new RoomEntity({
           id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
           pj_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
@@ -84,13 +84,13 @@ export default class Database {
           avaliacao: 5,
         }),
       ],
-      tests: [
-        // new TestEntity({
-        //   id: '89ecc32a-aec7-4b71-adfd-03287e4ca74f',
-        //   name: 'Test Seed',
-        //   cpf: '8888',
-        // }),
-      ],
+      // tests: [
+      //   new TestEntity({
+      //     id: '89ecc32a-aec7-4b71-adfd-03287e4ca74f',
+      //     name: 'Test Seed',
+      //     cpf: '8888',
+      //   }),
+      //],
     };
   }
 }

@@ -74,8 +74,9 @@ class RoomService {
   ): Promise<RoomEntity[] | "no_rooms_found" | "no_capacity_available"> {
   
     const roomRepository = new RoomRepository();
+    console.log(roomRepository, 'service');
     const rooms = await roomRepository.getRooms(); // busca todas as acomodacoes disponiveis
-
+    console.log(rooms);
     const reservationRepository = new ReservationRepository();
     const reservations = await reservationRepository.getReservations(); // busca todas as reservas
 

@@ -6,6 +6,7 @@ import RoomService from '../services/room.service';
 export const buscarAcomodacoes = async (req: Request, res: Response) => {
   try {
     const { destino, data_ida, data_volta, num_pessoas } = req.query;
+    console.log("Parâmetros recebidos:", req.query);
 
     // Validação: destino obrigatório
     if (!destino) {
@@ -44,7 +45,7 @@ export const buscarAcomodacoes = async (req: Request, res: Response) => {
       qntHospedes
     );
 
-    // 🔴 Correção: Assegurar que as mensagens correspondam às expectativas dos testes
+    
     if (roomsAdequados === "no_capacity_available") {
       return res.status(404).json({
         message: "Não há acomodações disponíveis para o número de pessoas informado. Tente diminuir o número de hóspedes e busque novamente."
@@ -66,3 +67,4 @@ export const buscarAcomodacoes = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Erro ao buscar acomodações no banco de dados." });
   }
 };
+

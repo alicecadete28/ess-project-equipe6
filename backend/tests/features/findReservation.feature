@@ -40,5 +40,5 @@ And a mensagem "Não há acomodações disponíveis para o número de pessoas in
 Scenario: Nenhuma acomodação disponível para o destino e datas selecionadas
 Given o RoomService não encontra acomodações disponíveis para "Recife" entre "2025-03-10" e "2025-03-15"
 When uma requisição "GET" for enviada para "/buscar-acomodacoes?destino=Recife&data_ida=2025-03-10&data_volta=2025-03-15"
-Then o status da resposta deve ser "200"
+Then o status da resposta deve ser "404"
 And a mensagem "Não há acomodações disponíveis no destino e nas datas pesquisadas." deve ser retornada
