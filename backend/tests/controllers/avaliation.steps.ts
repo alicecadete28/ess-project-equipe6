@@ -14,12 +14,12 @@ defineFeature(feature, (test) => {
   let response: supertest.Response;
 
   beforeEach(() => {
-    // Get the repository instance from the DI container
+    // Obter a instância do repositório do contêiner DI
     mockReservationRepository = di.getRepository<ReservationRepository>(ReservationRepository);
 
-    // Ensure that the repository instance is not undefined
+    // Garantir que a instância do repositório não seja indefinida
     if (!mockReservationRepository) {
-      throw new Error('Failed to get ReservationRepository from DI container');
+      throw new Error('Falha ao obter ReservationRepository do contêiner DI');
     }
 
     mockReservationEntity = new ReservationEntity({
@@ -37,70 +37,70 @@ defineFeature(feature, (test) => {
       }
     });
 
-    // Mock the repository methods
+    // Mock dos métodos do repositório
     jest.spyOn(mockReservationRepository, 'getReservations').mockResolvedValue([mockReservationEntity]);
     jest.spyOn(mockReservationRepository, 'updateReservation').mockImplementation(async (id, data) => {
       return { ...data, id };
     });
   });
 
-  test('Register an accommodation review successfully', ({ given, when, then }) => {
-    given(/^the ReservationRepository has a reservation with id "(.*)"$/, async (reservationId) => {
+  test('Registrar uma avaliação de acomodação com sucesso', ({ given, when, then, and }) => {
+    given(/^o Repositório de Reservas tem uma reserva com id "(.*)"$/, async (reservationId) => {
       const existingReservation = await mockReservationRepository.getReservation(reservationId);
       if (!existingReservation) {
         await mockReservationRepository.createReservation(mockReservationEntity);
       }
     });
 
-    when(/^a POST request is sent to "(.*)" with the request body being a JSON with stars "(.*)" and comment "(.*)"$/, async (url, stars, comment) => {
+    when(/^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e comentário "(.*)"$/, async (url, stars, comment) => {
       response = await request.post(url).send({
         num_estrelas: parseInt(stars, 10),
         comentario: comment
       });
     });
 
-    then(/^the response status should be "(.*)"$/, (statusCode) => {
+    then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
       expect(response.status).toBe(parseInt(statusCode, 10));
     });
 
-    then(/^the JSON response should contain the message "(.*)"$/, (message) => {
+    and(/^a resposta em JSON deve conter a mensagem "(.*)"$/, (message) => {
       expect(response.body.message).toEqual(message);
     });
   });
 
-  test('Return an error when the rating is not between 1 and 5', ({ given, when, then }) => {
-    given(/^the ReservationRepository has a reservation with id "(.*)"$/, async (reservationId) => {
+  test('Retornar um erro quando a nota não estiver entre 1 e 5', ({ given, when, then, and }) => {
+    given(/^o Repositório de Reservas tem uma reserva com id "(.*)"$/, async (reservationId) => {
       const existingReservation = await mockReservationRepository.getReservation(reservationId);
       if (!existingReservation) {
         await mockReservationRepository.createReservation(mockReservationEntity);
       }
     });
 
-    when(/^a POST request is sent to "(.*)" with the request body being a JSON with stars "(.*)" and comment "(.*)"$/, async (url, stars, comment) => {
+    when(/^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e comentário "(.*)"$/, async (url, stars, comment) => {
       response = await request.post(url).send({
         num_estrelas: parseInt(stars, 10),
         comentario: comment
       });
     });
 
-    then(/^the response status should be "(.*)"$/, (statusCode) => {
+    then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
       expect(response.status).toBe(parseInt(statusCode, 10));
     });
 
-    then(/^the JSON response should contain the error "(.*)"$/, (error) => {
+    and(/^a resposta em JSON deve conter o erro "(.*)"$/, (error) => {
       expect(response.body.error).toEqual(error);
     });
   });
 
-  test('Limit the comment length to 500 characters', ({ given, when, then }) => {
-    given(/^the ReservationRepository has a reservation with id "(.*)"$/, async (reservationId) => {
+  test('Limitar o comprimento do comentário a 500 caracteres', ({ given, when, then, and }) => {
+    given(/^o Repositório de Reservas tem uma reserva com id "(.*)"$/, async (reservationId) => {
       const existingReservation = await mockReservationRepository.getReservation(reservationId);
       if (!existingReservation) {
         await mockReservationRepository.createReservation(mockReservationEntity);
       }
     });
 
-    when(/^a POST request is sent to "(.*)" with the request body being a JSON with stars "(.*)" and a long comment$/, async (url, stars) => {
+    when(/^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e um comentário longo$/, async (url, stars) => {
       const longComment = 'a'.repeat(600);
       response = await request.post(url).send({
         num_estrelas: parseInt(stars, 10),
@@ -108,11 +108,11 @@ defineFeature(feature, (test) => {
       });
     });
 
-    then(/^the response status should be "(.*)"$/, (statusCode) => {
+    then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
       expect(response.status).toBe(parseInt(statusCode, 10));
     });
 
-    then(/^the JSON response should contain the error "(.*)"$/, (error) => {
+    and(/^a resposta em JSON deve conter o erro "(.*)"$/, (error) => {
       expect(response.body.error).toEqual(error);
     });
   });
