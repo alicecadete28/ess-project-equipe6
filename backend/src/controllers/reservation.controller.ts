@@ -18,6 +18,7 @@ class ReservationController {
     this.router.patch(`${this.prefix}/:reservationId/confirm`, (req: Request, res: Response) => this.confirmReservation(req, res));
     this.router.patch(`${this.prefix}/:reservationId/dates`, (req: Request, res: Response) => this.updateReservationDates(req, res));
     this.router.patch(`${this.prefix}/:reservationId/guests`, (req: Request, res: Response) => this.updateReservationGuests(req, res));
+    this.router.get(`${this.prefix}/:reservationId`, (req: Request, res: Response) => this.getReservation(req, res));
   }
 
   private async createReservation(req: Request, res: Response) {
@@ -50,6 +51,12 @@ class ReservationController {
     const { guests } = req.body;
     const updatedReservation = await this.reservationService.updateReservationGuests(req.params.reservationId, guests);
     return new SuccessResult({ msg: Result.transformRequestOnMsg(req), data: updatedReservation }).handle(res);
+  }
+
+  private async getReservation(req: Request, res: Response){
+    const { reservationId } = req.params;
+    const reservation = await this.reservationService.getReservation(reservationId);
+    return new SuccessResult({ msg: Result.transformRequestOnMsg(req), data: reservation }).handle(res);
   }
 }
 

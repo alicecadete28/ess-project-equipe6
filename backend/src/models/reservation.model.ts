@@ -7,6 +7,9 @@ export default class ReservationModel extends BaseModel {
   check_out: Date;
   guests: number;
   total: number;
+  status: string;
+  rating: number;
+  confirmed: boolean;
 
   constructor(data: ReservationModel) {
     super(data.id || '');
@@ -16,5 +19,8 @@ export default class ReservationModel extends BaseModel {
     this.check_out = new Date(data.check_out);
     this.guests = data.guests;
     this.total = data.total;
+    this.status = data.status;       
+    this.rating = data.rating;       
+    this.confirmed = data.confirmed; 
   }
 }

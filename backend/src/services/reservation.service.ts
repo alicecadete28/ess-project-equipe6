@@ -51,6 +51,19 @@ class ReservationService {
     }
     return new ReservationModel(reservationEntity);
   }
+
+  public async getReservation(id: string): Promise<ReservationModel> {
+    const reservation = await this.reservationRepository.findById(id); 
+    if (!reservation) {
+      throw new HttpNotFoundError({
+        msg: 'Reserva não encontrada',
+        msgCode: 'reserve_not_found',
+      });
+    }
+    return new ReservationModel(reservation!);
+
+  }
+
 }
 
 export default ReservationService;

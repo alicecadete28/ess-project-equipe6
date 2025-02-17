@@ -12,10 +12,12 @@ export default class ReservationRepository extends BaseRepository<ReservationEnt
 
   async confirmReservation(id: string): Promise<ReservationEntity | null> {
     const reservation = await this.findById(id);
+    console.log(reservation)
     if (reservation) {
       reservation.confirmed = true;
       await this.updateById(id, reservation);
     }
+    
     return reservation;
   }
 

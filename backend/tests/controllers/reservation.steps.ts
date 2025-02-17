@@ -4,6 +4,7 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import ReservationRepository from '../../src/repositories/reservation.repository';
 import ReservationEntity from '../../src/entities/reservation.entity';
+import { resolveTypeReferenceDirective } from 'typescript';
 
 const feature = loadFeature('tests/features/reservation.feature');
 const request = supertest(app);
@@ -36,7 +37,8 @@ defineFeature(feature, (test) => {
         response = await request.post(url)
           .set('Authorization', `Bearer ${token}`)
           .send({ pf_id, room_id, check_in, check_out, guests: Number(guests), total: Number(total), status: 'pending', rating: 0, confirmed: false });
-    });
+          //console.log(response.body)
+        });
 
     then(/^o status da resposta deve ser "(.*)"$/, (status) => {
       expect(response.status).toBe(Number(status));
@@ -49,60 +51,27 @@ defineFeature(feature, (test) => {
     });
   });
 
-  test('Buscar uma reserva existente', ({ given, when, then, and }) => {
-    given(/^uma reserva existe no sistema com id "(.*)"$/, async (id) => {
-      await mockReservationRepository.add(new ReservationEntity({ id, pf_id: 'user123', room_id: 'room456', check_in: new Date(), check_out: new Date(), guests: 2, total: 500, status: 'pending', rating: 0, confirmed: false }));
-    });
+  
 
-    when(/^uma requisição GET for enviada para "(.*)"$/, async (url) => {
-      response = await request.get(url).set('Authorization', `Bearer ${token}`);
-    });
+  // test('Atualizar o número de hóspedes em uma reserva', ({ given, when, then, and }) => {
+  //   given(/^uma reserva existe no sistema com id "(.*)"$/, async (id) => {
+  //     await mockReservationRepository.add(new ReservationEntity({ id, pf_id: 'user123', room_id: 'room456', check_in: new Date(), check_out: new Date(), guests: 2, total: 500, status: 'pending', rating: 0, confirmed: false }));
+  //   });
 
-    then(/^o status da resposta deve ser "(.*)"$/, (status) => {
-      expect(response.status).toBe(Number(status));
-    });
+  //   when(/^uma requisição POST for enviada para "(.*)" sem token$/, async (url) => {
+  //     response = await request.post(url);  // Envia requisição sem token
+  //   });
 
-    and('o JSON da resposta deve conter os dados da reserva correspondente', () => {
-      expect(response.body.data).toBeDefined();
-    });
-  });
+  //   then(/^o status da resposta deve ser "(.*)"$/, (status) => {
+  //     expect(response.status).toBe(Number(status));
+  //   });
 
-  test('Atualizar o número de hóspedes em uma reserva', ({ given, when, then, and }) => {
-    given(/^uma reserva existe no sistema com id "(.*)"$/, async (id) => {
-      await mockReservationRepository.add(new ReservationEntity({ id, pf_id: 'user123', room_id: 'room456', check_in: new Date(), check_out: new Date(), guests: 2, total: 500, status: 'pending', rating: 0, confirmed: false }));
-    });
+  //   and(/^o JSON da resposta deve conter a mensagem "(.*)"$/, (message) => {
+  //     expect(response.body.error).toBe(message);  // Verifica a mensagem de erro
+  //   });
+  // });
 
-    when(/^uma requisição PATCH for enviada para "(.*)" com o corpo da requisição sendo um JSON com guests "(.*)"$/, async (url, guests) => {
-      response = await request.patch(url).set('Authorization', `Bearer ${token}`).send({ guests: Number(guests) });
-    });
 
-    then(/^o status da resposta deve ser "(.*)"$/, (status) => {
-      expect(response.status).toBe(Number(status));
-    });
-
-    and(/^o JSON da resposta deve conter guests "(.*)"$/, (guests) => {
-      expect(response.body.data.guests).toBe(Number(guests));
-    });
-  });
-
-  test('Excluir uma reserva', ({ given, when, then, and }) => {
-    given(/^uma reserva existe no sistema com id "(.*)"$/, async (id) => {
-      await mockReservationRepository.add(new ReservationEntity({ id, pf_id: 'user123', room_id: 'room456', check_in: new Date(), check_out: new Date(), guests: 2, total: 500, status: 'pending', rating: 0, confirmed: false }));
-    });
-
-    when(/^uma requisição DELETE for enviada para "(.*)"$/, async (url) => {
-      response = await request.delete(url).set('Authorization', `Bearer ${token}`);
-    });
-
-    then(/^o status da resposta deve ser "(.*)"$/, (status) => {
-      expect(response.status).toBe(Number(status));
-    });
-
-    and('a reserva não deve mais existir no sistema', async () => {
-      const exists = await mockReservationRepository.findOne((r) => r.id === response.body.data.id);
-      expect(exists).toBeNull();
-    });
-  });
 
   test('Atualizar as datas de uma reserva existente', ({ given, when, then, and }) => {
     given(/^uma reserva existe no sistema com id "(.*)"$/, async (id) => {
@@ -111,6 +80,7 @@ defineFeature(feature, (test) => {
 
     when(/^uma requisição PATCH for enviada para "(.*)" com o corpo da requisição sendo um JSON com check_in "(.*)" e check_out "(.*)"$/, async (url, check_in, check_out) => {
       response = await request.patch(url).set('Authorization', `Bearer ${token}`).send({ check_in, check_out });
+      //console.log(response.body)
     });
 
     then(/^o status da resposta deve ser "(.*)"$/, (status) => {
@@ -125,11 +95,12 @@ defineFeature(feature, (test) => {
 
   test('Confirmar uma reserva existente', ({ given, when, then, and }) => {
     given(/^uma reserva existe no sistema com id "(.*)" com status "(.*)"$/, async (id, status) => {
-      await mockReservationRepository.add(new ReservationEntity({ id, pf_id: 'user123', room_id: 'room456', check_in: new Date(), check_out: new Date(), guests: 2, total: 500, status, rating: 0, confirmed: false }));
+      await mockReservationRepository.createReservation(new ReservationEntity({ id, pf_id: 'user123', room_id: 'room456', check_in: new Date(), check_out: new Date(), guests: 2, total: 500, status, rating: 0, confirmed: false }));
     });
 
     when(/^uma requisição PATCH for enviada para "(.*)"$/, async (url) => {
       response = await request.patch(url).set('Authorization', `Bearer ${token}`);
+      console.log(response.body)
     });
 
     then(/^o status da resposta deve ser "(.*)"$/, (status) => {

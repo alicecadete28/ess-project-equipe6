@@ -47,9 +47,9 @@ export default (app: Express) => {
   
   //app.use(prefix, AuthController.authenticate);
 
-  //app.use(
-  //  prefix,
-  //  new ReservationController(router, di.getService(ReservationService)).router
-  //);
+  app.use(
+    prefix,
+    new ReservationController(router, di.getService(ReservationService)).router
+  );
 };
 
