@@ -1,4 +1,4 @@
-/*import { loadFeature, defineFeature } from 'jest-cucumber';
+import { loadFeature, defineFeature } from 'jest-cucumber';
 import { Request, Response } from 'express';
 import RoomService from '../../src/services/room.service';
 import FilterService from '../../src/services/filter.service';
@@ -92,7 +92,7 @@ defineFeature(feature, test => {
 
         and('o JSON da resposta deve ser uma lista vazia', () => {
             expect(jsonMock).toHaveBeenCalledWith({ message: "Nenhuma acomodação atende aos filtros selecionados." });
-        });
+        });              
         
         and(/^a mensagem "(.*)" deve ser retornada$/, (message) => {
             expect(jsonMock).toHaveBeenCalledWith({ message });
@@ -203,4 +203,8 @@ defineFeature(feature, test => {
         });
     });
 });
-*/
+
+// npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/services/test.filterService.steps.ts
+
+// ok
+

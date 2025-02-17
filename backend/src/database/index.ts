@@ -60,7 +60,7 @@ export default class Database {
           stars: 5,
           ar_condicionado: true,
           tv: true,
-          wifi: true,
+          wifi: false,
           petFriendly: true,
           cafeDaManha: true,
           estacionamento: true,
@@ -122,6 +122,13 @@ export default class Database {
           savedRooms:  ['12', '222', '32'],
         }),
       ],
+      // tests: [
+      //   new TestEntity({
+      //     id: '89ecc32a-aec7-4b71-adfd-03287e4ca74f',
+      //     name: 'Test Seed',
+      //     cpf: '8888',
+      //   }),
+      //],
     };
   }
 }
