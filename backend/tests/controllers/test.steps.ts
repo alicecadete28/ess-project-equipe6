@@ -17,11 +17,11 @@
 //   });
 
 //   test('Create a test', ({ given, when, then, and }) => {
-//     given(/^o TestRepository  tem um test com nome "(.*)"$/, async (testId, testName) => {
+//     given(/^o TestRepository não tem um test com nome "(.*)"$/, async (testId, testName) => {
 //       // Check if the test does not exist in the repository and delete it if it exists
 //       const existingTest = await mockTestRepository.getTest(testId);
-//       if (!existingTest) {
-//         await mockTestRepository.(testId);
+//       if (existingTest) {
+//         await mockTestRepository.deleteTest(testId);
 //       }
 //     });
 
