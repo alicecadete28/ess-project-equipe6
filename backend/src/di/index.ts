@@ -20,6 +20,8 @@ di.registerRepository(ReservationRepository, new ReservationRepository()); // Re
 
 //Room
 di.registerRepository(RoomRepository, new RoomRepository());
+di.registerRepository(ReservationRepository, new ReservationRepository());
+
 /*
 di.registerService(
   AuthService,
