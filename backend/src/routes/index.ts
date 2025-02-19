@@ -28,6 +28,14 @@ router.get('/api/reservations/:roomId/room', getReservationsByRoom);
 router.get('/api/reservations/:pfId/pf', getReservationsByPF);
 
 export default (app: Express) => {
+
+ app.use('/', new AuthController(router, di.getService(AuthService)).router);
+
+
+  // app.use(prefix, AuthController.authenticate, (req, res) =>
+  //   res.json({ test: 'logado' })
+  // );
+
   app.use(
     prefix,
     new AuthController(router, di.getService(AuthService)).router
@@ -53,10 +61,12 @@ export default (app: Express) => {
 
   app.use('/api', reservationRoutes);
 
+
   app.use(
     prefix,
     new FavoritesController(router, di.getService(FavoriteService)).router
   );
 
   app.use('/api', reservationRoutes);
+
 };

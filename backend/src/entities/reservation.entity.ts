@@ -23,3 +23,4 @@ export default class ReservationEntity extends BaseEntity {
     this.rating = data.rating;
   }
 }
+
