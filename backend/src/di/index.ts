@@ -19,15 +19,15 @@ di.registerRepository(PfRepository, new PfRepository());
 //Room
 di.registerRepository(RoomRepository, new RoomRepository());
 
-di.registerService(
-  AuthService,
-  new AuthService(
-    di.getRepository(UserRepository),
-    di.getRepository(PfRepository),
-    di.getRepository(PjRepository),
-    di.getService(EmailService)
-  )
-);
+// di.registerService(
+//   AuthService,
+//   new AuthService(
+//     di.getRepository(UserRepository),
+//     di.getRepository(PfRepository),
+//     di.getRepository(PjRepository),
+//     di.getService(EmailService)
+//   )
+// );
 
 di.registerService(
   RoomService,

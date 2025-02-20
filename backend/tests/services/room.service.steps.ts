@@ -43,42 +43,25 @@ defineFeature(feature, (room) => {
 
   room('Return all rooms', ({ given, when, then }) => {
     given(
-      /^o método getRooms do RoomService retorna um array com o room de id "(.*)", pj_id "(.*)", description "(.*)", type "(.*)", price "(.*)", capacity "(.*)", caracteristics_ids ["(.*)"], local "(.*)", stars "(.*)", ar_condicionado "(.*)", tv "(.*)", wifi "(.*)", petFriendly "(.*)", cafeDaManha "(.*)", estacionamento "(.*)", avaliacao "(.*)"" $/,
-      (
-        roomId,
-        roomPj_id,
-        roomDescription,
-        roomType,
-        roomPrice,
-        roomCapacity,
-        roomCaracteristics_ids,
-        roomLocal,
-        roomStars,
-        roomAr_condicionado,
-        roomTv,
-        roomWifi,
-        roomPetFriendly,
-        roomCafeDaManha,
-        roomEstacionamento,
-        roomAvaliacao
-      ) => {
+      'o método getRooms do RoomsService retorna um array com o seguinte quarto:',
+      (table) => {
         mockRoomEntity = new RoomEntity({
-          id: roomId,
-          pj_id: roomPj_id,
-          description: roomDescription,
-          type: roomType,
-          price: roomPrice,
-          capacity: roomCapacity,
-          caracteristics_ids: roomCaracteristics_ids,
-          local: roomLocal,
-          stars: roomStars,
-          ar_condicionado: roomAr_condicionado,
-          tv: roomTv,
-          wifi: roomWifi,
-          petFriendly: roomPetFriendly,
-          cafeDaManha: roomCafeDaManha,
-          estacionamento: roomEstacionamento,
-          avaliacao: roomAvaliacao,
+          id: table[0],
+          pj_id: table[1],
+          description: table[2],
+          type: table[3],
+          price: table[4],
+          capacity: table[5],
+          caracteristics_ids: table[6],
+          local: table[7],
+          stars: table[8],
+          ar_condicionado: table[9],
+          tv: table[10],
+          wifi: table[11],
+          petFriendly: table[12],
+          cafeDaManha: table[13],
+          estacionamento: table[14],
+          avaliacao: table[15],
         });
 
         console.log('mock entity', mockRoomEntity);
@@ -96,93 +79,56 @@ defineFeature(feature, (room) => {
       console.log('rooms', rooms);
     });
 
-    then(
-      /^o array retornado deve conter o room de id "(.*)", pj_id "(.*)", description "(.*)", type "(.*)", price "(.*)", capacity "(.*)", caracteristics_ids ["(.*)"], local "(.*)", stars "(.*)", ar_condicionado "(.*)", tv "(.*)", wifi "(.*)", petFriendly "(.*)", cafeDaManha "(.*)", estacionamento "(.*)", avaliacao "(.*)"" $/,
-      (
-        roomId,
-        roomPj_id,
-        roomDescription,
-        roomType,
-        roomPrice,
-        roomCapacity,
-        roomCaracteristics_ids,
-        roomLocal,
-        roomStars,
-        roomAr_condicionado,
-        roomTv,
-        roomWifi,
-        roomPetFriendly,
-        roomCafeDaManha,
-        roomEstacionamento,
-        roomAvaliacao
-      ) => {
-        mockRoomModel = new RoomModel(
-          new RoomEntity({
-            id: roomId,
-            pj_id: roomPj_id,
-            description: roomDescription,
-            type: roomType,
-            price: roomPrice,
-            capacity: roomCapacity,
-            caracteristics_ids: roomCaracteristics_ids,
-            local: roomLocal,
-            stars: roomStars,
-            ar_condicionado: roomAr_condicionado,
-            tv: roomTv,
-            wifi: roomWifi,
-            petFriendly: roomPetFriendly,
-            cafeDaManha: roomCafeDaManha,
-            estacionamento: roomEstacionamento,
-            avaliacao: roomAvaliacao,
-          })
-        );
+    then('o array retornado deve conter o seguinte quarto:', (table) => {
+      mockRoomModel = new RoomModel(
+        new RoomEntity({
+          id: table[0],
+          pj_id: table[1],
+          description: table[2],
+          type: table[3],
+          price: table[4],
+          capacity: table[5],
+          caracteristics_ids: table[6],
+          local: table[7],
+          stars: table[8],
+          ar_condicionado: table[9],
+          tv: table[10],
+          wifi: table[11],
+          petFriendly: table[12],
+          cafeDaManha: table[13],
+          estacionamento: table[14],
+          avaliacao: table[15],
+        })
+      );
+      console.log('mockroomModel:', mockRoomModel);
 
-        expect(rooms).toEqual([mockRoomModel]);
-      }
-    );
+      expect(rooms).toEqual([mockRoomModel]);
+    });
   });
 
   room('Return room by id', ({ given, when, then }) => {
     given(
-      /^o método getRoom chamado com "(.*)" do RoomService retorna um room de id "(.*)", pj_id "(.*)", description "(.*)", type "(.*)", price "(.*)", capacity "(.*)", caracteristics_ids ["(.*)"], local "(.*)", stars "(.*)", ar_condicionado "(.*)", tv "(.*)", wifi "(.*)", petFriendly "(.*)", cafeDaManha "(.*)", etacionamento "(.*)", avaliacao "(.*)"" $/,
-      async (
-        id,
-        roomId,
-        roomPj_id,
-        roomDescription,
-        roomType,
-        roomPrice,
-        roomCapacity,
-        roomCaracteristics_ids,
-        roomLocal,
-        roomStars,
-        roomAr_condicionado,
-        roomTv,
-        roomWifi,
-        roomPetFriendly,
-        roomCafeDaManha,
-        roomEstacionamento,
-        roomAvaliacao
-      ) => {
-        idToCall = id;
+      /^o método getRoom chamado com "(.*)" do RoomService retorna o seguinte quarto:$/,
+      (arg0, table) => {
+        idToCall = arg0;
 
         mockRoomEntity = new RoomEntity({
-          id: roomId,
-          pj_id: roomPj_id,
-          description: roomDescription,
-          type: roomType,
-          price: roomPrice,
-          capacity: roomCapacity,
-          caracteristics_ids: roomCaracteristics_ids,
-          local: roomLocal,
-          stars: roomStars,
-          ar_condicionado: roomAr_condicionado,
-          tv: roomTv,
-          wifi: roomWifi,
-          petFriendly: roomPetFriendly,
-          cafeDaManha: roomCafeDaManha,
-          estacionamento: roomEstacionamento,
-          avaliacao: roomAvaliacao,
+          id: table[0],
+          pj_id: table[1],
+          description: table[2],
+          type: table[3],
+          price: table[4],
+          capacity: table[5],
+          caracteristics_ids: table[6],
+          local: table[7],
+          stars: table[8],
+          ar_condicionado: table[9],
+          tv: table[10],
+          wifi: table[11],
+          petFriendly: table[12],
+          cafeDaManha: table[13],
+          estacionamento: table[14],
+          avaliacao: table[15],
         });
 
         jest
@@ -198,48 +144,28 @@ defineFeature(feature, (room) => {
       }
     );
 
-    then(
-      /^o room retornado deve ter id "(.*)", pj_id "(.*)", description "(.*)", type "(.*)", price "(.*)", capacity "(.*)", caracteristics_ids ["(.*)"], local "(.*)", stars "(.*)", ar_condicionado "(.*)", tv "(.*)", wifi "(.*)", petFriendly "(.*)", cafeDaManha "(.*)", etacionamento "(.*)", avaliacao "(.*)"" $/,
-      (
-        roomId,
-        roomPj_id,
-        roomDescription,
-        roomType,
-        roomPrice,
-        roomCapacity,
-        roomCaracteristics_ids,
-        roomLocal,
-        roomStars,
-        roomAr_condicionado,
-        roomTv,
-        roomWifi,
-        roomPetFriendly,
-        roomCafeDaManha,
-        roomEstacionamento,
-        roomAvaliacao
-      ) => {
-        const roomEntity = new RoomEntity({
-          id: roomId,
-          pj_id: roomPj_id,
-          description: roomDescription,
-          type: roomType,
-          price: roomPrice,
-          capacity: roomCapacity,
-          caracteristics_ids: roomCaracteristics_ids,
-          local: roomLocal,
-          stars: roomStars,
-          ar_condicionado: roomAr_condicionado,
-          tv: roomTv,
-          wifi: roomWifi,
-          petFriendly: roomPetFriendly,
-          cafeDaManha: roomCafeDaManha,
-          estacionamento: roomEstacionamento,
-          avaliacao: roomAvaliacao,
-        });
+    then('o quarto retornado deve ter os seguintes atributos:', (table) => {
+      const roomEntity = new RoomEntity({
+        id: table[0],
+        pj_id: table[1],
+        description: table[2],
+        type: table[3],
+        price: table[4],
+        capacity: table[5],
+        caracteristics_ids: table[6],
+        local: table[7],
+        stars: table[8],
+        ar_condicionado: table[9],
+        tv: table[10],
+        wifi: table[11],
+        petFriendly: table[12],
+        cafeDaManha: table[13],
+        estacionamento: table[14],
+        avaliacao: table[15],
+      });
 
-        expect(roomReturned).toEqual(roomEntity);
-        expect(mockRoomRepository.getRoom).toBeCalledWith(idToCall);
-      }
-    );
+      expect(roomReturned).toEqual(roomEntity);
+      expect(mockRoomRepository.getRoom).toBeCalledWith(idToCall);
+    });
   });
 });
