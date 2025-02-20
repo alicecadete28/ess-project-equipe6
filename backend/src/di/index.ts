@@ -9,6 +9,7 @@ import Injector from './injector';
 import FavoriteService from '../services/favorite.service';
 import SavedService from '../services/saved.service';
 import ReservationRepository from '../repositories/reservation.repository'; // Import the ReservationRepository
+import { AuthService } from '../services/auth.service';
 
 export const di = new Injector();
 
@@ -22,15 +23,14 @@ di.registerRepository(ReservationRepository, new ReservationRepository()); // Re
 di.registerRepository(RoomRepository, new RoomRepository());
 di.registerRepository(ReservationRepository, new ReservationRepository());
 
-// di.registerService(
-//   AuthService,
-//   new AuthService(
-//     di.getRepository(UserRepository),
-//     di.getRepository(PfRepository),
-//     di.getRepository(PjRepository),
-//     di.getService(EmailService)
-//   )
-// );
+di.registerService(
+  AuthService,
+  new AuthService(
+    di.getRepository(UserRepository),
+    di.getRepository(PfRepository),
+    di.getRepository(PjRepository)
+  )
+);
 
 di.registerService(
   RoomService,

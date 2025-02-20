@@ -66,6 +66,9 @@ class RoomController {
   }
 
   private async createRoom(req: Request, res: Response) {
+    this.validateRoom(req.body, res);
+    if (res.headersSent) return;
+
     const room = await this.roomService.createRoom(new RoomEntity(req.body));
 
     return new SuccessResult({
@@ -92,6 +95,43 @@ class RoomController {
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
     }).handle(res);
+  }
+
+  private validateRoom(data: any, res: Response) {
+    console.log('description:', data.type);
+
+    data.tv = data.tv ?? false;
+    data.ar_condicionado = data.ar_condicionado ?? false;
+    data.wifi = data.wifi ?? false;
+    data.petFriendly = data.petFriendly ?? false;
+    data.cafeDaManha = data.cafeDaManha ?? false;
+    data.estacionamento = data.estacionamento ?? false;
+
+    if (!data.description) {
+      res.status(400).json({ error: 'A descrição do quarto é obrigatória' });
+    }
+    if (!data.type) {
+      res.status(400).json({ error: 'O tipo do quarto é obrigatório' });
+    }
+    if (!data.price) {
+      res.status(400).json({ error: 'O preço do quarto é obrigatório' });
+    }
+    if (!data.capacity) {
+      res.status(400).json({ error: 'A capacidade do quarto é obrigatória' });
+    }
+    if (!data.caracteristics_ids) {
+      res
+        .status(400)
+        .json({ error: 'As caracteristicas do quarto sao obrigatórias' });
+    }
+    if (!data.local) {
+      res.status(400).json({ error: 'O local do quarto é obrigatório' });
+    }
+    if (!data.stars) {
+      res
+        .status(400)
+        .json({ error: 'O número de estrelas do quarto é obrigatório' });
+    }
   }
 }
 
