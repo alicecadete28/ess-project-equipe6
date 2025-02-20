@@ -116,6 +116,9 @@ class RoomController {
     if (!data.price) {
       res.status(400).json({ error: 'O preço do quarto é obrigatório' });
     }
+    if (data.price < 50) {
+      res.status(400).json({ error: 'O preço mínimo da diária é de 50 reais' });
+    }
     if (!data.capacity) {
       res.status(400).json({ error: 'A capacidade do quarto é obrigatória' });
     }
