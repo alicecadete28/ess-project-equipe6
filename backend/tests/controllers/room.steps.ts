@@ -17,54 +17,33 @@ defineFeature(feature, (room) => {
   });
 
   room('Create a room', ({ given, when, then, and }) => {
-    given(
-      /^o RoomRepository não tem um room com id "(.*)"$/,
-      async (roomId) => {
-        // Check if the room does not exist in the repository and delete it if it exists
-        const existingRoom = await mockRoomRepository.getRoom(roomId);
-
-        if (existingRoom) {
-          await mockRoomRepository.deleteRoom(existingRoom.id);
-        }
-      }
-    );
+    given(/^o usuário tem um id de pj "(.*)"$/, async (roomId) => {
+      // // Check if the room does not exist in the repository and delete it if it exists
+      // const existingRoom = await mockRoomRepository.getRoom(roomId);
+      // if (existingRoom) {
+      //   await mockRoomRepository.deleteRoom(existingRoom.id);
+      // }
+    });
 
     when(
       /^uma requisição POST for enviada para "(.*)" com o corpo da requisição sendo um JSON com :"$/,
-      async (
-        url,
-        roomPj_id
-        // roomDescription,
-        // roomType,
-        // roomPrice,
-        // roomCapacity,
-        // roomCaracteristics_ids,
-        // roomLocal,
-        // roomStars,
-        // roomAr_condicionado,
-        // roomTv,
-        // roomWifi,
-        // roomPetFriendly,
-        // roomCafeDaManha,
-        // roomEstacionamento,
-        // roomAvaliacao
-      ) => {
+      async (url, table) => {
         response = await request.post(url).send({
-          pj_id: roomPj_id,
-          // description: roomDescription,
-          // type: roomType,
-          // price: roomPrice,
-          // capacity: roomCapacity,
-          // caracteristics_ids: roomCaracteristics_ids,
-          // local: roomLocal,
-          // stars: roomStars,
-          // ar_condicionado: roomAr_condicionado,
-          // tv: roomTv,
-          // wifi: roomWifi,
-          // petFriendly: roomPetFriendly,
-          // cafeDaManha: roomCafeDaManha,
-          // estacionamento: roomEstacionamento,
-          // avaliacao: roomAvaliacao,
+          pj_id: table[1],
+          description: table[2],
+          type: table[3],
+          price: table[4],
+          capacity: table[5],
+          caracteristics_ids: table[6],
+          local: table[7],
+          stars: table[8],
+          ar_condicionado: table[9],
+          tv: table[10],
+          wifi: table[11],
+          petFriendly: table[12],
+          cafeDaManha: table[13],
+          estacionamento: table[14],
+          avaliacao: table[15],
         });
       }
     );
