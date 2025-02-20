@@ -1,63 +1,76 @@
-import Database from '../database';
 import { Request, Response } from 'express';
+import { addDays } from 'date-fns';
 import RoomRepository from '../repositories/room.repository';
-import ReservationRepository from '../repositories/findReservation.repository';
-import { addDays, parseISO } from 'date-fns';
 import RoomService from '../services/room.service';
 import PjRepository from '../repositories/pj.repository';
 
 export const buscarAcomodacoes = async (req: Request, res: Response) => {
-  const { destino, data_ida, data_volta, num_pessoas } = req.query;
 
-  if (!destino) {
-    res.status(400).json({ error: 'O destino é obrigatório.' });
-  }
+  try {
+    const { destino, data_ida, data_volta, num_pessoas } = req.query;
+    console.log("Parâmetros recebidos:", req.query);
 
-  let checkIn: Date;
-  if (data_ida) {
-    checkIn = new Date(data_ida as string);
-  } else {
-    checkIn = addDays(new Date(), 1);
-  }
+    // Validação: destino obrigatório
+    if (!destino) {
+      return res.status(400).json({ error: 'O destino é obrigatório.' });
+    }
 
-  let checkOut: Date;
-  if (data_volta) {
-    checkOut = new Date(data_volta as string);
-  } else {
-    checkOut = addDays(new Date(), 2);
-  }
+    // Validação e conversão das datas
+    let checkIn: Date = data_ida ? new Date(data_ida as string) : addDays(new Date(), 1);
+    let checkOut: Date = data_volta ? new Date(data_volta as string) : addDays(new Date(), 2);
 
-  let qntHospedes: number;
-  if (num_pessoas) {
-    qntHospedes = parseInt(num_pessoas as string);
-  } else {
-    qntHospedes = 2;
-  }
+    // Validação: datas inválidas
+    if (isNaN(checkIn.getTime())) {
+      return res.status(400).json({ message: 'Data de ida inválida.' });
+    }
+    if (isNaN(checkOut.getTime())) {
+      return res.status(400).json({ message: 'Data de volta inválida.' });
+    }
 
-  // Agora verificamos corretamente se `checkIn` e `checkOut` foram atribuídos corretamente
-  if (!checkIn || isNaN(checkIn.getTime())) {
-    return res.status(400).json({ message: 'Data de ida inválida' });
-  }
-  if (!checkOut || isNaN(checkOut.getTime())) {
-    return res.status(400).json({ message: 'Data de volta inválida' });
-  }
-  if (checkIn >= checkOut) {
-    res.status(400).json({ message: 'Data de ida maior que data de volta' });
-  }
-  // Chama o Service para buscar as acomodações
-  const roomService = new RoomService(new RoomRepository(), new PjRepository());
-  const roomsAdequados = await roomService.buscarAcomodacoes(
-    destino as string,
-    checkIn,
-    checkOut,
-    qntHospedes
-  );
+    // Validação: data de ida não pode ser maior ou igual à data de volta
+    if (checkIn >= checkOut) {
+      return res.status(400).json({ message: 'Data de ida deve ser anterior à data de volta.' });
+    }
 
-  console.log('Destino:', destino);
-  console.log('Data de ida:', checkIn);
-  console.log('Data de volta:', checkOut);
-  console.log('Numero de Pessoas:', qntHospedes);
+    // Conversão do número de hóspedes (se for inválido, assume o padrão 2)
+    let qntHospedes = num_pessoas ? parseInt(num_pessoas as string, 10) : 2;
+    if (isNaN(qntHospedes) || qntHospedes <= 0) {
+      return res.status(400).json({ message: 'Número de hóspedes inválido.' });
+    }
 
-  console.table(roomsAdequados);
-  res.json(roomsAdequados);
+    // ✅ Criando instâncias dos repositórios
+    const roomRepository = new RoomRepository();
+    const pjRepository = new PjRepository(); // ✅ Criando instância do PjRepository
+
+    // ✅ Passando os dois repositórios corretamente para RoomService
+    const roomService = new RoomService(roomRepository, pjRepository);
+
+    const roomsAdequados = await roomService.buscarAcomodacoes(
+      destino as string,
+      checkIn,
+      checkOut,
+      qntHospedes
+    );
+
+    
+    if (roomsAdequados === "no_capacity_available") {
+      return res.status(404).json({
+        message: "Não há acomodações disponíveis para o número de pessoas informado. Tente diminuir o número de hóspedes e busque novamente."
+      });
+    }
+
+    if (roomsAdequados === "no_rooms_found" || !roomsAdequados || roomsAdequados.length === 0) {
+      return res.status(404).json({
+        message: "Não há acomodações disponíveis no destino e nas datas pesquisadas."
+      });
+    }
+    else{
+    // Resposta de sucesso com as acomodações disponíveis
+    return res.status(200).json(roomsAdequados);
+    }
+    
+  } catch (error) {
+    console.error("Erro no servidor:", error);
+    return res.status(500).json({ message: "Erro ao buscar acomodações no banco de dados." });
+  }
 };

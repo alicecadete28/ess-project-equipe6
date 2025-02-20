@@ -1,7 +1,14 @@
+import Database from '../database';
 import { Request, Response } from 'express';
 import ReservationService from '../services/reservation.service';
+import RoomService from '../services/room.service';
+import RoomRepository from '../repositories/room.repository';
+import PjRepository from '../repositories/pj.repository';
 
 const reservationService = new ReservationService();
+const roomRepository = new RoomRepository();
+const pjRepository = new PjRepository();
+const roomService = new RoomService(roomRepository, pjRepository);
 
 //Criar uma reserva
 export async function createReservation(req: Request, res: Response) {
@@ -10,6 +17,7 @@ export async function createReservation(req: Request, res: Response) {
     const newReservation = await reservationService.createReservation({
       pf_id,
       room_id,
+      //availability_id,
       check_in: new Date(check_in),
       check_out: new Date(check_out),
       guests,
@@ -79,3 +87,6 @@ export async function updateReservationGuests(req: Request, res: Response) {
     res.status(400).json({ error: (error as Error).message });
   }
 }
+
+
+

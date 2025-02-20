@@ -89,10 +89,12 @@ class RoomService {
     checkIn: Date,
     checkOut: Date,
     qntHospedes: number
-  ) {
+  ): Promise<RoomEntity[] | "no_rooms_found" | "no_capacity_available"> {
+  
     const roomRepository = new RoomRepository();
+    console.log(roomRepository, 'service');
     const rooms = await roomRepository.getRooms(); // busca todas as acomodacoes disponiveis
-
+    console.log(rooms);
     const reservationRepository = new ReservationRepository();
     const reservations = await reservationRepository.getReservations(); // busca todas as reservas
 
@@ -112,26 +114,25 @@ class RoomService {
       ); // retornou quartos com a data livre
     });
 
-    const roomsAvailableDestino = roomsAvailable.filter(
-      (room) => room.local === destino
-    );
+  // Filtra quartos disponíveis no destino informado
+  const roomsAvailableDestino = roomsAvailable.filter(
+    (room) => room.local === destino
+  );
 
-    if (roomsAvailableDestino.length === 0) {
-      throw new Error(
-        'Não há acomodações disponíveis no destino e nas datas pesquisadas.'
-      );
-    }
+  // Caso 1: Não há acomodações disponíveis no destino e data selecionados
+  if (roomsAvailableDestino.length === 0) {
+    return "no_rooms_found"; // Retorna uma flag indicando que não há quartos disponíveis
+  }
 
-    // Quartos adequados para a quantidade de hospedes e destino
-    const roomsAdequados = roomsAvailable.filter(
-      (room) => room.local === destino && room.capacity >= qntHospedes
-    );
+  // Filtra quartos com capacidade suficiente
+  const roomsAdequados = roomsAvailableDestino.filter(
+    (room) => room.capacity >= qntHospedes
+  );
 
-    if (roomsAdequados.length === 0) {
-      throw new Error(
-        'Não há acomodações disponíveis para o número de pessoas informado. Tente diminuir o número de hóspedes e busque novamente.'
-      );
-    }
+  // Caso 2: Nenhum quarto com capacidade suficiente
+  if (roomsAdequados.length === 0) {
+    return "no_capacity_available"; // Retorna uma flag específica para falta de capacidade
+  }
     // Ordena os quartos do menor preço para o maior
     roomsAdequados.sort((a, b) => a.price - b.price);
 

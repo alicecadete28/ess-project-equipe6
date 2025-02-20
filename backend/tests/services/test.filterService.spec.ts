@@ -2,11 +2,13 @@ import { Request, Response } from 'express';
 import { parseISO } from 'date-fns';
 import RoomService from '../../src/services/room.service';
 import RoomRepository from '../../src/repositories/room.repository';
+import PjRepository from '../../src/repositories/pj.repository'; // ✅ Importando PjRepository
 import FilterService from '../../src/services/filter.service';
 import { filtrarAcomodacoes } from '../../src/controllers/filter.controller';
 
 jest.mock('../../src/services/room.service');
 jest.mock('../../src/repositories/room.repository');
+jest.mock('../../src/repositories/pj.repository'); // ✅ Mockando PjRepository
 jest.mock('../../src/services/filter.service');
 
 import RoomEntity from '../../src/entities/room.entity';
@@ -57,6 +59,8 @@ describe('filtrarAcomodacoes', () => {
     let statusMock: jest.Mock;
     let sendMock: jest.Mock;
     let mockRoomService: jest.Mocked<RoomService>;
+    let mockRoomRepository: jest.Mocked<RoomRepository>;
+    let mockPjRepository: jest.Mocked<PjRepository>; // ✅ Criando mock do PjRepository
 
     beforeEach(() => {
         jsonMock = jest.fn();
@@ -69,7 +73,10 @@ describe('filtrarAcomodacoes', () => {
             send: sendMock,
         };
 
-        mockRoomService = new RoomService(new RoomRepository()) as jest.Mocked<RoomService>;
+        mockRoomRepository = new RoomRepository() as jest.Mocked<RoomRepository>;
+        mockPjRepository = new PjRepository() as jest.Mocked<PjRepository>; // ✅ Criando instância mockada
+
+        mockRoomService = new RoomService(mockRoomRepository, mockPjRepository) as jest.Mocked<RoomService>; // ✅ Passando ambos os repositórios
     });
 
     afterEach(() => {
@@ -117,6 +124,10 @@ describe('filtrarAcomodacoes', () => {
         await filtrarAcomodacoes(mockRequest as Request, mockResponse as Response);
 
         expect(statusMock).toHaveBeenCalledWith(500);
-        expect(jsonMock).toHaveBeenCalledWith({ message: 'Erro ao buscar acomodações' });
+        expect(jsonMock).toHaveBeenCalledWith({ message: 'Erro ao buscar acomodações no banco de dados.' });
     });
 });
+
+
+// npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/services/test.filterService.spec.ts
+/// ok

@@ -15,7 +15,7 @@ export default class ReservationService {
       id: uuidv4(),
       ...data,
       status: 'pending', // Padrão ao criar
-      rating: 0 // Inicializa sem avaliação
+      rating: {stars: 0, comment:""} // Inicializa sem avaliação
     });
 
     return this.reservationRepository.add(newReservation);
@@ -42,6 +42,25 @@ export default class ReservationService {
     return this.reservationRepository.update(
       (reservation) => reservation.id === reservationId,
       { guests }
+    );
+  }
+
+  //Listar reservas de uma dada acomodação
+  public async getReservationByRoomId(roomId: string): Promise<ReservationEntity[] | null> {
+    // console.log(this.reservationRepository.getReservationByRoomId(roomId), "nao entrou");
+    return this.reservationRepository.getReservationByRoomId(roomId);
+  }
+
+  //Listar reservas feitas por um dado usuário
+  public async getReservationByPFId(pfId: string): Promise<ReservationEntity[] | null> {
+    return this.reservationRepository.getReservationByPFId(pfId);
+  }
+
+  //Cancelar reservas
+  public async cancelReservation(reservationId: string): Promise<ReservationEntity | null> {
+    return this.reservationRepository.update(
+      (reservation) => reservation.id === reservationId,
+      { status: 'canceled' }
     );
   }
 }
