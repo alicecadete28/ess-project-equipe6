@@ -1,7 +1,6 @@
 import PfRepository from '../repositories/pf.repository';
 import PjRepository from '../repositories/pj.repository';
 import UserRepository from '../repositories/user.repository';
-//import { AuthService } from '../services/auth.service';
 import RoomRepository from '../repositories/room.repository';
 import RoomService from '../services/room.service';
 import Injector from './injector';
@@ -11,6 +10,8 @@ import ReservationRepository from '../repositories/reservation.repository'; // I
 import FindReservationRepository from '../repositories/findReservation.repository';
 import AvaliationService from '../services/avaliation.service';
 import ReservationService from '../services/reservation.service';
+import { AuthService } from '../services/auth.service';
+
 
 export const di = new Injector();
 
@@ -26,7 +27,6 @@ di.registerRepository(
 ); // Register the FindReservationRepository
 //Room
 
-/*
 di.registerService(
   AuthService,
   new AuthService(
@@ -34,7 +34,7 @@ di.registerService(
     di.getRepository(PfRepository),
     di.getRepository(PjRepository)
   )
-);*/
+);
 
 di.registerService(
   RoomService,
@@ -53,6 +53,7 @@ di.registerService(
   new SavedService(di.getRepository(PfRepository))
 );
 
+
 di.registerService(
   AvaliationService,
   new AvaliationService(di.getRepository(ReservationRepository))
@@ -62,3 +63,4 @@ di.registerService(
   ReservationService,
   new ReservationService(di.getRepository(ReservationRepository))
 );
+

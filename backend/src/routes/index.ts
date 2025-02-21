@@ -14,7 +14,10 @@ import { AuthController } from '../controllers/auth.controller';
 import { AuthService } from '../services/auth.service';
 import RoomController from '../controllers/room.controller';
 import RoomService from '../services/room.service';
-import { getReservationsByRoom, getReservationsByPF } from '../controllers/reservationlist.controller';
+import {
+  getReservationsByRoom,
+  getReservationsByPF,
+} from '../controllers/reservationlist.controller';
 
 const router = Router();
 const prefix = '/api';
@@ -28,9 +31,7 @@ router.get('/api/reservations/:roomId/room', getReservationsByRoom);
 router.get('/api/reservations/:pfId/pf', getReservationsByPF);
 
 export default (app: Express) => {
-
- app.use('/', new AuthController(router, di.getService(AuthService)).router);
-
+  app.use('/', new AuthController(router, di.getService(AuthService)).router);
 
   // app.use(prefix, AuthController.authenticate, (req, res) =>
   //   res.json({ test: 'logado' })
@@ -41,7 +42,7 @@ export default (app: Express) => {
     new AuthController(router, di.getService(AuthService)).router
   );
 
-  router.use(AuthController.authenticate); // all routes below line is authenticate, if you want to remove authtetication place the function above this line
+  // router.use(AuthController.authenticate); // all routes below line is authenticate, if you want to remove authtetication place the function above this line
 
   app.use(
     prefix,
@@ -61,12 +62,10 @@ export default (app: Express) => {
 
   app.use('/api', reservationRoutes);
 
-
   app.use(
     prefix,
     new FavoritesController(router, di.getService(FavoriteService)).router
   );
 
   app.use('/api', reservationRoutes);
-
 };
