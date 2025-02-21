@@ -43,7 +43,7 @@ defineFeature(feature, (room) => {
 
   room('Return all rooms', ({ given, when, then }) => {
     given(
-      'o método getRooms do RoomsService retorna um array com os seguintes quartos:',
+      'o método getRooms do RoomsService retorna um array com o seguinte quarto:',
       (table) => {
         const requestBody = table.reduce(
           (
@@ -71,7 +71,7 @@ defineFeature(feature, (room) => {
       console.log('rooms', rooms);
     });
 
-    then('o array retornado deve conter os seguintes quartos:', (table) => {
+    then('o array retornado deve conter o seguinte quarto:', (table) => {
       const requestBody = table.reduce(
         (
           acc: { [x: string]: any },
