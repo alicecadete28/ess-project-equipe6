@@ -45,7 +45,7 @@ class RoomService {
   public async getRoomsByPj(id_pj: string): Promise<RoomEntity[]> {
     const roomsPjEntity = await this.roomRepository.getRoomsByPj(id_pj);
 
-    if (!roomsPjEntity) {
+    if (!roomsPjEntity || !Array.isArray(roomsPjEntity)) {
       throw new HttpNotFoundError({
         msg: 'No room found',
         msgCode: RoomServiceMessageCode.room_not_found,
@@ -89,8 +89,7 @@ class RoomService {
     checkIn: Date,
     checkOut: Date,
     qntHospedes: number
-  ): Promise<RoomEntity[] | "no_rooms_found" | "no_capacity_available"> {
-  
+  ): Promise<RoomEntity[] | 'no_rooms_found' | 'no_capacity_available'> {
     const roomRepository = new RoomRepository();
     console.log(roomRepository, 'service');
     const rooms = await roomRepository.getRooms(); // busca todas as acomodacoes disponiveis
@@ -114,25 +113,25 @@ class RoomService {
       ); // retornou quartos com a data livre
     });
 
-  // Filtra quartos disponíveis no destino informado
-  const roomsAvailableDestino = roomsAvailable.filter(
-    (room) => room.local === destino
-  );
+    // Filtra quartos disponíveis no destino informado
+    const roomsAvailableDestino = roomsAvailable.filter(
+      (room) => room.local === destino
+    );
 
-  // Caso 1: Não há acomodações disponíveis no destino e data selecionados
-  if (roomsAvailableDestino.length === 0) {
-    return "no_rooms_found"; // Retorna uma flag indicando que não há quartos disponíveis
-  }
+    // Caso 1: Não há acomodações disponíveis no destino e data selecionados
+    if (roomsAvailableDestino.length === 0) {
+      return 'no_rooms_found'; // Retorna uma flag indicando que não há quartos disponíveis
+    }
 
-  // Filtra quartos com capacidade suficiente
-  const roomsAdequados = roomsAvailableDestino.filter(
-    (room) => room.capacity >= qntHospedes
-  );
+    // Filtra quartos com capacidade suficiente
+    const roomsAdequados = roomsAvailableDestino.filter(
+      (room) => room.capacity >= qntHospedes
+    );
 
-  // Caso 2: Nenhum quarto com capacidade suficiente
-  if (roomsAdequados.length === 0) {
-    return "no_capacity_available"; // Retorna uma flag específica para falta de capacidade
-  }
+    // Caso 2: Nenhum quarto com capacidade suficiente
+    if (roomsAdequados.length === 0) {
+      return 'no_capacity_available'; // Retorna uma flag específica para falta de capacidade
+    }
     // Ordena os quartos do menor preço para o maior
     roomsAdequados.sort((a, b) => a.price - b.price);
 

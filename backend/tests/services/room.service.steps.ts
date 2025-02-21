@@ -45,30 +45,22 @@ defineFeature(feature, (room) => {
     given(
       'o método getRooms do RoomsService retorna um array com o seguinte quarto:',
       (table) => {
-        mockRoomEntity = new RoomEntity({
-          id: table[0],
-          pj_id: table[1],
-          description: table[2],
-          type: table[3],
-          price: table[4],
-          capacity: table[5],
-          caracteristics_ids: table[6],
-          local: table[7],
-          stars: table[8],
-          ar_condicionado: table[9],
-          tv: table[10],
-          wifi: table[11],
-          petFriendly: table[12],
-          cafeDaManha: table[13],
-          estacionamento: table[14],
-          avaliacao: table[15],
-        });
+        const requestBody = table.reduce(
+          (
+            acc: { [x: string]: any },
+            row: { campo: string | number; var: string }
+          ) => {
+            acc[row.campo] = JSON.parse(row.var); // Converte valores corretamente
+            return acc;
+          },
+          {}
+        );
 
-        console.log('mock entity', mockRoomEntity);
+        console.log('request body', requestBody);
 
         jest
           .spyOn(mockRoomRepository, 'getRooms')
-          .mockResolvedValue([mockRoomEntity]);
+          .mockResolvedValue([requestBody]);
       }
     );
 
@@ -80,29 +72,19 @@ defineFeature(feature, (room) => {
     });
 
     then('o array retornado deve conter o seguinte quarto:', (table) => {
-      mockRoomModel = new RoomModel(
-        new RoomEntity({
-          id: table[0],
-          pj_id: table[1],
-          description: table[2],
-          type: table[3],
-          price: table[4],
-          capacity: table[5],
-          caracteristics_ids: table[6],
-          local: table[7],
-          stars: table[8],
-          ar_condicionado: table[9],
-          tv: table[10],
-          wifi: table[11],
-          petFriendly: table[12],
-          cafeDaManha: table[13],
-          estacionamento: table[14],
-          avaliacao: table[15],
-        })
+      const requestBody = table.reduce(
+        (
+          acc: { [x: string]: any },
+          row: { campo: string | number; var: string }
+        ) => {
+          acc[row.campo] = JSON.parse(row.var); // Converte valores corretamente
+          return acc;
+        },
+        {}
       );
-      console.log('mockroomModel:', mockRoomModel);
+      console.log('array esperado:', requestBody);
 
-      expect(rooms).toEqual([mockRoomModel]);
+      expect(rooms).toEqual([requestBody]);
     });
   });
 
@@ -111,29 +93,22 @@ defineFeature(feature, (room) => {
       /^o método getRoom chamado com "(.*)" do RoomService retorna o seguinte quarto:$/,
       (arg0, table) => {
         idToCall = arg0;
+        const requestBody = table.reduce(
+          (
+            acc: { [x: string]: any },
+            row: { campo: string | number; var: string }
+          ) => {
+            acc[row.campo] = JSON.parse(row.var); // Converte valores corretamente
+            return acc;
+          },
+          {}
+        );
 
-        mockRoomEntity = new RoomEntity({
-          id: table[0],
-          pj_id: table[1],
-          description: table[2],
-          type: table[3],
-          price: table[4],
-          capacity: table[5],
-          caracteristics_ids: table[6],
-          local: table[7],
-          stars: table[8],
-          ar_condicionado: table[9],
-          tv: table[10],
-          wifi: table[11],
-          petFriendly: table[12],
-          cafeDaManha: table[13],
-          estacionamento: table[14],
-          avaliacao: table[15],
-        });
+        console.log('request body', requestBody);
 
         jest
           .spyOn(mockRoomRepository, 'getRoom')
-          .mockResolvedValue(mockRoomEntity);
+          .mockResolvedValue(requestBody);
       }
     );
 
@@ -145,27 +120,70 @@ defineFeature(feature, (room) => {
     );
 
     then('o quarto retornado deve ter os seguintes atributos:', (table) => {
-      const roomEntity = new RoomEntity({
-        id: table[0],
-        pj_id: table[1],
-        description: table[2],
-        type: table[3],
-        price: table[4],
-        capacity: table[5],
-        caracteristics_ids: table[6],
-        local: table[7],
-        stars: table[8],
-        ar_condicionado: table[9],
-        tv: table[10],
-        wifi: table[11],
-        petFriendly: table[12],
-        cafeDaManha: table[13],
-        estacionamento: table[14],
-        avaliacao: table[15],
-      });
+      const requestBody = table.reduce(
+        (
+          acc: { [x: string]: any },
+          row: { campo: string | number; var: string }
+        ) => {
+          acc[row.campo] = JSON.parse(row.var); // Converte valores corretamente
+          return acc;
+        },
+        {}
+      );
 
-      expect(roomReturned).toEqual(roomEntity);
+      console.log('request body', requestBody);
+
+      expect(roomReturned).toEqual(requestBody);
       expect(mockRoomRepository.getRoom).toBeCalledWith(idToCall);
+    });
+  });
+  room('Return rooms by the pj id', ({ given, when, then }) => {
+    given(
+      /^o método getRoomsByPj chamado com "(.*)" do RoomService retorna o seguinte quarto:$/,
+      (arg0, table) => {
+        idToCall = arg0;
+        const requestBody = table.reduce(
+          (
+            acc: { [x: string]: any },
+            row: { campo: string | number; var: string }
+          ) => {
+            acc[row.campo] = JSON.parse(row.var); // Converte valores corretamente
+            return acc;
+          },
+          {}
+        );
+
+        console.log('request body', requestBody);
+
+        jest
+          .spyOn(mockRoomRepository, 'getRoomsByPj')
+          .mockResolvedValue([requestBody]);
+      }
+    );
+
+    when(
+      /^o método getRoomsByPj do RoomService for chamado com o id "(.*)"$/,
+      async (roomId) => {
+        rooms = await service.getRoomsByPj(roomId);
+      }
+    );
+
+    then('o quarto retornado deve ter os seguintes atributos:', (table) => {
+      const requestBody = table.reduce(
+        (
+          acc: { [x: string]: any },
+          row: { campo: string | number; var: string }
+        ) => {
+          acc[row.campo] = JSON.parse(row.var); // Converte valores corretamente
+          return acc;
+        },
+        {}
+      );
+
+      console.log('request body', requestBody);
+
+      expect(roomReturned).toEqual(requestBody);
+      expect(mockRoomRepository.getRoomsByPj).toBeCalledWith(idToCall);
     });
   });
 });

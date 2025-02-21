@@ -1,7 +1,7 @@
 Feature: Tests
 
   # API
-  Scenario: Create a room
+  Scenario: Create a room successfully
     Given o usuário tem um id de pj "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d"
     When uma requisição POST for enviada para "/api/rooms" com o corpo da requisição sendo um JSON com:
       | campo              | var         |

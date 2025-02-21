@@ -17,7 +17,7 @@ defineFeature(feature, (room) => {
     mockRoomRepository = di.getRepository<RoomRepository>(RoomRepository);
   });
 
-  room('Create a room', ({ given, when, then, and }) => {
+  room('Create a room successfully', ({ given, when, then, and }) => {
     let roomPjId: string; // Variável para armazenar o `pj_id`
     let response: any;
     given(/^o usuário tem um id de pj "(.*)"$/, (roomId: string) => {
