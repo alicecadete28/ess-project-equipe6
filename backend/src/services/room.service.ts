@@ -13,10 +13,16 @@ class RoomServiceMessageCode {
 class RoomService {
   private roomRepository: RoomRepository;
   private pjRepository: PjRepository;
+  private reservationRepository: ReservationRepository;
 
-  constructor(roomRepository: RoomRepository, pjRepository: PjRepository) {
+  constructor(
+    roomRepository: RoomRepository,
+    pjRepository: PjRepository,
+    reservationRepository: ReservationRepository
+  ) {
     this.roomRepository = roomRepository;
     this.pjRepository = pjRepository;
+    this.reservationRepository = reservationRepository;
   }
 
   public async getRooms(): Promise<RoomEntity[]> {
@@ -100,12 +106,11 @@ class RoomService {
     checkOut: Date,
     qntHospedes: number
   ): Promise<RoomEntity[] | 'no_rooms_found' | 'no_capacity_available'> {
-    const roomRepository = new RoomRepository();
-    console.log(roomRepository, 'service');
-    const rooms = await roomRepository.getRooms(); // busca todas as acomodacoes disponiveis
-    console.log(rooms);
-    const reservationRepository = new ReservationRepository();
-    const reservations = await reservationRepository.getReservations(); // busca todas as reservas
+
+    const rooms = await this.roomRepository.getRooms(); // busca todas as acomodacoes disponiveis
+
+    const reservations = await this.reservationRepository.getReservations(); // busca todas as reservas
+
 
     const roomsAvailable = rooms.filter((room) => {
       const quartoComReservas = reservations.some(
