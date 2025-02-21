@@ -1,14 +1,12 @@
 import { Request, Response } from 'express';
 import { addDays } from 'date-fns';
-import RoomRepository from '../repositories/room.repository';
 import RoomService from '../services/room.service';
-import PjRepository from '../repositories/pj.repository';
+import { di } from '../di';
 
 export const buscarAcomodacoes = async (req: Request, res: Response) => {
-
   try {
     const { destino, data_ida, data_volta, num_pessoas } = req.query;
-    console.log("Parâmetros recebidos:", req.query);
+    console.log('Parâmetros recebidos:', req.query);
 
     // Validação: destino obrigatório
     if (!destino) {
@@ -16,8 +14,12 @@ export const buscarAcomodacoes = async (req: Request, res: Response) => {
     }
 
     // Validação e conversão das datas
-    let checkIn: Date = data_ida ? new Date(data_ida as string) : addDays(new Date(), 1);
-    let checkOut: Date = data_volta ? new Date(data_volta as string) : addDays(new Date(), 2);
+    let checkIn: Date = data_ida
+      ? new Date(data_ida as string)
+      : addDays(new Date(), 1);
+    let checkOut: Date = data_volta
+      ? new Date(data_volta as string)
+      : addDays(new Date(), 2);
 
     // Validação: datas inválidas
     if (isNaN(checkIn.getTime())) {
@@ -29,7 +31,9 @@ export const buscarAcomodacoes = async (req: Request, res: Response) => {
 
     // Validação: data de ida não pode ser maior ou igual à data de volta
     if (checkIn >= checkOut) {
-      return res.status(400).json({ message: 'Data de ida deve ser anterior à data de volta.' });
+      return res
+        .status(400)
+        .json({ message: 'Data de ida deve ser anterior à data de volta.' });
     }
 
     // Conversão do número de hóspedes (se for inválido, assume o padrão 2)
@@ -38,12 +42,8 @@ export const buscarAcomodacoes = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Número de hóspedes inválido.' });
     }
 
-    // ✅ Criando instâncias dos repositórios
-    const roomRepository = new RoomRepository();
-    const pjRepository = new PjRepository(); // ✅ Criando instância do PjRepository
-
     // ✅ Passando os dois repositórios corretamente para RoomService
-    const roomService = new RoomService(roomRepository, pjRepository);
+    const roomService = di.getService(RoomService);
 
     const roomsAdequados = await roomService.buscarAcomodacoes(
       destino as string,
@@ -52,25 +52,30 @@ export const buscarAcomodacoes = async (req: Request, res: Response) => {
       qntHospedes
     );
 
-    
-    if (roomsAdequados === "no_capacity_available") {
+    if (roomsAdequados === 'no_capacity_available') {
       return res.status(404).json({
-        message: "Não há acomodações disponíveis para o número de pessoas informado. Tente diminuir o número de hóspedes e busque novamente."
+        message:
+          'Não há acomodações disponíveis para o número de pessoas informado. Tente diminuir o número de hóspedes e busque novamente.',
       });
     }
 
-    if (roomsAdequados === "no_rooms_found" || !roomsAdequados || roomsAdequados.length === 0) {
+    if (
+      roomsAdequados === 'no_rooms_found' ||
+      !roomsAdequados ||
+      roomsAdequados.length === 0
+    ) {
       return res.status(404).json({
-        message: "Não há acomodações disponíveis no destino e nas datas pesquisadas."
+        message:
+          'Não há acomodações disponíveis no destino e nas datas pesquisadas.',
       });
+    } else {
+      // Resposta de sucesso com as acomodações disponíveis
+      return res.status(200).json(roomsAdequados);
     }
-    else{
-    // Resposta de sucesso com as acomodações disponíveis
-    return res.status(200).json(roomsAdequados);
-    }
-    
   } catch (error) {
-    console.error("Erro no servidor:", error);
-    return res.status(500).json({ message: "Erro ao buscar acomodações no banco de dados." });
+    console.error('Erro no servidor:', error);
+    return res
+      .status(500)
+      .json({ message: 'Erro ao buscar acomodações no banco de dados.' });
   }
 };

@@ -13,10 +13,16 @@ class RoomServiceMessageCode {
 class RoomService {
   private roomRepository: RoomRepository;
   private pjRepository: PjRepository;
+  private reservationRepository: ReservationRepository;
 
-  constructor(roomRepository: RoomRepository, pjRepository: PjRepository) {
+  constructor(
+    roomRepository: RoomRepository,
+    pjRepository: PjRepository,
+    reservationRepository: ReservationRepository
+  ) {
     this.roomRepository = roomRepository;
     this.pjRepository = pjRepository;
+    this.reservationRepository = reservationRepository;
   }
 
   public async getRooms(): Promise<RoomEntity[]> {
@@ -31,6 +37,8 @@ class RoomService {
     const roomEntity = await this.roomRepository.getRoom(id);
 
     if (!roomEntity) {
+      console.log('entrou3');
+
       throw new HttpNotFoundError({
         msg: 'Room not found',
         msgCode: RoomServiceMessageCode.room_not_found,
@@ -45,7 +53,15 @@ class RoomService {
   public async getRoomsByPj(id_pj: string): Promise<RoomEntity[]> {
     const roomsPjEntity = await this.roomRepository.getRoomsByPj(id_pj);
 
-    if (!roomsPjEntity) {
+    console.log('entrou');
+
+    if (
+      !roomsPjEntity ||
+      !Array.isArray(roomsPjEntity) ||
+      roomsPjEntity.length === 0
+    ) {
+      console.log('entrou2');
+
       throw new HttpNotFoundError({
         msg: 'No room found',
         msgCode: RoomServiceMessageCode.room_not_found,
@@ -89,14 +105,12 @@ class RoomService {
     checkIn: Date,
     checkOut: Date,
     qntHospedes: number
-  ): Promise<RoomEntity[] | "no_rooms_found" | "no_capacity_available"> {
-  
-    const roomRepository = new RoomRepository();
-    console.log(roomRepository, 'service');
-    const rooms = await roomRepository.getRooms(); // busca todas as acomodacoes disponiveis
-    console.log(rooms);
-    const reservationRepository = new ReservationRepository();
-    const reservations = await reservationRepository.getReservations(); // busca todas as reservas
+  ): Promise<RoomEntity[] | 'no_rooms_found' | 'no_capacity_available'> {
+
+    const rooms = await this.roomRepository.getRooms(); // busca todas as acomodacoes disponiveis
+
+    const reservations = await this.reservationRepository.getReservations(); // busca todas as reservas
+
 
     const roomsAvailable = rooms.filter((room) => {
       const quartoComReservas = reservations.some(
@@ -114,25 +128,25 @@ class RoomService {
       ); // retornou quartos com a data livre
     });
 
-  // Filtra quartos disponíveis no destino informado
-  const roomsAvailableDestino = roomsAvailable.filter(
-    (room) => room.local === destino
-  );
+    // Filtra quartos disponíveis no destino informado
+    const roomsAvailableDestino = roomsAvailable.filter(
+      (room) => room.local === destino
+    );
 
-  // Caso 1: Não há acomodações disponíveis no destino e data selecionados
-  if (roomsAvailableDestino.length === 0) {
-    return "no_rooms_found"; // Retorna uma flag indicando que não há quartos disponíveis
-  }
+    // Caso 1: Não há acomodações disponíveis no destino e data selecionados
+    if (roomsAvailableDestino.length === 0) {
+      return 'no_rooms_found'; // Retorna uma flag indicando que não há quartos disponíveis
+    }
 
-  // Filtra quartos com capacidade suficiente
-  const roomsAdequados = roomsAvailableDestino.filter(
-    (room) => room.capacity >= qntHospedes
-  );
+    // Filtra quartos com capacidade suficiente
+    const roomsAdequados = roomsAvailableDestino.filter(
+      (room) => room.capacity >= qntHospedes
+    );
 
-  // Caso 2: Nenhum quarto com capacidade suficiente
-  if (roomsAdequados.length === 0) {
-    return "no_capacity_available"; // Retorna uma flag específica para falta de capacidade
-  }
+    // Caso 2: Nenhum quarto com capacidade suficiente
+    if (roomsAdequados.length === 0) {
+      return 'no_capacity_available'; // Retorna uma flag específica para falta de capacidade
+    }
     // Ordena os quartos do menor preço para o maior
     roomsAdequados.sort((a, b) => a.price - b.price);
 
