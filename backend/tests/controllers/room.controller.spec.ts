@@ -48,6 +48,12 @@ describe('RoomController', () => {
     expect(response.status).toBe(404);
     expect(response.body.msgCode).toEqual('room_not_found');
   });
+  it('should throw an error when there is no room associated with the pj', async () => {
+    const response = await request.get(`/api/rooms/pj/02`);
+
+    expect(response.status).toBe(404);
+    expect(response.body.msgCode).toEqual('room_not_found');
+  });
 
   it('should create a room', async () => {
     const response = await request.post('/api/rooms').send(mockRoomEntity);

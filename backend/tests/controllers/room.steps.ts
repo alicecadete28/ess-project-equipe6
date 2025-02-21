@@ -212,4 +212,104 @@ defineFeature(feature, (room) => {
       );
     }
   );
+  room(
+    'Room could not be created because price is not a numerical value',
+    ({ given, when, then, and }) => {
+      let roomPjId: string; // Variável para armazenar o `pj_id`
+      let response: any;
+      given(/^o usuário tem um id de pj "(.*)"$/, (roomId: string) => {
+        roomPjId = roomId; // Armazena o `pj_id` passado no `given`
+      });
+
+      when(
+        /^uma requisição POST for enviada para "(.*)" com o corpo da requisição sendo um JSON com:$/,
+        (arg0, table) => {
+          const requestBody = table.reduce(
+            (
+              acc: { [x: string]: any },
+              row: { campo: string | number; var: string }
+            ) => {
+              acc[row.campo] = JSON.parse(row.var); // Converte valores corretamente
+              return acc;
+            },
+            {}
+          );
+
+          console.log('Dados da requisição:', requestBody);
+          // console.log('room entity', roomEntity);
+          return request
+            .post(arg0)
+            .send(requestBody)
+            .then((res) => {
+              response = res; // Atualiza a variável response
+            })
+            .catch((err) => {
+              console.error('Erro na requisição:', err);
+            });
+        }
+      );
+
+      then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
+        expect(response.status).toBe(parseInt(statusCode, 10));
+      });
+
+      and(
+        /^o JSON da resposta deve conter a mensagem de erro "(.*)"$/,
+        (message) => {
+          expect(response.body).toHaveProperty('error');
+          expect(response.body.error).toBe(message);
+        }
+      );
+    }
+  );
+  room(
+    'Room could not be created because stars is not a integer between 1 and 5',
+    ({ given, when, then, and }) => {
+      let roomPjId: string; // Variável para armazenar o `pj_id`
+      let response: any;
+      given(/^o usuário tem um id de pj "(.*)"$/, (roomId: string) => {
+        roomPjId = roomId; // Armazena o `pj_id` passado no `given`
+      });
+
+      when(
+        /^uma requisição POST for enviada para "(.*)" com o corpo da requisição sendo um JSON com:$/,
+        (arg0, table) => {
+          const requestBody = table.reduce(
+            (
+              acc: { [x: string]: any },
+              row: { campo: string | number; var: string }
+            ) => {
+              acc[row.campo] = JSON.parse(row.var); // Converte valores corretamente
+              return acc;
+            },
+            {}
+          );
+
+          console.log('Dados da requisição:', requestBody);
+          // console.log('room entity', roomEntity);
+          return request
+            .post(arg0)
+            .send(requestBody)
+            .then((res) => {
+              response = res; // Atualiza a variável response
+            })
+            .catch((err) => {
+              console.error('Erro na requisição:', err);
+            });
+        }
+      );
+
+      then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
+        expect(response.status).toBe(parseInt(statusCode, 10));
+      });
+
+      and(
+        /^o JSON da resposta deve conter a mensagem de erro "(.*)"$/,
+        (message) => {
+          expect(response.body).toHaveProperty('error');
+          expect(response.body.error).toBe(message);
+        }
+      );
+    }
+  );
 });

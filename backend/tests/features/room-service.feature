@@ -1,4 +1,4 @@
-Feature: Rooms Service
+Feature: Return rooms
 
   # Service
   Scenario: Return all rooms
@@ -79,7 +79,6 @@ Feature: Rooms Service
       | estacionamento     | "true"                                 |
       | avaliacao          | "5"                                    |
 
-
   Scenario: Return rooms by the pj id
 
     Given o método getRoomsByPj chamado com "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d" do RoomService retorna o seguinte quarto:
@@ -119,3 +118,4 @@ Feature: Rooms Service
       | cafeDaManha        | "true"                                 |
       | estacionamento     | "true"                                 |
       | avaliacao          | "5"                                    |
+
