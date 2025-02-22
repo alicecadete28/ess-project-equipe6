@@ -9,7 +9,6 @@ import { AvaliarAcomodacao } from '../controllers/avaliation.controller';
 import { buscarAcomodacoes } from '../controllers/findReservation.controller';
 import { filtrarAcomodacoes } from '../controllers/filter.controller';
 import { ordenarAcomodacoes } from '../controllers/order.controller';
-import reservationRoutes from './reservation.routes';
 import { AuthController } from '../controllers/auth.controller';
 import { AuthService } from '../services/auth.service';
 import RoomController from '../controllers/room.controller';
@@ -18,6 +17,8 @@ import {
   getReservationsByRoom,
   getReservationsByPF,
 } from '../controllers/reservationlist.controller';
+import ReservationController from '../controllers/reservation.controller';
+import ReservationService from '../services/reservation.service';
 
 const router = Router();
 const prefix = '/api';
@@ -60,12 +61,10 @@ export default (app: Express) => {
   );
   //app.use(prefix, AuthController.authenticate);
 
-  app.use('/api', reservationRoutes);
-
   app.use(
     prefix,
-    new FavoritesController(router, di.getService(FavoriteService)).router
+    new ReservationController(router, di.getService(ReservationService)).router 
   );
 
-  app.use('/api', reservationRoutes);
+  
 };

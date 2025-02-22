@@ -35,17 +35,6 @@ export default class Database {
           status: 'Pending',
           rating: { stars: 0, comment: '' },
         }),
-        new ReservationEntity({
-          id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1b',
-          pf_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
-          room_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
-          check_in: new Date('2025-03-09'),
-          check_out: new Date('2025-03-29'),
-          guests: 2,
-          total: 100,
-          status: 'Pending',
-          rating: { stars: 0, comment: '' },
-        }),
       ],
       rooms: [
         new RoomEntity({
