@@ -8,6 +8,7 @@ import { buscarAcomodacoes } from '../../src/controllers/findReservation.control
 import RoomEntity from '../../src/entities/room.entity';
 import PjRepository from '../../src/repositories/pj.repository';
 import { mock } from 'node:test';
+import ReservationEntity from '../../src/entities/reservation.entity';
 
 describe('buscarAcomodacoes', () => {
   let mockRoomRepository: RoomRepository;
@@ -56,7 +57,7 @@ describe('buscarAcomodacoes', () => {
       price: 200,
       capacity: 2,
       caracteristics_ids: [],
-      local: 'Recife, PE',
+      local: 'Recife',
       stars: 4.5,
       ar_condicionado: true,
       tv: true,
@@ -105,36 +106,22 @@ describe('buscarAcomodacoes', () => {
   });
 
   it('deve retornar no_capacity_available', async () => {
-    const mockReservation = [
-      {
-        id: '1',
-        pf_id: 'PF123',
-        room_id: '1',
-        check_in: parseISO('2025-06-05'),
-        check_out: parseISO('2025-06-10'),
-        guests: 2,
-        total: 200,
-        status: 'confirmed',
-        rating: { stars: 4.5, comment: 'Ótimo' },
-      },
-    ];
-
     jest.spyOn(mockRoomRepository, 'getRooms').mockResolvedValue(mockRoom);
     jest
       .spyOn(mockReservationRepository, 'getReservations')
-      .mockResolvedValue(mockReservation);
+      .mockResolvedValue([]);
 
     const result = await service.buscarAcomodacoes(
       'Recife',
       parseISO('2025-06-01'),
       parseISO('2025-06-10'),
-      2
+      10
     );
 
     expect(result).toEqual('no_capacity_available');
   });
 });
 
-//npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/services/test.findRoomService.spec.ts
+//npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/services/test.findReservationService.spec.ts
 
 //ok

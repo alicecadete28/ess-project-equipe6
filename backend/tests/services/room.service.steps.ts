@@ -4,6 +4,7 @@ import RoomEntity from '../../src/entities/room.entity';
 import RoomService from '../../src/services/room.service';
 import PjRepository from '../../src/repositories/pj.repository';
 import RoomModel from '../../src/models/room.model';
+import ReservationRepository from '../../src/repositories/reservation.repository';
 
 const feature = loadFeature('tests/features/room-service.feature');
 
@@ -12,6 +13,7 @@ defineFeature(feature, (room) => {
   let mockRoomRepository: RoomRepository;
   let mockPjRepository: PjRepository;
   let service: RoomService;
+  let mockReservationRepository: ReservationRepository;
 
   let rooms: RoomEntity[];
   let roomReturned: RoomEntity;
@@ -30,11 +32,17 @@ defineFeature(feature, (room) => {
       getRoomsByPj: jest.fn(),
     } as any;
 
-    mockPjRepository = {
-      getRoomsByPj: jest.fn(),
+    mockReservationRepository = {
+      getReservations: jest.fn(),
+      getReservation: jest.fn(),
+      getReservationsByPf: jest.fn(),
     } as any;
 
-    service = new RoomService(mockRoomRepository, mockPjRepository);
+    service = new RoomService(
+      mockRoomRepository,
+      mockPjRepository,
+      mockReservationRepository
+    );
   });
 
   afterEach(() => {
@@ -56,8 +64,6 @@ defineFeature(feature, (room) => {
           {}
         );
 
-        console.log('request body', requestBody);
-
         jest
           .spyOn(mockRoomRepository, 'getRooms')
           .mockResolvedValue([requestBody]);
@@ -68,7 +74,6 @@ defineFeature(feature, (room) => {
       rooms = await service.getRooms();
 
       //getRooms retorna:
-      console.log('rooms', rooms);
     });
 
     then('o array retornado deve conter o seguinte quarto:', (table) => {
@@ -82,7 +87,6 @@ defineFeature(feature, (room) => {
         },
         {}
       );
-      console.log('array esperado:', requestBody);
 
       expect(rooms).toEqual([requestBody]);
     });
@@ -103,8 +107,6 @@ defineFeature(feature, (room) => {
           },
           {}
         );
-
-        console.log('request body', requestBody);
 
         jest
           .spyOn(mockRoomRepository, 'getRoom')
@@ -131,8 +133,6 @@ defineFeature(feature, (room) => {
         {}
       );
 
-      console.log('request body', requestBody);
-
       expect(roomReturned).toEqual(requestBody);
       expect(mockRoomRepository.getRoom).toBeCalledWith(idToCall);
     });
@@ -152,8 +152,6 @@ defineFeature(feature, (room) => {
           },
           {}
         );
-
-        console.log('request body', requestBody);
 
         jest
           .spyOn(mockRoomRepository, 'getRoomsByPj')
@@ -179,8 +177,6 @@ defineFeature(feature, (room) => {
         },
         {}
       );
-
-      console.log('request body', requestBody);
 
       expect(roomReturned).toEqual(requestBody);
       expect(mockRoomRepository.getRoomsByPj).toBeCalledWith(idToCall);

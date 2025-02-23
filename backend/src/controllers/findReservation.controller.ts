@@ -6,8 +6,6 @@ import { di } from '../di';
 export const buscarAcomodacoes = async (req: Request, res: Response) => {
   try {
     const { destino, data_ida, data_volta, num_pessoas } = req.query;
-    console.log('Parâmetros recebidos:', req.query);
-
     // Validação: destino obrigatório
     if (!destino) {
       return res.status(400).json({ error: 'O destino é obrigatório.' });

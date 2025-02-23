@@ -44,9 +44,8 @@ class ReservationController {
       check_out: new Date(check_out),
       guests,
       total,
-      confirmed: false, 
+      confirmed: false,
     });
-    
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
@@ -67,6 +66,7 @@ class ReservationController {
 
   private async updateReservationDates(req: Request, res: Response) {
     const { check_in, check_out } = req.body;
+
     const updatedReservation =
       await this.reservationService.updateReservationDates(
         req.params.reservationId,

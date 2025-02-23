@@ -81,7 +81,6 @@ defineFeature(feature, (test) => {
           email,
           password,
         });
-        console.log(response.body);
       }
     );
 

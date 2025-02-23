@@ -6,7 +6,7 @@
     "start": "env-cmd -f .env nodemon --watch 'src//*.ts' --exec 'ts-node' src/index.ts",
     "build": "tsc -p .",
     "prod": "node dist/src/index.js",
-    "test": "env-cmd -f .env.test jest --verbose --coverage --config ./jest.config.js --detectOpenHandles",
+    "test": "env-cmd -f .env jest --verbose --coverage --config ./jest.config.js --detectOpenHandles",
     "prettier": "prettier --write 'src//.{ts,js}'",
     "lint": "eslint '**/.ts' --report-unused-disable-directives --max-warnings 0 --fix",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts"

@@ -21,15 +21,19 @@ class ReservationService {
     const newReservation = new ReservationEntity({
       id: uuidv4(),
       ...data,
-      status: 'pending', 
+      status: 'pending',
       rating: { stars: 0, comment: '' },
     });
 
-    const createdReservation = await this.reservationRepository.add(newReservation);
+    const createdReservation = await this.reservationRepository.add(
+      newReservation
+    );
     return new ReservationModel(createdReservation);
   }
 
-  public async confirmReservation(reservationId: string): Promise<ReservationModel> {
+  public async confirmReservation(
+    reservationId: string
+  ): Promise<ReservationModel> {
     const updatedReservation = await this.reservationRepository.update(
       (reservation) => reservation.id === reservationId,
       { status: 'confirmed' }
@@ -50,10 +54,19 @@ class ReservationService {
     checkIn: Date,
     checkOut: Date
   ): Promise<ReservationModel> {
-    const updatedReservation = await this.reservationRepository.update(
-      (reservation) => reservation.id === reservationId,
-      { check_in: checkIn, check_out: checkOut }
+    console.log(await this.reservationRepository.getReservations());
+    const reservation = await this.reservationRepository.getReservation(
+      reservationId
     );
+
+    console.log(reservation);
+
+    const updatedReservation =
+      await this.reservationRepository.updateReservation(reservationId, {
+        ...reservation,
+        check_in: checkIn,
+        check_out: checkOut,
+      } as ReservationEntity);
 
     if (!updatedReservation) {
       throw new HttpNotFoundError({
@@ -65,7 +78,10 @@ class ReservationService {
     return new ReservationModel(updatedReservation);
   }
 
-  public async updateReservationGuests(reservationId: string, guests: number): Promise<ReservationModel> {
+  public async updateReservationGuests(
+    reservationId: string,
+    guests: number
+  ): Promise<ReservationModel> {
     const updatedReservation = await this.reservationRepository.update(
       (reservation) => reservation.id === reservationId,
       { guests }
@@ -81,18 +97,23 @@ class ReservationService {
     return new ReservationModel(updatedReservation);
   }
 
-  public async getReservationByRoomId(roomId: string): Promise<ReservationModel[]> {
-    const reservations = (await this.reservationRepository.getReservationByRoomId(roomId)) ?? [];
+  public async getReservationByRoomId(
+    roomId: string
+  ): Promise<ReservationModel[]> {
+    const reservations =
+      (await this.reservationRepository.getReservationByRoomId(roomId)) ?? [];
     return reservations.map((reservation) => new ReservationModel(reservation));
-
   }
 
   public async getReservationByPFId(pfId: string): Promise<ReservationModel[]> {
-    const reservations = (await this.reservationRepository.getReservationByPFId(pfId)) ?? [];
+    const reservations =
+      (await this.reservationRepository.getReservationByPFId(pfId)) ?? [];
     return reservations.map((reservation) => new ReservationModel(reservation));
   }
 
-  public async cancelReservation(reservationId: string): Promise<ReservationModel> {
+  public async cancelReservation(
+    reservationId: string
+  ): Promise<ReservationModel> {
     const updatedReservation = await this.reservationRepository.update(
       (reservation) => reservation.id === reservationId,
       { status: 'canceled' }
