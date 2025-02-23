@@ -4,6 +4,7 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import ReservationRepository from '../../src/repositories/reservation.repository';
 import ReservationEntity from '../../src/entities/reservation.entity';
+import { generateToken } from '../utils/generateToken';
 
 const feature = loadFeature('tests/features/reservation.feature');
 const request = supertest(app);
@@ -15,11 +16,7 @@ defineFeature(feature, (test) => {
   let token: string;
 
   beforeAll(async () => {
-    const res = await request.post('/login').send({
-      email: 'email_de_teste@teste.com',
-      password: 'senha123',
-    });
-    token = res.body.token;
+    token = generateToken();
   });
 
   beforeEach(() => {
@@ -136,8 +133,6 @@ defineFeature(feature, (test) => {
           .patch(url1 + mockEntity.id + url2)
           .set('Authorization', `Bearer ${token}`)
           .send({ check_in, check_out });
-
-        console.log(response.body);
       }
     );
 

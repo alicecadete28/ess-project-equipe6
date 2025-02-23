@@ -54,12 +54,9 @@ class ReservationService {
     checkIn: Date,
     checkOut: Date
   ): Promise<ReservationModel> {
-    console.log(await this.reservationRepository.getReservations());
     const reservation = await this.reservationRepository.getReservation(
       reservationId
     );
-
-    console.log(reservation);
 
     const updatedReservation =
       await this.reservationRepository.updateReservation(reservationId, {
