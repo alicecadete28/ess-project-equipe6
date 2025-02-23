@@ -1,6 +1,7 @@
 import RoomEntity from '../../src/entities/room.entity';
 import RoomModel from '../../src/models/room.model';
 import PjRepository from '../../src/repositories/pj.repository';
+import ReservationRepository from '../../src/repositories/reservation.repository';
 import RoomRepository from '../../src/repositories/room.repository';
 import RoomService from '../../src/services/room.service';
 import { HttpNotFoundError } from '../../src/utils/errors/http.error';
@@ -8,6 +9,7 @@ import { HttpNotFoundError } from '../../src/utils/errors/http.error';
 describe('RoomService', () => {
   let mockRoomRepository: RoomRepository;
   let mockPjRepository: PjRepository;
+  let mockReservationRepository: ReservationRepository;
   let service: RoomService;
 
   let mockRoomEntity: RoomEntity = new RoomEntity({
@@ -45,7 +47,17 @@ describe('RoomService', () => {
       getRoomsByPj: jest.fn(),
     } as any;
 
-    service = new RoomService(mockRoomRepository, mockPjRepository);
+    mockReservationRepository = {
+      getReservations: jest.fn(),
+      getReservation: jest.fn(),
+      getReservationsByPf: jest.fn(),
+    } as any;
+
+    service = new RoomService(
+      mockRoomRepository,
+      mockPjRepository,
+      mockReservationRepository
+    );
   });
 
   afterEach(() => {

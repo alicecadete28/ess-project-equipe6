@@ -37,8 +37,6 @@ class RoomService {
     const roomEntity = await this.roomRepository.getRoom(id);
 
     if (!roomEntity) {
-      console.log('entrou3');
-
       throw new HttpNotFoundError({
         msg: 'Room not found',
         msgCode: RoomServiceMessageCode.room_not_found,
@@ -53,15 +51,11 @@ class RoomService {
   public async getRoomsByPj(id_pj: string): Promise<RoomEntity[]> {
     const roomsPjEntity = await this.roomRepository.getRoomsByPj(id_pj);
 
-    console.log('entrou');
-
     if (
       !roomsPjEntity ||
       !Array.isArray(roomsPjEntity) ||
       roomsPjEntity.length === 0
     ) {
-      console.log('entrou2');
-
       throw new HttpNotFoundError({
         msg: 'No room found',
         msgCode: RoomServiceMessageCode.room_not_found,
@@ -106,11 +100,9 @@ class RoomService {
     checkOut: Date,
     qntHospedes: number
   ): Promise<RoomEntity[] | 'no_rooms_found' | 'no_capacity_available'> {
-
     const rooms = await this.roomRepository.getRooms(); // busca todas as acomodacoes disponiveis
 
     const reservations = await this.reservationRepository.getReservations(); // busca todas as reservas
-
 
     const roomsAvailable = rooms.filter((room) => {
       const quartoComReservas = reservations.some(

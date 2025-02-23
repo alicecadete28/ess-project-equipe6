@@ -7,7 +7,11 @@ class AvaliationService {
     this.reservationRepository = reservationRepository;
   }
 
-  async avaliarAcomodacao(id: string, num_Estrelas: number, comentario: string) {
+  async avaliarAcomodacao(
+    id: string,
+    num_Estrelas: number,
+    comentario: string
+  ) {
     // Validate the rating
     if (num_Estrelas < 1 || num_Estrelas > 5) {
       throw new Error('A nota deve ser um número entre 1 e 5.');
@@ -20,17 +24,16 @@ class AvaliationService {
 
     try {
       const reservas = await this.reservationRepository.getReservations();
-      console.log('Reservations:', reservas);
 
-      const reserva = reservas.find(res => res.id === id);
+      const reserva = reservas.find((res) => res.id === id);
 
       if (!reserva) {
         throw new Error('Reserva não encontrada.');
       }
       reserva.rating = { stars: num_Estrelas, comment: comentario };
 
-      const updatedReservation = await this.reservationRepository.updateReservation(id, reserva);
-      console.log('Updated Reservation:', updatedReservation);
+      const updatedReservation =
+        await this.reservationRepository.updateReservation(id, reserva);
 
       return updatedReservation;
     } catch (error) {

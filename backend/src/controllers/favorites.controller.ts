@@ -24,19 +24,19 @@ class FavoritesController {
   }
 
   private async getFavorites(req: Request, res: Response) {
-    //console.log ("foi")
     const favorites = await this.favoriteService.getFavorites(req.params.id);
-    //console.log ("foi2"),
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
       data: favorites,
     }).handle(res);
-    
   }
 
   private async addFavorite(req: Request, res: Response) {
-    const favorite = await this.favoriteService.updateFavorite(req.body.favorites, req.params.id);
+    const favorite = await this.favoriteService.updateFavorite(
+      req.body.favorites,
+      req.params.id
+    );
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
