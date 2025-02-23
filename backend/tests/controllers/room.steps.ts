@@ -38,8 +38,6 @@ defineFeature(feature, (room) => {
           {}
         );
 
-        console.log('Dados da requisição:', requestBody);
-        // console.log('room entity', roomEntity);
         return request
           .post(arg0)
           .send(requestBody)
@@ -85,8 +83,6 @@ defineFeature(feature, (room) => {
             {}
           );
 
-          console.log('Dados da requisição:', requestBody);
-          // console.log('room entity', roomEntity);
           return request
             .post(arg0)
             .send(requestBody)
@@ -135,8 +131,6 @@ defineFeature(feature, (room) => {
             {}
           );
 
-          console.log('Dados da requisição:', requestBody);
-          // console.log('room entity', roomEntity);
           return request
             .post(arg0)
             .send(requestBody)
@@ -185,8 +179,6 @@ defineFeature(feature, (room) => {
             {}
           );
 
-          console.log('Dados da requisição:', requestBody);
-          // console.log('room entity', roomEntity);
           return request
             .post(arg0)
             .send(requestBody)
@@ -235,8 +227,6 @@ defineFeature(feature, (room) => {
             {}
           );
 
-          console.log('Dados da requisição:', requestBody);
-          // console.log('room entity', roomEntity);
           return request
             .post(arg0)
             .send(requestBody)
@@ -285,8 +275,6 @@ defineFeature(feature, (room) => {
             {}
           );
 
-          console.log('Dados da requisição:', requestBody);
-          // console.log('room entity', roomEntity);
           return request
             .post(arg0)
             .send(requestBody)

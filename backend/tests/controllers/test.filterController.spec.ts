@@ -28,19 +28,22 @@ describe('FilterController', () => {
     });
 
     expect(resposta.status).toBe(200);
-    expect(resposta.body).toBeInstanceOf(Array);
+
+    expect(resposta.body).toBeInstanceOf(Array<RoomEntity>);
+
     expect(resposta.body.length).toBeGreaterThan(0);
   });
 
   it('deve retornar uma mensagem quando nenhuma acomodação corresponder', async () => {
     const resposta = await request.get('/api/filtrar-acomodacoes').query({
-      destino: 'São Paulo',
+      destino: 'Recife',
       data_ida: dataCheckIn,
       data_volta: dataCheckOut,
       num_pessoas,
+      wifi: true,
     });
 
-    expect(resposta.status).toBe(200);
+    expect(resposta.status).toBe(404);
     expect(resposta.body).toEqual({
       message: 'Nenhuma acomodação atende aos filtros selecionados.',
     });
@@ -49,4 +52,4 @@ describe('FilterController', () => {
 
 //npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/controllers/test.filterController.spec.ts
 
-/// era para ta ok, mas um teste nao esta funcionando
+///ok

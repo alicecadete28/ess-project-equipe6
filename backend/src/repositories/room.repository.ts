@@ -20,8 +20,7 @@ class RoomRepository extends BaseRepository<RoomEntity> {
   }
 
   public async createRoom(data: RoomEntity): Promise<RoomEntity> {
-    const room = await this.add(data)
-    console.log(Database.getInstance(), 'Database.getInstance()')
+    const room = await this.add(data);
     return room;
   }
 

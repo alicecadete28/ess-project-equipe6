@@ -61,7 +61,9 @@ export const filtrarAcomodacoes = async (req: Request, res: Response) => {
         .json({ message: 'Erro ao processar acomodações.' });
     }
 
-    const quartosFiltrados = FilterService.filtrarAcomodacoes(
+    const filterService = di.getService(FilterService);
+
+    const quartosFiltrados = filterService.filtrarAcomodacoes(
       roomsAdequados,
       filtros
     );
@@ -71,9 +73,6 @@ export const filtrarAcomodacoes = async (req: Request, res: Response) => {
         message: 'Nenhuma acomodação atende aos filtros selecionados.',
       });
     }
-
-    console.log('Acomodações antes do filtro:', roomsAdequados);
-    console.log('Filtros aplicados:', filtros);
 
     return res.status(200).json(quartosFiltrados);
   } catch (error: any) {

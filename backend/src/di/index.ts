@@ -11,7 +11,7 @@ import FindReservationRepository from '../repositories/findReservation.repositor
 import AvaliationService from '../services/avaliation.service';
 import ReservationService from '../services/reservation.service';
 import { AuthService } from '../services/auth.service';
-
+import FilterService from '../services/filter.service';
 
 export const di = new Injector();
 
@@ -53,7 +53,6 @@ di.registerService(
   new SavedService(di.getRepository(PfRepository))
 );
 
-
 di.registerService(
   AvaliationService,
   new AvaliationService(di.getRepository(ReservationRepository))
@@ -64,3 +63,4 @@ di.registerService(
   new ReservationService(di.getRepository(ReservationRepository))
 );
 
+di.registerService(FilterService, new FilterService());

@@ -106,11 +106,9 @@ class RoomService {
     checkOut: Date,
     qntHospedes: number
   ): Promise<RoomEntity[] | 'no_rooms_found' | 'no_capacity_available'> {
-
     const rooms = await this.roomRepository.getRooms(); // busca todas as acomodacoes disponiveis
 
     const reservations = await this.reservationRepository.getReservations(); // busca todas as reservas
-
 
     const roomsAvailable = rooms.filter((room) => {
       const quartoComReservas = reservations.some(
