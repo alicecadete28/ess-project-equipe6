@@ -1,123 +1,102 @@
-/*import { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { parseISO } from 'date-fns';
 import RoomService from '../../src/services/room.service';
 import RoomRepository from '../../src/repositories/room.repository';
-import FilterService from '../../src/services/filter.service';
-import { filtrarAcomodacoes } from '../../src/controllers/filter.controller';
-
-jest.mock('../../src/services/room.service');
-jest.mock('../../src/repositories/room.repository');
-jest.mock('../../src/services/filter.service');
+import ReservationRepository from '../../src/repositories/findReservation.repository';
+import { buscarAcomodacoes } from '../../src/controllers/findReservation.controller';
 
 import RoomEntity from '../../src/entities/room.entity';
+import PjRepository from '../../src/repositories/pj.repository';
+import { mock } from 'node:test';
+import ReservationEntity from '../../src/entities/reservation.entity';
+import FilterService from '../../src/services/filter.service';
 
-const mockRooms: RoomEntity[] = [
+describe('buscarAcomodacoes', () => {
+  let service: FilterService;
+  let error: any;
+  let mockRoom: RoomEntity[];
+
+  beforeEach(() => {
+    service = new FilterService();
+  });
+
+  mockRoom = [
     new RoomEntity({
-        id: '1',
-        pj_id: 'PJ123',
-        description: 'Quarto confortável',
-        type: 'deluxe',
-        price: 200,
-        capacity: 2,
-        caracteristics_ids: [],
-        local: 'Recife, PE',
-        stars: 4.5,
-        ar_condicionado: true,
-        tv: true,
-        wifi: true,
-        petFriendly: true,
-        cafeDaManha: true,
-        estacionamento: true,
-        avaliacao: 9.0,
+      id: '1',
+      pj_id: 'PJ123',
+      description: 'Quarto confortável',
+      type: 'deluxe',
+      price: 200,
+      capacity: 2,
+      caracteristics_ids: [],
+      local: 'Recife',
+      stars: 4.5,
+      ar_condicionado: true,
+      tv: true,
+      wifi: true,
+      petFriendly: true,
+      cafeDaManha: true,
+      estacionamento: true,
+      avaliacao: 9.0,
     }),
     new RoomEntity({
-        id: '2',
-        pj_id: 'PJ456',
-        description: 'Quarto simples',
-        type: 'standard',
-        price: 150,
-        capacity: 1,
-        caracteristics_ids: [],
-        local: 'Recife, PE',
-        stars: 3.8,
-        ar_condicionado: false,
-        tv: false,
-        wifi: false,
-        petFriendly: false,
-        cafeDaManha: false,
-        estacionamento: false,
-        avaliacao: 7.5,
+      id: '1',
+      pj_id: 'PJ123',
+      description: 'Quarto confortável',
+      type: 'deluxe',
+      price: 200,
+      capacity: 2,
+      caracteristics_ids: [],
+      local: 'Recife',
+      stars: 4.5,
+      ar_condicionado: true,
+      tv: true,
+      wifi: true,
+      petFriendly: true,
+      cafeDaManha: true,
+      estacionamento: true,
+      avaliacao: 9.0,
     }),
-];
+    new RoomEntity({
+      id: '1',
+      pj_id: 'PJ123',
+      description: 'Quarto confortável',
+      type: 'deluxe',
+      price: 200,
+      capacity: 2,
+      caracteristics_ids: [],
+      local: 'Recife',
+      stars: 4.5,
+      ar_condicionado: true,
+      tv: true,
+      wifi: true,
+      petFriendly: true,
+      cafeDaManha: true,
+      estacionamento: false,
+      avaliacao: 9.0,
+    }),
+  ];
 
-describe('filtrarAcomodacoes', () => {
-    let mockRequest: Partial<Request>;
-    let mockResponse: Partial<Response>;
-    let jsonMock: jest.Mock;
-    let statusMock: jest.Mock;
-    let sendMock: jest.Mock;
-    let mockRoomService: jest.Mocked<RoomService>;
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
 
-    beforeEach(() => {
-        jsonMock = jest.fn();
-        statusMock = jest.fn().mockReturnThis();
-        sendMock = jest.fn();
+  it('deve retornar quartos que possuem wifi', async () => {
+    const result = service.filtrarAcomodacoes(mockRoom, { wifi: true });
 
-        mockResponse = {
-            json: jsonMock,
-            status: statusMock,
-            send: sendMock,
-        };
+    expect(result).toEqual(mockRoom.filter((item) => item.wifi));
+  });
 
-        mockRoomService = new RoomService(new RoomRepository()) as jest.Mocked<RoomService>;
+  it('deve retornar quartos possuem tv e wifi', async () => {
+    const result = service.filtrarAcomodacoes(mockRoom, {
+      wifi: true,
+      tv: true,
     });
 
-    afterEach(() => {
-        jest.resetAllMocks();
-    });
-
-    it('deve retornar quartos filtrados corretamente', async () => {
-        mockRequest = {
-            query: {
-                destino: 'Recife',
-                data_ida: '2025-06-01',
-                data_volta: '2025-06-10',
-                num_pessoas: '2',
-                ar_condicionado: 'true',
-            },
-        };
-
-        jest.spyOn(RoomService.prototype, 'buscarAcomodacoes').mockResolvedValue(mockRooms);
-        jest.spyOn(FilterService, 'filtrarAcomodacoes').mockReturnValue([mockRooms[0]]);
-
-        await filtrarAcomodacoes(mockRequest as Request, mockResponse as Response);
-
-        expect(RoomService.prototype.buscarAcomodacoes).toHaveBeenCalledWith(
-            'Recife',
-            parseISO('2025-06-01'),
-            parseISO('2025-06-10'),
-            2
-        );
-        expect(FilterService.filtrarAcomodacoes).toHaveBeenCalledWith(mockRooms, { ar_condicionado: 'true' });
-        expect(jsonMock).toHaveBeenCalledWith([mockRooms[0]]);
-    });
-
-    it('deve retornar erro 500 se ocorrer uma exceção', async () => {
-        mockRequest = {
-            query: {
-                destino: 'Recife',
-                data_ida: '2025-06-01',
-                data_volta: '2025-06-10',
-                num_pessoas: '2',
-            },
-        };
-
-        jest.spyOn(RoomService.prototype, 'buscarAcomodacoes').mockRejectedValue(new Error('Erro ao buscar acomodações'));
-
-        await filtrarAcomodacoes(mockRequest as Request, mockResponse as Response);
-
-        expect(statusMock).toHaveBeenCalledWith(500);
-        expect(jsonMock).toHaveBeenCalledWith({ message: 'Erro ao buscar acomodações' });
-    });
+    expect(result).toEqual(mockRoom.filter((item) => item.wifi && item.tv));
+  });
 });
-*/
+
+//npx jest --verbose --config ./jest.config.js --detectOpenHandles tests/services/test.findReservationService.spec.ts
+
+//ok

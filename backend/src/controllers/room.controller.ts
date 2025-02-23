@@ -66,6 +66,9 @@ class RoomController {
   }
 
   private async createRoom(req: Request, res: Response) {
+    this.validateRoom(req.body, res);
+    if (res.headersSent) return;
+
     const room = await this.roomService.createRoom(new RoomEntity(req.body));
 
     return new SuccessResult({
@@ -92,6 +95,73 @@ class RoomController {
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),
     }).handle(res);
+  }
+
+  private validateRoom(data: any, res: Response) {
+    data.tv = data.tv ?? false;
+    data.ar_condicionado = data.ar_condicionado ?? false;
+    data.wifi = data.wifi ?? false;
+    data.petFriendly = data.petFriendly ?? false;
+    data.cafeDaManha = data.cafeDaManha ?? false;
+    data.estacionamento = data.estacionamento ?? false;
+
+    if (!data.description) {
+      res.status(400).json({ error: 'A descrição do quarto é obrigatória' });
+    }
+    if (!data.type) {
+      res.status(400).json({ error: 'O tipo do quarto é obrigatório' });
+    }
+    if (!data.price) {
+      res.status(400).json({ error: 'O preço do quarto é obrigatório' });
+    }
+    if (typeof data.price !== 'number' || isNaN(data.price)) {
+      return res
+        .status(400)
+        .json({ error: 'O preço deve ser um valor numérico' });
+    }
+
+    if (data.price < 50) {
+      res.status(400).json({ error: 'O preço mínimo da diária é de 50 reais' });
+    }
+    if (!data.capacity) {
+      res.status(400).json({ error: 'A capacidade do quarto é obrigatória' });
+    }
+    if (typeof data.capacity !== 'number' || isNaN(data.capacity)) {
+      return res
+        .status(400)
+        .json({ error: 'A capacidade do quarto deve ser um valor numérico' });
+    }
+    if (!data.caracteristics_ids) {
+      res
+        .status(400)
+        .json({ error: 'As caracteristicas do quarto sao obrigatórias' });
+    }
+    if (!data.local) {
+      res.status(400).json({ error: 'O local do quarto é obrigatório' });
+    }
+    if (!data.stars) {
+      res
+        .status(400)
+        .json({ error: 'O número de estrelas do quarto é obrigatório' });
+    }
+    if (
+      typeof data.stars !== 'number' ||
+      isNaN(data.stars) ||
+      !Number.isInteger(data.stars) ||
+      data.stars < 1 ||
+      data.stars > 5
+    ) {
+      return res.status(400).json({
+        error:
+          'O número de estrelas do quarto deve ser um número inteiro entre 1 e 5',
+      });
+    }
+
+    if (typeof data.avaliacao !== 'number' || isNaN(data.avaliacao)) {
+      return res.status(400).json({
+        error: 'A avaliacao do quarto deve ser um valor numérico',
+      });
+    }
   }
 }
 

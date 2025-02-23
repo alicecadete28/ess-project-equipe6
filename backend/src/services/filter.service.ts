@@ -1,28 +1,40 @@
 class FilterService {
-    static filtrarAcomodacoes(roomsAdequados: any[], filtros: { [key: string]: any }) {
-        if (!roomsAdequados || !Array.isArray(roomsAdequados)) {
-            throw new Error('Lista de quartos adequada não foi fornecida corretamente.');
-        }
-
-        let quartosFiltrados = roomsAdequados.filter(room => {
-            return (
-                (filtros.ar_condicionado === 'true' ? room.ar_condicionado === true : true) &&
-                (filtros.tv === 'true' ? room.tv === true : true) &&
-                (filtros.wifi === 'true' ? room.wifi === true : true) &&
-                (filtros.petFriendly === 'true' ? room.petFriendly === true : true) &&
-                (filtros.cafeDaManha === 'true' ? room.cafeDaManha === true : true) &&
-                (filtros.estacionamento === 'true' ? room.estacionamento === true : true)
-            );
-        });
-        
-        if (quartosFiltrados.length === 0) {
-            return[]; // Agora retorna lista vazia corretamente
-        }
-        
-        // Ordena os quartos filtrados do menor preço para o maior
-        quartosFiltrados.sort((a, b) => a.price - b.price);
-        
-        return quartosFiltrados;
+  filtrarAcomodacoes(roomsAdequados: any[], filtros: { [key: string]: any }) {
+    if (!roomsAdequados || !Array.isArray(roomsAdequados)) {
+      throw new Error(
+        'Lista de quartos adequada não foi fornecida corretamente.'
+      );
     }
+
+    // Converte os valores dos filtros para booleanos
+    const filtrosBooleanos = {
+      ar_condicionado: filtros.ar_condicionado === 'true',
+      tv: filtros.tv === 'true',
+      wifi: filtros.wifi === 'true',
+      petFriendly: filtros.petFriendly === 'true',
+      cafeDaManha: filtros.cafeDaManha === 'true',
+      estacionamento: filtros.estacionamento === 'true',
+    };
+
+    let quartosFiltrados = roomsAdequados.filter((room) => {
+      return (
+        (!filtrosBooleanos.ar_condicionado || room.ar_condicionado === true) &&
+        (!filtrosBooleanos.tv || room.tv === true) &&
+        (!filtrosBooleanos.wifi || room.wifi === true) &&
+        (!filtrosBooleanos.petFriendly || room.petFriendly === true) &&
+        (!filtrosBooleanos.cafeDaManha || room.cafeDaManha === true) &&
+        (!filtrosBooleanos.estacionamento || room.estacionamento === true)
+      );
+    });
+
+    if (quartosFiltrados.length === 0) {
+      console.warn('Nenhuma acomodação atende aos filtros selecionados.');
+    }
+
+    // Ordena os quartos filtrados do menor preço para o maior
+    quartosFiltrados.sort((a, b) => a.price - b.price);
+
+    return quartosFiltrados;
+  }
 }
 export default FilterService;

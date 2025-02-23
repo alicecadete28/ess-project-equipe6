@@ -20,3 +20,4 @@ export default class PFEntity extends BaseEntity {
     this.savedRooms = data.savedRooms;
   }
 }
+

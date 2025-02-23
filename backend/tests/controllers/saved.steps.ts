@@ -17,7 +17,12 @@ defineFeature(feature, (test) => {
     mockTestRepository = di.getRepository<PfRepository>(PfRepository);
   });
 
-  test('lista de savedRooms de um usuario bem sucedido', ({ given, when, then, and }) => {
+  test('lista de savedRooms de um usuario bem sucedido', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
     given(
       /^o PfRepository tem um usuário com cpf "(.*)" e phone "(.*)"$/,
       async (cpf) => {
@@ -25,7 +30,7 @@ defineFeature(feature, (test) => {
         const user = await mockTestRepository.getPfByCpf(cpf);
 
         if (!user) {
-            mockPfEntity = new PFEntity({
+          mockPfEntity = new PFEntity({
             id: '12732',
             user_id: '1',
             name: 'bia',
@@ -48,7 +53,6 @@ defineFeature(feature, (test) => {
           cpf,
           phone,
         });
-        console.log(response.body);
       }
     );
 
@@ -57,11 +61,16 @@ defineFeature(feature, (test) => {
     });
 
     and(/^a resposta deve ter um JSON com os savedRooms$/, () => {
-      expect(response.body.data).toEqual(["12", "222", "32"]);
+      expect(response.body.data).toEqual(['12', '222', '32']);
     });
   });
 
-  test('Falha ao acessar a lista de savedRooms de um usuario', ({ given, when, then, and }) => {
+  test('Falha ao acessar a lista de savedRooms de um usuario', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
     given(
       /^o PfRepository tem um usuário com cpf "(.*)" e phone "(.*)"$/,
       async (cpf) => {
@@ -81,7 +90,6 @@ defineFeature(feature, (test) => {
           cpf,
           phone,
         });
-        console.log(response.body);
       }
     );
 
@@ -97,5 +105,4 @@ defineFeature(feature, (test) => {
       }
     );
   });
-
 });

@@ -1,3 +1,4 @@
+import Database from '../database';
 import RoomEntity from '../entities/room.entity';
 import BaseRepository from './base.repository';
 
@@ -19,7 +20,8 @@ class RoomRepository extends BaseRepository<RoomEntity> {
   }
 
   public async createRoom(data: RoomEntity): Promise<RoomEntity> {
-    return await this.add(data);
+    const room = await this.add(data);
+    return room;
   }
 
   public async updateRoom(
