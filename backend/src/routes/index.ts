@@ -59,12 +59,11 @@ export default (app: Express) => {
     prefix,
     new SavedController(router, di.getService(SavedService)).router
   );
-  //app.use(prefix, AuthController.authenticate);
+
+  app.use(prefix, AuthController.authenticate);
 
   app.use(
     prefix,
-    new ReservationController(router, di.getService(ReservationService)).router 
+    new ReservationController(router, di.getService(ReservationService)).router
   );
-
-  
 };
