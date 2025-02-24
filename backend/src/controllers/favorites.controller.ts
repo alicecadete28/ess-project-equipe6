@@ -43,6 +43,8 @@ class FavoritesController {
       data: favorite,
     }).handle(res);
   }
+  
+
 }
 
 export default FavoritesController;
