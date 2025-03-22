@@ -4,6 +4,7 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import RoomRepository from '../../src/repositories/room.repository';
 import RoomEntity from '../../src/entities/room.entity';
+import { generateToken } from '../utils/generateToken';
 
 const feature = loadFeature('tests/features/room.feature');
 const request = supertest(app);
@@ -12,6 +13,11 @@ defineFeature(feature, (room) => {
   // mocking the repository
   let mockRoomRepository: RoomRepository;
   let response: supertest.Response;
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
 
   beforeEach(() => {
     mockRoomRepository = di.getRepository<RoomRepository>(RoomRepository);
@@ -40,6 +46,7 @@ defineFeature(feature, (room) => {
 
         return request
           .post(arg0)
+          .set('Authorization', `Bearer ${token}`)
           .send(requestBody)
           .then((res) => {
             response = res; // Atualiza a variável response
@@ -85,6 +92,7 @@ defineFeature(feature, (room) => {
 
           return request
             .post(arg0)
+            .set('Authorization', `Bearer ${token}`)
             .send(requestBody)
             .then((res) => {
               response = res; // Atualiza a variável response
@@ -133,6 +141,7 @@ defineFeature(feature, (room) => {
 
           return request
             .post(arg0)
+            .set('Authorization', `Bearer ${token}`)
             .send(requestBody)
             .then((res) => {
               response = res; // Atualiza a variável response
@@ -181,6 +190,7 @@ defineFeature(feature, (room) => {
 
           return request
             .post(arg0)
+            .set('Authorization', `Bearer ${token}`)
             .send(requestBody)
             .then((res) => {
               response = res; // Atualiza a variável response
@@ -229,6 +239,7 @@ defineFeature(feature, (room) => {
 
           return request
             .post(arg0)
+            .set('Authorization', `Bearer ${token}`)
             .send(requestBody)
             .then((res) => {
               response = res; // Atualiza a variável response
@@ -277,6 +288,7 @@ defineFeature(feature, (room) => {
 
           return request
             .post(arg0)
+            .set('Authorization', `Bearer ${token}`)
             .send(requestBody)
             .then((res) => {
               response = res; // Atualiza a variável response

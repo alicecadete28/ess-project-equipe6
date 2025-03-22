@@ -3,6 +3,7 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import RoomRepository from '../../src/repositories/room.repository';
 import RoomEntity from '../../src/entities/room.entity';
+import { generateToken } from '../utils/generateToken';
 
 describe('FilterController', () => {
   let request = supertest(app);
@@ -12,6 +13,11 @@ describe('FilterController', () => {
   const dataCheckIn = '2025-02-22';
   const dataCheckOut = '2025-02-25';
   const num_pessoas = 2;
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
 
   beforeEach(() => {
     mockRoomRepository = di.getRepository<RoomRepository>(RoomRepository);
@@ -20,12 +26,15 @@ describe('FilterController', () => {
   it('deve retornar acomodações filtradas', async () => {
     const destino = 'Recife';
 
-    const resposta = await request.get('/api/filtrar-acomodacoes').query({
-      destino,
-      data_ida: dataCheckIn,
-      data_volta: dataCheckOut,
-      num_pessoas,
-    });
+    const resposta = await request
+      .get('/api/filtrar-acomodacoes')
+      .set('Authorization', `Bearer ${token}`)
+      .query({
+        destino,
+        data_ida: dataCheckIn,
+        data_volta: dataCheckOut,
+        num_pessoas,
+      });
 
     expect(resposta.status).toBe(200);
 
@@ -35,13 +44,16 @@ describe('FilterController', () => {
   });
 
   it('deve retornar uma mensagem quando nenhuma acomodação corresponder', async () => {
-    const resposta = await request.get('/api/filtrar-acomodacoes').query({
-      destino: 'Recife',
-      data_ida: dataCheckIn,
-      data_volta: dataCheckOut,
-      num_pessoas,
-      wifi: true,
-    });
+    const resposta = await request
+      .get('/api/filtrar-acomodacoes')
+      .set('Authorization', `Bearer ${token}`)
+      .query({
+        destino: 'Recife',
+        data_ida: dataCheckIn,
+        data_volta: dataCheckOut,
+        num_pessoas,
+        wifi: true,
+      });
 
     expect(resposta.status).toBe(404);
     expect(resposta.body).toEqual({

@@ -4,6 +4,7 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import PfRepository from '../../src/repositories/pf.repository';
 import PFEntity from '../../src/entities/pf.entity';
+import { generateToken } from '../utils/generateToken';
 
 const feature = loadFeature('tests/features/favorites.feature');
 const request = supertest(app);
@@ -12,6 +13,12 @@ defineFeature(feature, (test) => {
   let mockTestRepository: PfRepository;
   let response: supertest.Response;
   let mockPfEntity: PFEntity;
+
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
 
   beforeEach(() => {
     mockTestRepository = di.getRepository<PfRepository>(PfRepository);
@@ -30,7 +37,7 @@ defineFeature(feature, (test) => {
         const user = await mockTestRepository.getPfById(id);
 
         if (!user) {
-            mockPfEntity = new PFEntity({
+          mockPfEntity = new PFEntity({
             id,
             user_id: '1',
             name: 'bia',
@@ -40,7 +47,7 @@ defineFeature(feature, (test) => {
             favorites: ['12', '22', '32'],
             savedRooms: [''],
           });
-          console.log("Criando usuário:", mockPfEntity);
+          console.log('Criando usuário:', mockPfEntity);
 
           await mockTestRepository.createPf(mockPfEntity);
         }
@@ -50,10 +57,13 @@ defineFeature(feature, (test) => {
     when(
       /^uma requisição GET for enviada para "(.*)" com o corpo da requisição sendo um JSON com id "(.*)" e phone "(.*)"$/,
       async (url, id, phone) => {
-        response = await request.get(url).query({
-          id,
-          phone,
-        });
+        response = await request
+          .get(url)
+          .set('Authorization', `Bearer ${token}`)
+          .query({
+            id,
+            phone,
+          });
       }
     );
 
@@ -86,10 +96,13 @@ defineFeature(feature, (test) => {
     when(
       /^uma requisição GET for enviada para "(.*)" com o corpo da requisição sendo um JSON com id "(.*)" e phone "(.*)"$/,
       async (url, id, phone) => {
-        response = await request.get(url).query({
-          id,
-          phone,
-        });
+        response = await request
+          .get(url)
+          .set('Authorization', `Bearer ${token}`)
+          .query({
+            id,
+            phone,
+          });
       }
     );
 
@@ -105,9 +118,14 @@ defineFeature(feature, (test) => {
       }
     );
   });
-  test('Atualizar a lista de favoritos de um usuário com sucesso', ({ given, when, then, and }) => {
+  test('Atualizar a lista de favoritos de um usuário com sucesso', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
     given(
-      /^o PfRepository tem um usuário com id "(.*)" e phone "(.*)"$/, 
+      /^o PfRepository tem um usuário com id "(.*)" e phone "(.*)"$/,
       async (id, phone) => {
         const user = await mockTestRepository.getPfById(id);
         if (!user) {
@@ -127,13 +145,16 @@ defineFeature(feature, (test) => {
     );
 
     when(
-      /^uma requisição PATCH for enviada para "(.*)" com o corpo da requisição sendo um JSON contendo id "(.*)", phone "(.*)" e uma lista de favoritos atualizada$/, 
+      /^uma requisição PATCH for enviada para "(.*)" com o corpo da requisição sendo um JSON contendo id "(.*)", phone "(.*)" e uma lista de favoritos atualizada$/,
       async (url, id, phone) => {
-        response = await request.patch(url).send({
-          id,
-          phone,
-          favorites: ['15', '25', '35'],
-        });
+        response = await request
+          .patch(url)
+          .set('Authorization', `Bearer ${token}`)
+          .send({
+            id,
+            phone,
+            favorites: ['15', '25', '35'],
+          });
       }
     );
 
@@ -141,18 +162,26 @@ defineFeature(feature, (test) => {
       expect(response.status).toBe(parseInt(statusCode, 10));
     });
 
-    and(/^a resposta deve ter um JSON confirmando a atualização da lista de favoritos$/, () => {
-      expect(response.body).toEqual({
-        msg: "PATCH /api/favorites/12732",
-        msgCode: "success",
-        code: 200,
-        data: ["15", "25", "35"],
-      });
-    });
+    and(
+      /^a resposta deve ter um JSON confirmando a atualização da lista de favoritos$/,
+      () => {
+        expect(response.body).toEqual({
+          msg: 'PATCH /api/favorites/12732',
+          msgCode: 'success',
+          code: 200,
+          data: ['15', '25', '35'],
+        });
+      }
+    );
   });
-  test('Falha ao atualizar a lista de favoritos de um usuário', ({ given, when, then, and }) => {
+  test('Falha ao atualizar a lista de favoritos de um usuário', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
     given(
-      /^o PfRepository não tem um usuário com cpf "(.*)" e phone "(.*)"$/, 
+      /^o PfRepository não tem um usuário com cpf "(.*)" e phone "(.*)"$/,
       async (cpf, phone) => {
         const user = await mockTestRepository.getPfByCpf(cpf);
         expect(user).toBeNull();
@@ -160,13 +189,16 @@ defineFeature(feature, (test) => {
     );
 
     when(
-      /^uma requisição PATCH for enviada para "(.*)" com o corpo da requisição sendo um JSON contendo cpf "(.*)", phone "(.*)" e uma lista de favoritos$/, 
+      /^uma requisição PATCH for enviada para "(.*)" com o corpo da requisição sendo um JSON contendo cpf "(.*)", phone "(.*)" e uma lista de favoritos$/,
       async (url, cpf, phone) => {
-        response = await request.patch(url).send({
-          cpf,
-          phone,
-          favorites: ['10', '20', '30'],
-        });
+        response = await request
+          .patch(url)
+          .set('Authorization', `Bearer ${token}`)
+          .send({
+            cpf,
+            phone,
+            favorites: ['10', '20', '30'],
+          });
       }
     );
 
@@ -174,10 +206,12 @@ defineFeature(feature, (test) => {
       expect(response.status).toBe(parseInt(statusCode, 10));
     });
 
-    and(/^a resposta deve ter um JSON com a mensagem de erro "(.*)"$/, (message) => {
-      expect(response.body).toHaveProperty('msg');
-      expect(response.body.msg).toBe("Pf não cadastrado");
-    });
+    and(
+      /^a resposta deve ter um JSON com a mensagem de erro "(.*)"$/,
+      (message) => {
+        expect(response.body).toHaveProperty('msg');
+        expect(response.body.msg).toBe('Pf não cadastrado');
+      }
+    );
   });
 });
-

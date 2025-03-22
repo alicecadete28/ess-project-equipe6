@@ -4,6 +4,7 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import RoomRepository from '../../src/repositories/room.repository';
 import RoomEntity from '../../src/entities/room.entity';
+import { generateToken } from '../utils/generateToken';
 
 const feature = loadFeature('tests/features/filter-controller.feature');
 const request = supertest(app);
@@ -12,6 +13,11 @@ defineFeature(feature, (test) => {
   let mockTestRepository: RoomRepository;
   let response: supertest.Response;
   let mockRoomEntity: RoomEntity;
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
 
   beforeEach(() => {
     mockTestRepository = di.getRepository<RoomRepository>(RoomRepository);
@@ -52,7 +58,10 @@ defineFeature(feature, (test) => {
     and('algumas acomodações possuem Wi-Fi como comodidade', () => {});
 
     when(/^uma requisição GET for enviada para "(.*)"$/, async (url) => {
-      response = await request.get(url).send();
+      response = await request
+        .get(url)
+        .set('Authorization', `Bearer ${token}`)
+        .send();
     });
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
@@ -110,9 +119,12 @@ defineFeature(feature, (test) => {
     and('algumas acomodações possuem café da manhã como comodidade', () => {});
 
     when(/^uma requisição GET for enviada para "(.*)"$/, async (url) => {
-      response = await request.get(url).send();
+      response = await request
+        .get(url)
+        .set('Authorization', `Bearer ${token}`)
+        .send();
+      console.log(response.error);
     });
-
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
       expect(response.status).toBe(parseInt(statusCode));
     });

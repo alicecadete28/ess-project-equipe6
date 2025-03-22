@@ -1,21 +1,26 @@
-"use client"
+"use client";
 
-import { Search, Calendar, Users } from "lucide-react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { DatePicker } from "@/components/ui/date-picker"
-import { GuestSelector } from "@/components/ui/guest-selector"
-import { useState } from "react"
+import { Search, Calendar, Users } from "lucide-react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
+import { GuestSelector } from "@/components/ui/guest-selector";
+import { useState } from "react";
 
 export default function EnhancedHome() {
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <main className="min-h-screen flex flex-col">
       <header className="border-b">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Image src="/compass.svg" alt="DestCINation logo" width={24} height={24} />
+            <Image
+              src="/compass.svg"
+              alt="DestCINation logo"
+              width={24}
+              height={24}
+            />
             <span className="font-semibold text-xl">DestCINation</span>
           </div>
           <div className="flex items-center gap-2">
@@ -30,7 +35,9 @@ export default function EnhancedHome() {
       <div className="flex-1 flex items-center justify-center">
         <div className="container mx-auto px-4 flex flex-col items-center">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">Encontre sua próxima estadia</h1>
+            <h1 className="text-3xl font-bold mb-2">
+              Encontre sua próxima estadia
+            </h1>
             <p className="text-gray-600">Encontre ofertas de hoteis</p>
           </div>
 
@@ -50,7 +57,10 @@ export default function EnhancedHome() {
                     />
                   </div>
                   {searchQuery && (
-                    <button className="text-gray-400" onClick={() => setSearchQuery("")}>
+                    <button
+                      className="text-gray-400"
+                      onClick={() => setSearchQuery("")}
+                    >
                       ✕
                     </button>
                   )}
@@ -82,22 +92,23 @@ export default function EnhancedHome() {
                   <Users className="text-gray-400" size={20} />
                   <div className="flex-1">
                     <div className="text-xs text-gray-500">Hóspedes</div>
-                    <GuestSelector 
-                      guests={2} 
-                      onGuestsChange={(newGuests) => console.log(newGuests)} 
+                    <GuestSelector
+                      guests={2}
+                      onGuestsChange={(newGuests) => console.log(newGuests)}
                     />
                   </div>
                 </div>
               </div>
 
               <div className="p-4 flex items-center">
-                <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6">Pesquisar</Button>
+                <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6">
+                  Pesquisar
+                </Button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }
-
