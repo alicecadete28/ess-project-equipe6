@@ -4,6 +4,7 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import RoomRepository from '../../src/repositories/room.repository';
 import RoomEntity from '../../src/entities/room.entity';
+import { generateToken } from '../utils/generateToken';
 
 const feature = loadFeature(
   'tests/features/findReservation-controller.feature'
@@ -14,6 +15,11 @@ defineFeature(feature, (test) => {
   let mockTestRepository: RoomRepository;
   let response: supertest.Response;
   let mockRoomEntity: RoomEntity;
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
 
   beforeEach(() => {
     mockTestRepository = di.getRepository<RoomRepository>(RoomRepository);
@@ -52,7 +58,10 @@ defineFeature(feature, (test) => {
     );
 
     when(/^uma requisição GET for enviada para "(.*)"$/, async (url) => {
-      response = await request.get(url).send();
+      response = await request
+        .get(url)
+        .set('Authorization', `Bearer ${token}`)
+        .send();
     });
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
@@ -81,7 +90,10 @@ defineFeature(feature, (test) => {
     given('o destino não foi informado na requisição', () => {});
 
     when(/^uma requisição GET for enviada para "(.*)"$/, async (url) => {
-      response = await request.get(url).send();
+      response = await request
+        .get(url)
+        .set('Authorization', `Bearer ${token}`)
+        .send();
     });
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
@@ -106,7 +118,10 @@ defineFeature(feature, (test) => {
     given(/^a data de ida é "(.*)" e a data de volta é "(.*)"$/, () => {});
 
     when(/^uma requisição GET for enviada para "(.*)"$/, async (url) => {
-      response = await request.get(url).send();
+      response = await request
+        .get(url)
+        .set('Authorization', `Bearer ${token}`)
+        .send();
     });
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
@@ -156,7 +171,10 @@ defineFeature(feature, (test) => {
     and(/^a data de ida é "(.*)" e a data de volta é "(.*)"$/, () => {});
 
     when(/^uma requisição GET for enviada para "(.*)"$/, async (url) => {
-      response = await request.get(url).send();
+      response = await request
+        .get(url)
+        .set('Authorization', `Bearer ${token}`)
+        .send();
     });
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
@@ -199,7 +217,10 @@ defineFeature(feature, (test) => {
     and(/^a data de ida é "(.*)" e a data de volta é "(.*)"$/, () => {});
 
     when(/^uma requisição GET for enviada para "(.*)"$/, async (url) => {
-      response = await request.get(url).send();
+      response = await request
+        .get(url)
+        .set('Authorization', `Bearer ${token}`)
+        .send();
     });
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
@@ -236,7 +257,10 @@ defineFeature(feature, (test) => {
     );
 
     when(/^uma requisição GET for enviada para "(.*)"$/, async (url) => {
-      response = await request.get(url).send();
+      response = await request
+        .get(url)
+        .set('Authorization', `Bearer ${token}`)
+        .send();
     });
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {

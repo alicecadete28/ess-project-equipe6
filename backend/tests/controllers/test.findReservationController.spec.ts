@@ -8,6 +8,7 @@ import { addDays } from 'date-fns';
 import PjRepository from '../../src/repositories/pj.repository'; // Ajuste o caminho conforme necessário
 import RoomEntity from '../../src/entities/room.entity';
 import { mock } from 'node:test';
+import { generateToken } from '../utils/generateToken';
 
 describe('FindReservationController', () => {
   let request = supertest(app);
@@ -18,6 +19,11 @@ describe('FindReservationController', () => {
   const dataCheckIn = '2025-02-22';
   const dataCheckOut = '2025-02-25';
   const num_pessoas = 2;
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
 
   beforeEach(() => {
     mockRoomRepository = di.getRepository<RoomRepository>(RoomRepository);
@@ -48,35 +54,44 @@ describe('FindReservationController', () => {
 
     await mockRoomRepository.createRoom(mockRoomEntity);
 
-    const resposta = await request.get('/api/buscar-acomodacoes').query({
-      destino,
-      data_ida: dataCheckIn,
-      data_volta: dataCheckOut,
-      num_pessoas,
-    });
+    const resposta = await request
+      .get('/api/buscar-acomodacoes')
+      .set('Authorization', `Bearer ${token}`)
+      .query({
+        destino,
+        data_ida: dataCheckIn,
+        data_volta: dataCheckOut,
+        num_pessoas,
+      });
 
     expect(resposta.status).toBe(200);
     expect(resposta.body).toBeInstanceOf(Array<RoomEntity>);
   });
 
   it('deve retornar erro quando destino não é fornecido', async () => {
-    const resposta = await request.get('/api/buscar-acomodacoes').query({
-      data_ida: dataCheckIn,
-      data_volta: dataCheckOut,
-      num_pessoas,
-    });
+    const resposta = await request
+      .get('/api/buscar-acomodacoes')
+      .set('Authorization', `Bearer ${token}`)
+      .query({
+        data_ida: dataCheckIn,
+        data_volta: dataCheckOut,
+        num_pessoas,
+      });
 
     expect(resposta.status).toBe(400);
     expect(resposta.body).toEqual({ error: 'O destino é obrigatório.' });
   });
 
   it('deve retornar mensagem quando não houver acomodações disponíveis', async () => {
-    const resposta = await request.get('/api/buscar-acomodacoes').query({
-      destino: 'Saõ paulo',
-      data_ida: dataCheckIn,
-      data_volta: dataCheckOut,
-      num_pessoas,
-    });
+    const resposta = await request
+      .get('/api/buscar-acomodacoes')
+      .set('Authorization', `Bearer ${token}`)
+      .query({
+        destino: 'Saõ paulo',
+        data_ida: dataCheckIn,
+        data_volta: dataCheckOut,
+        num_pessoas,
+      });
 
     expect(resposta.status).toBe(404);
     expect(resposta.body).toEqual({
@@ -86,13 +101,16 @@ describe('FindReservationController', () => {
   });
 
   it('deve retornar erro para datas inválidas', async () => {
-    const resposta = await request.get('/api/buscar-acomodacoes').query({
-      destino: 'Recife',
-      data_ida: 'data-invalida',
-      data_volta: 'dsad',
-      num_pessoas,
-    });
-
+    const resposta = await request
+      .get('/api/buscar-acomodacoes')
+      .set('Authorization', `Bearer ${token}`)
+      .query({
+        destino: 'Recife',
+        data_ida: 'data-invalida',
+        data_volta: 'dsad',
+        num_pessoas,
+      });
+    console.log(resposta);
     expect(resposta.status).toBe(400);
     expect(resposta.body).toEqual({ message: 'Data de ida inválida.' });
   });
