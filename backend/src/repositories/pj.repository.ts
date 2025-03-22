@@ -14,6 +14,10 @@ class PjRepository extends BaseRepository<PjEntity> {
     return await this.findOne((item) => item.id === id);
   }
 
+  public async getPjByUserId(userId: string): Promise<PjEntity | null> {
+    return await this.findOne((item) => item.user_id === userId);
+  }
+
   public async getPjByCnpj(cnpj: string): Promise<PjEntity | null> {
     return await this.findOne((item) => item.cnpj === cnpj);
   }

@@ -10,6 +10,7 @@ export type User = {
   id: string;
   email: string;
   name?: string;
+  client?: Record<string, any>;
 };
 
 // Define auth context type
@@ -91,9 +92,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       // Mock successful login
       const newUser: User = {
-        id: "user-1",
+        id: data.id,
         email: data?.email || "",
-        name: email.split("@")[0],
+        name: data?.email?.split("@")[0],
+        client: data.client,
       };
 
       // Save to state and localStorage
