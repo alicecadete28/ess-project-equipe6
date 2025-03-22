@@ -3,11 +3,17 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import ReservationRepository from '../../src/repositories/reservation.repository';
 import ReservationEntity from '../../src/entities/reservation.entity';
+import { generateToken } from '../utils/generateToken';
 
 describe('AvaliationController', () => {
   let request = supertest(app);
   let mockReservationRepository: ReservationRepository;
   let mockReservationEntity: ReservationEntity;
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
 
   beforeEach(() => {
     // Get the repository instance from the DI container
@@ -49,6 +55,7 @@ describe('AvaliationController', () => {
   it('should register an accommodation review successfully', async () => {
     const response = await request
       .post(`/api/avaliacoes?id=${mockReservationEntity.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({
         num_estrelas: 5,
         comentario: 'Ótima acomodação!',
@@ -60,10 +67,13 @@ describe('AvaliationController', () => {
   });
 
   it('should return an error when the rating is not between 1 and 5', async () => {
-    const response = await request.post('/api/avaliacoes?id=123').send({
-      num_estrelas: 6,
-      comentario: 'Nota inválida',
-    });
+    const response = await request
+      .post('/api/avaliacoes?id=123')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        num_estrelas: 6,
+        comentario: 'Nota inválida',
+      });
 
     expect(response.status).toBe(400);
     expect(response.body.error).toEqual(
@@ -73,10 +83,13 @@ describe('AvaliationController', () => {
 
   it('should limit the comment length to 500 characters', async () => {
     const longComment = 'a'.repeat(600);
-    const response = await request.post('/api/avaliacoes?id=123').send({
-      num_estrelas: 4,
-      comentario: longComment,
-    });
+    const response = await request
+      .post('/api/avaliacoes?id=123')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        num_estrelas: 4,
+        comentario: longComment,
+      });
 
     expect(response.status).toBe(400); // Ajustado para 400, pois deveria falhar devido ao tamanho do comentário.
   });

@@ -14,6 +14,10 @@ class PfRepository extends BaseRepository<PfEntity> {
     return await this.findOne((item) => item.id === id);
   }
 
+  public async getPfByUserId(userId: string): Promise<PfEntity | null> {
+    return await this.findOne((item) => item.user_id === userId);
+  }
+
   public async getPfByCpf(cpf: string): Promise<PfEntity | null> {
     return await this.findOne((item) => item.cpf === cpf);
   }
@@ -21,7 +25,6 @@ class PfRepository extends BaseRepository<PfEntity> {
   public async createPf(data: PfEntity): Promise<PfEntity> {
     return await this.add(data);
   }
-
 
   public async updatePf(id: string, data: PfEntity): Promise<PfEntity | null> {
     return await this.update((item) => item.id === id, data);

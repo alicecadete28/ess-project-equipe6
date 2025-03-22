@@ -3,10 +3,16 @@ import RoomEntity from '../../src/entities/room.entity';
 import app from '../../src/app';
 import { di } from '../../src/di';
 import RoomRepository from '../../src/repositories/room.repository';
+import { generateToken } from '../utils/generateToken';
 
 describe('RoomController', () => {
   let request = supertest(app);
   let mockRoomRepository: RoomRepository;
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
 
   let mockRoomEntity: RoomEntity = new RoomEntity({
     id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1c',
@@ -36,27 +42,36 @@ describe('RoomController', () => {
       mockRoomEntity
     );
 
-    const response = await request.get(`/api/rooms/${createdRoomEntity.id}`);
+    const response = await request
+      .get(`/api/rooms/${createdRoomEntity.id}`)
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body.data).toEqual(createdRoomEntity);
   });
 
   it('should throw an error when room is not found', async () => {
-    const response = await request.get(`/api/rooms/02`);
+    const response = await request
+      .get(`/api/rooms/02`)
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(404);
     expect(response.body.msgCode).toEqual('room_not_found');
   });
   it('should throw an error when there is no room associated with the pj', async () => {
-    const response = await request.get(`/api/rooms/pj/02`);
+    const response = await request
+      .get(`/api/rooms/pj/02`)
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(404);
     expect(response.body.msgCode).toEqual('room_not_found');
   });
 
   it('should create a room', async () => {
-    const response = await request.post('/api/rooms').send(mockRoomEntity);
+    const response = await request
+      .post('/api/rooms')
+      .set('Authorization', `Bearer ${token}`)
+      .send(mockRoomEntity);
 
     expect(response.status).toBe(200);
     const createdRoom = response.body.data;
@@ -89,6 +104,7 @@ describe('RoomController', () => {
 
     const response = await request
       .put(`/api/rooms/${createdRoomEntity.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .send({
         id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1c',
         pj_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d',
@@ -136,7 +152,9 @@ describe('RoomController', () => {
       mockRoomEntity
     );
 
-    const response = await request.delete(`/api/rooms/${createdRoomEntity.id}`);
+    const response = await request
+      .delete(`/api/rooms/${createdRoomEntity.id}`)
+      .set('Authorization', `Bearer ${token}`);
 
     const deletedRoomEntity = await mockRoomRepository.getRoom(
       createdRoomEntity.id

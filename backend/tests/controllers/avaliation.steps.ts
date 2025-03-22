@@ -4,6 +4,7 @@ import app from '../../src/app';
 import { di } from '../../src/di';
 import ReservationRepository from '../../src/repositories/reservation.repository';
 import ReservationEntity from '../../src/entities/reservation.entity';
+import { generateToken } from '../utils/generateToken';
 
 const feature = loadFeature('tests/features/avaliation.feature');
 const request = supertest(app);
@@ -13,9 +14,17 @@ defineFeature(feature, (test) => {
   let mockReservationEntity: ReservationEntity;
   let response: supertest.Response;
 
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
+
   beforeEach(() => {
     // Obter a instância do repositório do contêiner DI
-    mockReservationRepository = di.getRepository<ReservationRepository>(ReservationRepository);
+    mockReservationRepository = di.getRepository<ReservationRepository>(
+      ReservationRepository
+    );
 
     // Garantir que a instância do repositório não seja indefinida
     if (!mockReservationRepository) {
@@ -33,31 +42,52 @@ defineFeature(feature, (test) => {
       status: 'o',
       rating: {
         stars: 0,
-        comment: 'o'
-      }
+        comment: 'o',
+      },
     });
 
     // Mock dos métodos do repositório
-    jest.spyOn(mockReservationRepository, 'getReservations').mockResolvedValue([mockReservationEntity]);
-    jest.spyOn(mockReservationRepository, 'updateReservation').mockImplementation(async (id, data) => {
-      return { ...data, id };
-    });
+    jest
+      .spyOn(mockReservationRepository, 'getReservations')
+      .mockResolvedValue([mockReservationEntity]);
+    jest
+      .spyOn(mockReservationRepository, 'updateReservation')
+      .mockImplementation(async (id, data) => {
+        return { ...data, id };
+      });
   });
 
-  test('Registrar uma avaliação de acomodação com sucesso', ({ given, when, then, and }) => {
-    given(/^o Repositório de Reservas tem uma reserva com id "(.*)"$/, async (reservationId) => {
-      const existingReservation = await mockReservationRepository.getReservation(reservationId);
-      if (!existingReservation) {
-        await mockReservationRepository.createReservation(mockReservationEntity);
+  test('Registrar uma avaliação de acomodação com sucesso', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
+    given(
+      /^o Repositório de Reservas tem uma reserva com id "(.*)"$/,
+      async (reservationId) => {
+        const existingReservation =
+          await mockReservationRepository.getReservation(reservationId);
+        if (!existingReservation) {
+          await mockReservationRepository.createReservation(
+            mockReservationEntity
+          );
+        }
       }
-    });
+    );
 
-    when(/^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e comentário "(.*)"$/, async (url, stars, comment) => {
-      response = await request.post(url).send({
-        num_estrelas: parseInt(stars, 10),
-        comentario: comment
-      });
-    });
+    when(
+      /^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e comentário "(.*)"$/,
+      async (url, stars, comment) => {
+        response = await request
+          .post(url)
+          .set('Authorization', `Bearer ${token}`)
+          .send({
+            num_estrelas: parseInt(stars, 10),
+            comentario: comment,
+          });
+      }
+    );
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
       expect(response.status).toBe(parseInt(statusCode, 10));
@@ -68,20 +98,37 @@ defineFeature(feature, (test) => {
     });
   });
 
-  test('Retornar um erro quando a nota não estiver entre 1 e 5', ({ given, when, then, and }) => {
-    given(/^o Repositório de Reservas tem uma reserva com id "(.*)"$/, async (reservationId) => {
-      const existingReservation = await mockReservationRepository.getReservation(reservationId);
-      if (!existingReservation) {
-        await mockReservationRepository.createReservation(mockReservationEntity);
+  test('Retornar um erro quando a nota não estiver entre 1 e 5', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
+    given(
+      /^o Repositório de Reservas tem uma reserva com id "(.*)"$/,
+      async (reservationId) => {
+        const existingReservation =
+          await mockReservationRepository.getReservation(reservationId);
+        if (!existingReservation) {
+          await mockReservationRepository.createReservation(
+            mockReservationEntity
+          );
+        }
       }
-    });
+    );
 
-    when(/^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e comentário "(.*)"$/, async (url, stars, comment) => {
-      response = await request.post(url).send({
-        num_estrelas: parseInt(stars, 10),
-        comentario: comment
-      });
-    });
+    when(
+      /^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e comentário "(.*)"$/,
+      async (url, stars, comment) => {
+        response = await request
+          .post(url)
+          .set('Authorization', `Bearer ${token}`)
+          .send({
+            num_estrelas: parseInt(stars, 10),
+            comentario: comment,
+          });
+      }
+    );
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
       expect(response.status).toBe(parseInt(statusCode, 10));
@@ -92,21 +139,38 @@ defineFeature(feature, (test) => {
     });
   });
 
-  test('Limitar o comprimento do comentário a 500 caracteres', ({ given, when, then, and }) => {
-    given(/^o Repositório de Reservas tem uma reserva com id "(.*)"$/, async (reservationId) => {
-      const existingReservation = await mockReservationRepository.getReservation(reservationId);
-      if (!existingReservation) {
-        await mockReservationRepository.createReservation(mockReservationEntity);
+  test('Limitar o comprimento do comentário a 500 caracteres', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
+    given(
+      /^o Repositório de Reservas tem uma reserva com id "(.*)"$/,
+      async (reservationId) => {
+        const existingReservation =
+          await mockReservationRepository.getReservation(reservationId);
+        if (!existingReservation) {
+          await mockReservationRepository.createReservation(
+            mockReservationEntity
+          );
+        }
       }
-    });
+    );
 
-    when(/^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e um comentário longo$/, async (url, stars) => {
-      const longComment = 'a'.repeat(600);
-      response = await request.post(url).send({
-        num_estrelas: parseInt(stars, 10),
-        comentario: longComment
-      });
-    });
+    when(
+      /^uma requisição POST é enviada para "(.*)" com o corpo da requisição sendo um JSON com estrelas "(.*)" e um comentário longo$/,
+      async (url, stars) => {
+        const longComment = 'a'.repeat(600);
+        response = await request
+          .post(url)
+          .set('Authorization', `Bearer ${token}`)
+          .send({
+            num_estrelas: parseInt(stars, 10),
+            comentario: longComment,
+          });
+      }
+    );
 
     then(/^o status da resposta deve ser "(.*)"$/, (statusCode) => {
       expect(response.status).toBe(parseInt(statusCode, 10));
