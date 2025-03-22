@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import FotoUpload from "./FotoUpload";
-
+import axios from "axios";
 import { Upload, Image } from "lucide-react";
 const amenities = [
   "Wi-fi",
@@ -26,7 +26,6 @@ const amenities = [
 ];
 
 const formSchema = z.object({
-  nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
   preco: z.coerce.number().min(50, "O preço deve ser maior que cinquenta"),
   descricao: z.string().optional(),
   quantidade_hosp: z.number().min(1),
@@ -34,13 +33,13 @@ const formSchema = z.object({
   stars: z.coerce.number().min(1, "As entrelas devem ser de 1 a 5"),
   avaliacao: z.coerce.number().min(1, "A avaliacao deve ser de 0 a 10"),
   caracteristics: z.string().optional(),
+  tipo: z.string().optional(),
 });
 
 export default function FormAcomodacao() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nome: "",
       preco: 10,
       descricao: "",
       quantidade_hosp: 2,
@@ -48,11 +47,63 @@ export default function FormAcomodacao() {
       stars: 1,
       avaliacao: 1,
       caracteristics: "",
+      tipo: "",
     },
   });
 
-  function onSubmit(values: any) {
-    console.log("Dados enviados:", values);
+  const [loading, setLoading] = useState(false);
+
+  async function onSubmit(values: any) {
+    console.log("Botão clicado");
+    setLoading(true);
+
+    const dataToSend = {
+      id: crypto.randomUUID(), // Gera um UUID para o id
+      pj_id: "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d", // Ajuste se necessário
+      description: values.descricao || "Sem descrição",
+      type: values.tipo, // Pode ajustar conforme necessário
+      price: values.preco,
+      capacity: values.quantidade_hosp,
+      caracteristics_ids: values.caracteristics
+        ? values.caracteristics.split(",")
+        : [],
+      local: values.local,
+      stars: values.stars,
+      avaliacao: 0,
+      ar_condicionado: selectedAmenities.includes("Ar-condicionado"),
+      tv: selectedAmenities.includes("Tv"),
+      wifi: selectedAmenities.includes("Wi-fi"),
+      petFriendly: selectedAmenities.includes("Pet-Friendly"),
+      cafeDaManha: false, // Defina como necessário
+      estacionamento: selectedAmenities.includes("Estacionamento"),
+    };
+
+    console.log(dataToSend);
+
+    try {
+      const response = await fetch("http://localhost:5001/api/rooms", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao enviar os dados.");
+      }
+
+      const result = await response.json();
+      console.log("Acomodação cadastrada:", result);
+      alert("Acomodação cadastrada com sucesso!");
+      form.reset();
+      setSelectedAmenities([]);
+    } catch (error) {
+      console.error("Erro:", error);
+      alert("Falha ao cadastrar acomodação.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
@@ -135,6 +186,19 @@ export default function FormAcomodacao() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="tipo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tipo</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ex: Casa" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
@@ -172,20 +236,6 @@ export default function FormAcomodacao() {
                 <FormLabel>Estrelas</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="Ex: 3" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="avaliacao"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Avaliacao</FormLabel>
-                <FormControl>
-                  <Input type="number" placeholder="Ex: 7" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
