@@ -28,20 +28,22 @@ const amenities = [
 
 const formSchema = z.object({
   preco: z.coerce.number().min(50, "O preço deve ser maior que cinquenta"),
-  descricao: z.string().optional(),
-  quantidade_hosp: z.number().min(1),
+  descricao: z.string().min(1, "A descrição é obrigatória"),
+  quantidade_hosp: z.coerce
+    .number()
+    .min(1, "A quantidade de hóspedes é no mínimo 1"),
   local: z.string().min(1, "O local é obrigatorio"),
   stars: z.coerce.number().min(1, "As entrelas devem ser de 1 a 5"),
   avaliacao: z.coerce.number().min(1, "A avaliacao deve ser de 0 a 10"),
-  caracteristics: z.string().optional(),
-  tipo: z.string().optional(),
+  caracteristics: z.string().min(1, "As características são obrigatorias"),
+  tipo: z.string().min(1, "O tipo é obrigatorio"),
 });
 
 export default function FormAcomodacao() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      preco: 10,
+      preco: 100,
       descricao: "",
       quantidade_hosp: 2,
       local: "",
@@ -63,6 +65,7 @@ export default function FormAcomodacao() {
     const dataToSend = {
       id: crypto.randomUUID(), // Gera um UUID para o id
       pj_id: user?.id, // Ajuste se necessário
+      // pj_id: "2222",
       description: values.descricao || "Sem descrição",
       type: values.tipo, // Pode ajustar conforme necessário
       price: values.preco,
@@ -84,11 +87,14 @@ export default function FormAcomodacao() {
     console.log(dataToSend);
 
     try {
+      const token = localStorage.getItem("token") as string;
+
       const response = await fetch("http://localhost:5001/api/rooms", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        token,
         body: JSON.stringify(dataToSend),
       });
 
@@ -137,11 +143,12 @@ export default function FormAcomodacao() {
                 <FormControl>
                   <Input type="number" placeholder="Ex: 150" {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
           <label className="block text-gray-700 font-semibold">
-            Selecione as características que seu quarto possui:
+            Selecione as comodidades do seu quarto:
           </label>
           <div className="flex flex-wrap gap-2">
             {amenities.map((amenity) => (
@@ -155,8 +162,6 @@ export default function FormAcomodacao() {
                 {amenity}
               </Button>
             ))}
-
-            <FotoUpload />
           </div>
 
           <FormField

@@ -39,8 +39,13 @@ export class AuthService {
         msgCode: 'invalid_password',
       });
 
+    const client =
+      user.type === 'pf'
+        ? await this.pfRepository.getPfByUserId(user.id)
+        : await this.pjRepository.getPjByUserId(user.id);
+
     const token = jwt.sign(
-      { id: user.id, email, type: user.type },
+      { id: user.id, email, type: user.type, client },
       Env.JWT_SECRET,
       {
         expiresIn: '1h',
