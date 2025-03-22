@@ -39,6 +39,8 @@ export default (app: Express) => {
 
   router.use(AuthController.authenticate); // all routes below line is authenticate, if you want to remove authtetication place the function above this line
 
+  app.use(router);
+
   app.use(
     prefix,
     new FavoritesController(router, di.getService(FavoriteService)).router

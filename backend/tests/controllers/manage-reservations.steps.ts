@@ -8,6 +8,7 @@ import RoomRepository from '../../src/repositories/room.repository';
 import RoomEntity from '../../src/entities/room.entity';
 import ReservationEntity from '../../src/entities/reservation.entity';
 import ReservationRepository from '../../src/repositories/reservation.repository';
+import { generateToken } from '../utils/generateToken';
 
 const feature = loadFeature('tests/features/manage-reservation.feature');
 const request = supertest(app);
@@ -18,6 +19,12 @@ defineFeature(feature, (test) => {
   let response: supertest.Response;
   let mockUserEntity: UserEntity;
 
+  let token: string;
+
+  beforeAll(async () => {
+    token = generateToken();
+  });
+
   beforeEach(() => {
     mockReservationRepository = di.getRepository<ReservationRepository>(
       ReservationRepository
@@ -26,88 +33,104 @@ defineFeature(feature, (test) => {
   });
 
   test('Return reservations by room_id', ({ given, when, then, and }) => {
-      given(
-          /^o RoomRepository tem um quarto com id "(.*)"$/,
-          async (id) => {
-            // Check if the test does not exist in the repository and delete it if it exists
-            const user = await mockRoomRepository.getRoom(id);
+    given(/^o RoomRepository tem um quarto com id "(.*)"$/, async (id) => {
+      // Check if the test does not exist in the repository and delete it if it exists
+      const user = await mockRoomRepository.getRoom(id);
 
-             console.log(user);
-          }
-      );
+      console.log(user);
+    });
 
-      and(
-          /^o ReservationRepository tem as seguintes reservas: pf_id "(.*)", room_id "(.*)", check_in "(.*)", check_out "(.*)", guests "(.*)", total "(.*)", status "(.*)", rating_star "(.*)", rating_comment "(.*)"$/,
-          async (pf_id, room_id,check_in,check_out,guests,total,status,rating_s, rating_c) => {
-              // console.log(pf_id, room_id,check_in,check_out,guests,total,status,rating);
-              const reservation = await mockReservationRepository.getReservationByRoomId(room_id);
-              // console.log(reservation);
-          }
-      );
+    and(
+      /^o ReservationRepository tem as seguintes reservas: pf_id "(.*)", room_id "(.*)", check_in "(.*)", check_out "(.*)", guests "(.*)", total "(.*)", status "(.*)", rating_star "(.*)", rating_comment "(.*)"$/,
+      async (
+        pf_id,
+        room_id,
+        check_in,
+        check_out,
+        guests,
+        total,
+        status,
+        rating_s,
+        rating_c
+      ) => {
+        // console.log(pf_id, room_id,check_in,check_out,guests,total,status,rating);
+        const reservation =
+          await mockReservationRepository.getReservationByRoomId(room_id);
+        // console.log(reservation);
+      }
+    );
 
-      when(/^uma requisição GET é feita para "(.*)"$/,
-          async (url) => {
-              response = await request.get(url);
-              console.log(response.status);
-              console.log(response.text);
-          }
-      );
+    when(/^uma requisição GET é feita para "(.*)"$/, async (url) => {
+      response = await request.get(url).set('Authorization', `Bearer ${token}`);
+      console.log(response.status);
+      console.log(response.text);
+    });
 
-      then(/^a resposta deve ter status "(.*)"$/,
-          (statusCode) => {
+    then(/^a resposta deve ter status "(.*)"$/, (statusCode) => {
+      expect(response.status).toBe(parseInt(statusCode, 10));
+    });
 
-              expect(response.status).toBe(parseInt(statusCode, 10));
-          }
-      );
-
-      and(/^a resposta deve ser um JSON com as seguintes reservas: id "(.*)" pf_id "(.*)", room_id "(.*)", check_in "(.*)", check_out "(.*)", guests "(.*)", total "(.*)", status "(.*)", rating_star "(.*)", rating_comment "(.*)"$/,
-          async (id, pf_id, room_id,check_in,check_out,guests,total,status,rating_s, rating_c) => {
-              expect(response.body).toEqual([{
-                  check_in: check_in,
-                  check_out: check_out,
-                  confirmed: false,
-                  guests: +guests,
-                  id: id,
-                  pf_id: pf_id,
-                  rating: { comment: rating_c, stars: +rating_s },
-                  room_id: room_id,
-                  status: status,
-                  total: +total
-                  }]);
-                }
-      );
+    and(
+      /^a resposta deve ser um JSON com as seguintes reservas: id "(.*)" pf_id "(.*)", room_id "(.*)", check_in "(.*)", check_out "(.*)", guests "(.*)", total "(.*)", status "(.*)", rating_star "(.*)", rating_comment "(.*)"$/,
+      async (
+        id,
+        pf_id,
+        room_id,
+        check_in,
+        check_out,
+        guests,
+        total,
+        status,
+        rating_s,
+        rating_c
+      ) => {
+        expect(response.body).toEqual([
+          {
+            check_in: check_in,
+            check_out: check_out,
+            confirmed: false,
+            guests: +guests,
+            id: id,
+            pf_id: pf_id,
+            rating: { comment: rating_c, stars: +rating_s },
+            room_id: room_id,
+            status: status,
+            total: +total,
+          },
+        ]);
+      }
+    );
   });
 
-  test('Return reservations by room_id - failed', ({ given, when, then, and }) => {
-      given(
-          /^o RoomRepository não tem um quarto com id "(.*)"$/,
-          async (id) => {
-            // Check if the test does not exist in the repository and delete it if it exists
-             const user = await mockRoomRepository.getRoom(id);
+  test('Return reservations by room_id - failed', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
+    given(/^o RoomRepository não tem um quarto com id "(.*)"$/, async (id) => {
+      // Check if the test does not exist in the repository and delete it if it exists
+      const user = await mockRoomRepository.getRoom(id);
 
-             console.log(user);
-          }
-      );
+      console.log(user);
+    });
 
-      when(/^uma requisição GET é feita para "(.*)"$/,
-          async (url) => {
-              response = await request.get(url);
-              console.log(response.status);
-              console.log(response.text);
-          }
-      );
+    when(/^uma requisição GET é feita para "(.*)"$/, async (url) => {
+      response = await request.get(url).set('Authorization', `Bearer ${token}`);
+      console.log(response.status);
+      console.log(response.text);
+    });
 
-      then(/^o status de resposta deve ser "(.*)"$/,
-          (statusCode) => {
-              expect(response.status).toBe(parseInt(statusCode, 10));
-          }
-      );
+    then(/^o status de resposta deve ser "(.*)"$/, (statusCode) => {
+      expect(response.status).toBe(parseInt(statusCode, 10));
+    });
 
-      and(/^a resposta deve ser um JSON com a seguinte mensagem: "(.*)"$/,
-          (message) => {
-              expect(response.body).toEqual({ error: message });
-          }
-      )
+    and(
+      /^a resposta deve ser um JSON com a seguinte mensagem: "(.*)"$/,
+      (message) => {
+        expect(response.body).toEqual({ error: message });
+      }
+    );
   });
 
   test('Return reservations by pf_id', ({ given, when, then, and }) => {
@@ -145,7 +168,7 @@ defineFeature(feature, (test) => {
     );
 
     when(/^uma requisição GET é feita para "(.*)"$/, async (url) => {
-      response = await request.get(url);
+      response = await request.get(url).set('Authorization', `Bearer ${token}`);
     });
 
     then(/^o status de resposta deve ser "(.*)"$/, (statusCode) => {
@@ -194,7 +217,7 @@ defineFeature(feature, (test) => {
   //            console.log(user);
   //         }
   //     );
-  // 
+  //
   //     when(/^uma requisição GET é feita para "(.*)"$/,
   //         async (url) => {
   //             response = await request.get(url);
@@ -215,5 +238,4 @@ defineFeature(feature, (test) => {
   //         }
   //     )
   // });
-
 });
