@@ -30,6 +30,10 @@ const formSchema = z.object({
   preco: z.coerce.number().min(50, "O preço deve ser maior que cinquenta"),
   descricao: z.string().optional(),
   quantidade_hosp: z.number().min(1),
+  local: z.string().min(1, "O local é obrigatorio"),
+  stars: z.coerce.number().min(1, "As entrelas devem ser de 1 a 5"),
+  avaliacao: z.coerce.number().min(1, "A avaliacao deve ser de 0 a 10"),
+  caracteristics: z.string().optional(),
 });
 
 export default function FormAcomodacao() {
@@ -40,6 +44,10 @@ export default function FormAcomodacao() {
       preco: 10,
       descricao: "",
       quantidade_hosp: 2,
+      local: "",
+      stars: 1,
+      avaliacao: 1,
+      caracteristics: "",
     },
   });
 
@@ -66,7 +74,7 @@ export default function FormAcomodacao() {
         <div className="p-6 bg-gray-200 rounded-lg max-w-xl mx-auto space-y-4">
           <FormField
             control={form.control}
-            name="preco"
+            name="quantidade_hosp"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
@@ -96,9 +104,10 @@ export default function FormAcomodacao() {
 
             <FotoUpload />
           </div>
+
           <FormField
             control={form.control}
-            name="nome"
+            name="descricao"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Descrição do quarto</FormLabel>
@@ -115,12 +124,68 @@ export default function FormAcomodacao() {
 
           <FormField
             control={form.control}
+            name="local"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Local</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ex: Porto de Galinhas" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="caracteristics"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Caracteristicas do seu quarto</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ex: Aconchegante, espaçoso" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="preco"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Preço por Noite (R$)</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="Ex: 150" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="stars"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Estrelas</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Ex: 3" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="avaliacao"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Avaliacao</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Ex: 7" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
