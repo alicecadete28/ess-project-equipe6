@@ -17,6 +17,7 @@ import { useState } from "react";
 import FotoUpload from "./FotoUpload";
 import axios from "axios";
 import { Upload, Image } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 const amenities = [
   "Wi-fi",
   "Tv",
@@ -53,13 +54,15 @@ export default function FormAcomodacao() {
 
   const [loading, setLoading] = useState(false);
 
+  const { user } = useAuth();
+
   async function onSubmit(values: any) {
     console.log("Botão clicado");
     setLoading(true);
 
     const dataToSend = {
       id: crypto.randomUUID(), // Gera um UUID para o id
-      pj_id: "f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1d", // Ajuste se necessário
+      pj_id: user?.id, // Ajuste se necessário
       description: values.descricao || "Sem descrição",
       type: values.tipo, // Pode ajustar conforme necessário
       price: values.preco,

@@ -91,7 +91,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       // Mock successful login
       const newUser: User = {
-        id: "user-1",
+        id: data.id,
         email: data?.email || "",
         name: email.split("@")[0],
       };
