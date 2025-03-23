@@ -66,7 +66,8 @@ export default function FormAcomodacao() {
       id: crypto.randomUUID(), // Gera um UUID para o id
       pj_id: user?.id, // Ajuste se necessário
       // pj_id: "2222",
-      description: values.descricao || "Sem descrição",
+
+      description: values.descricao,
       type: values.tipo, // Pode ajustar conforme necessário
       price: values.preco,
       capacity: values.quantidade_hosp,
@@ -87,14 +88,16 @@ export default function FormAcomodacao() {
     console.log(dataToSend);
 
     try {
-      const token = localStorage.getItem("token") as string;
+      const token = localStorage.getItem("accessToken") as string;
+      console.log("Token armazenado:", token);
 
       const response = await fetch("http://localhost:5001/api/rooms", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        token,
+
         body: JSON.stringify(dataToSend),
       });
 
@@ -124,14 +127,19 @@ export default function FormAcomodacao() {
         : [...prev, amenity]
     );
   };
+
+  console.log(user);
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 p-4 border rounded-lg"
       >
-        <h1 className="font-bold">Hotel Estrela</h1>
-        <div className="p-6 bg-gray-200 rounded-lg max-w-xl mx-auto space-y-4">
+        <h1 className="font-bold">{user?.client?.name}</h1>
+        <div
+          className="p-6
+         bg-gray-200 rounded-lg max-w-xl mx-auto space-y-4"
+        >
           <FormField
             control={form.control}
             name="quantidade_hosp"
