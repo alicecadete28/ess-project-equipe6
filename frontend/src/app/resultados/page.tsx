@@ -3,16 +3,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 import {
   Home,
   Bookmark,
   Heart,
   LogOut,
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
   Wifi,
   Tv,
   Car,
@@ -22,10 +18,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import AppHeader from "@/components/Header"; // ✅ Importado aqui
-import { Badge } from "@/components/ui/badge"
+import AppHeader from "@/components/Header";
+import { Badge } from "@/components/ui/badge";
 
-// Define the room type
 interface Room {
   id: number;
   name: string;
@@ -37,92 +32,17 @@ interface Room {
   stars: number;
   rating: number;
   caracteristics_ids: string;
-  ar_condicionado?: boolean
-  tv: boolean
-  wifi: boolean
-  petFriendly: boolean
-  cafeDaManha: boolean
-  estacionamento: boolean
+  ar_condicionado?: boolean;
+  tv: boolean;
+  wifi: boolean;
+  petFriendly: boolean;
+  cafeDaManha: boolean;
+  estacionamento: boolean;
 }
 
 export default function SearchResults() {
-  const router = useRouter()
-  const initialRooms: Room[] = [
-    {
-      id: 1,
-      name: "Quarto bom",
-      description: "Descrição",
-      dailyRate: "R$ 250,00",
-      totalValue: "R$ 750,00",
-      image: "/placeholder.svg?height=150&width=150",
-      price: 250,
-      stars: 4,
-      rating: 8.7,
-      caracteristics_ids: "Seed",
-      ar_condicionado: true,
-      tv: true,
-      wifi: false,
-      petFriendly: true,
-      cafeDaManha: true,
-      estacionamento: true,
-    },
-    {
-      id: 2,
-      name: "Quarto teste",
-      description: "Descrição",
-      dailyRate: "R$ 300,00",
-      totalValue: "R$ 900,00",
-      image: "/placeholder.svg?height=150&width=150",
-      price: 300,
-      stars: 5,
-      rating: 9.2,
-      caracteristics_ids: "Seed",
-      ar_condicionado: false,
-      tv: true,
-      wifi: false,
-      petFriendly: true,
-      cafeDaManha: true,
-      estacionamento: true,
-    },
-    {
-      id: 3,
-      name: "Quartinho",
-      description: "Descrição",
-      dailyRate: "R$ 200,00",
-      totalValue: "R$ 600,00",
-      image: "/placeholder.svg?height=150&width=150",
-      price: 200,
-      stars: 3,
-      rating: 7.5,
-      caracteristics_ids: "Seed",
-      ar_condicionado: true,
-      tv: true,
-      wifi: false,
-      petFriendly: true,
-      cafeDaManha: true,
-      estacionamento: true,
-    },
-    {
-      id: 4,
-      name: "Nome quarto",
-      description: "Descrição",
-      dailyRate: "R$ 350,00",
-      totalValue: "R$ 1050,00",
-      image: "/placeholder.svg?height=150&width=150",
-      price: 350,
-      stars: 4,
-      rating: 8.9,
-      caracteristics_ids: "Seed",
-      ar_condicionado: true,
-      tv: true,
-      wifi: false,
-      petFriendly: true,
-      cafeDaManha: true,
-      estacionamento: true,
-    },
-  ];
-
-  const [rooms, setRooms] = useState<Room[]>(initialRooms);
+  const router = useRouter();
+  const [rooms, setRooms] = useState<Room[]>([]);
   const [errorMsg, setErrorMsg] = useState("");
   const [filters, setFilters] = useState({
     airConditioning: false,
@@ -138,8 +58,6 @@ export default function SearchResults() {
     stars: false,
     rating: false,
   });
-
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handleFilterChange = (filter: keyof typeof filters) => {
     setFilters((prev) => ({
@@ -209,29 +127,28 @@ export default function SearchResults() {
         setRooms([]);
         setErrorMsg(data.message || "Erro ao buscar acomodações");
       } else {
-        const parametros = JSON.parse(paramsString);
         const checkIn = new Date(parametros.data_ida);
         const checkOut = new Date(parametros.data_volta);
         const numberOfNights = Math.ceil(
-    (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)
-  );
-  const mappedRooms = data.map((room: any) => {
-    const price = Number(room.price) || 0;
-    const totalValue = price * numberOfNights;
+          (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)
+        );
 
-    return {
-      ...room,
-      dailyRate: `R$ ${price.toLocaleString("pt-BR")}`,
-      totalValue: `R$ ${totalValue.toLocaleString("pt-BR")}`,
-      rating: room.avaliacao ?? 0,
-      stars: room.stars ?? 0,
-    };
-  });
+        const mappedRooms = data.map((room: any) => {
+          const price = Number(room.price) || 0;
+          const totalValue = price * numberOfNights;
 
-  setRooms(mappedRooms);
-  setErrorMsg("");
-}
+          return {
+            ...room,
+            dailyRate: `R$ ${price.toLocaleString("pt-BR")}`,
+            totalValue: `R$ ${totalValue.toLocaleString("pt-BR")}`,
+            rating: room.avaliacao ?? 0,
+            stars: room.stars ?? 0,
+          };
+        });
 
+        setRooms(mappedRooms);
+        setErrorMsg("");
+      }
     } catch (error) {
       setErrorMsg("Erro ao se comunicar com o servidor");
       console.error(error);
@@ -251,51 +168,38 @@ export default function SearchResults() {
   };
 
   const handleReserve = (room: Room) => {
-    // Recuperar os parâmetros de busca (datas, hospedes)
-    const paramsString = sessionStorage.getItem("parametrosBusca")
+    const paramsString = sessionStorage.getItem("parametrosBusca");
     let reservaData = {
       quarto: room,
       data_ida: "",
       data_volta: "",
       hospedes: 1,
       preco_total: room.totalValue,
-    }
+    };
 
     if (paramsString) {
-      const params = JSON.parse(paramsString)
+      const params = JSON.parse(paramsString);
       reservaData = {
         ...reservaData,
         data_ida: params.data_ida || "",
         data_volta: params.data_volta || "",
         hospedes: params.num_pessoas || 1,
-      }
+      };
     }
-    console.log("Dados a serem salvos:", reservaData)
 
-    // Salvar os dados completos da reserva no sessionStorage
-    sessionStorage.setItem("dadosReserva", JSON.stringify(reservaData))
-    // Verificar se foi salvo corretamente
-    const savedData = sessionStorage.getItem("dadosReserva")
-    console.log("Dados salvos:", savedData ? JSON.parse(savedData) : null)
-    // Salvar os dados do quarto selecionado no sessionStorage
-    sessionStorage.setItem("selectedRoom", JSON.stringify(room))
-    // Verificar se o quarto foi salvo corretamente
-    const savedRoom = sessionStorage.getItem("selectedRoom")
-    console.log("Quarto salvo:", savedRoom ? JSON.parse(savedRoom) : null)
-
-    // Redirecionar para a página de reserva
-    router.push("/reservar")
-  }
+    sessionStorage.setItem("dadosReserva", JSON.stringify(reservaData));
+    sessionStorage.setItem("selectedRoom", JSON.stringify(room));
+    router.push("/reservar");
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* ✅ AppHeader substitui o header manual */}
       <AppHeader />
 
       {/* Navigation Bar */}
       <div className="bg-[#0069b0] text-white p-2">
         <div className="container mx-auto flex justify-between">
-          <Link href="/(home)" className="flex items-center gap-2 hover:underline">
+          <Link href="/" className="flex items-center gap-2 hover:underline">
             <Home size={18} />
             <span>Voltar para a tela inicial</span>
           </Link>
@@ -318,8 +222,19 @@ export default function SearchResults() {
 
       {/* Main Content */}
       <div className="flex flex-1">
-        {/* Search Results */}
         <div className="flex-1 p-4">
+          {errorMsg && (
+            <div className="text-center text-red-600 font-semibold my-4">
+              {errorMsg}
+            </div>
+          )}
+
+          {rooms.length === 0 && !errorMsg && (
+            <div className="text-center text-gray-600 font-medium my-4">
+              Nenhum quarto encontrado com os filtros selecionados.
+            </div>
+          )}
+
           {rooms.map((room) => (
             <div key={room.id} className="flex mb-4 border rounded-md overflow-hidden shadow-md">
               <div className="w-64 h-48 bg-gray-200 flex items-center justify-center">
@@ -349,56 +264,51 @@ export default function SearchResults() {
                     ))}
                     <span className="ml-2 text-sm font-medium">{room.stars} estrelas</span>
                   </div>
-                  {/* Características do quarto - apenas as disponíveis */}
-                <div className="mt-4">
-                  <h3 className="font-semibold text-sm mb-2">Características:</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {room.ar_condicionado && (
-                      <Badge className="flex items-center gap-1">
-                        <Wind className="h-3 w-3 mr-1" />
-                        Ar-condicionado
-                      </Badge>
-                    )}
 
-                    {room.tv && (
-                      <Badge className="flex items-center gap-1">
-                        <Tv className="h-3 w-3 mr-1" />
-                        TV
-                      </Badge>
-                    )}
-
-                    {room.wifi && (
-                      <Badge className="flex items-center gap-1">
-                        <Wifi className="h-3 w-3 mr-1" />
-                        Wi-Fi
-                      </Badge>
-                    )}
-
-                    {room.petFriendly && (
-                      <Badge className="flex items-center gap-1">
-                        <Dog className="h-3 w-3 mr-1" />
-                        Pet-Friendly
-                      </Badge>
-                    )}
-
-                    {room.cafeDaManha && (
-                      <Badge className="flex items-center gap-1">
-                        <Coffee className="h-3 w-3 mr-1" />
-                        Café da Manhã
-                      </Badge>
-                    )}
-
-                    {room.estacionamento && (
-                      <Badge className="flex items-center gap-1">
-                        <Car className="h-3 w-3 mr-1" />
-                        Estacionamento
-                      </Badge>
-                    )}
+                  <div className="mt-4">
+                    <h3 className="font-semibold text-sm mb-2">Características:</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {room.ar_condicionado && (
+                        <Badge className="flex items-center gap-1">
+                          <Wind className="h-3 w-3 mr-1" />
+                          Ar-condicionado
+                        </Badge>
+                      )}
+                      {room.tv && (
+                        <Badge className="flex items-center gap-1">
+                          <Tv className="h-3 w-3 mr-1" />
+                          TV
+                        </Badge>
+                      )}
+                      {room.wifi && (
+                        <Badge className="flex items-center gap-1">
+                          <Wifi className="h-3 w-3 mr-1" />
+                          Wi-Fi
+                        </Badge>
+                      )}
+                      {room.petFriendly && (
+                        <Badge className="flex items-center gap-1">
+                          <Dog className="h-3 w-3 mr-1" />
+                          Pet-Friendly
+                        </Badge>
+                      )}
+                      {room.cafeDaManha && (
+                        <Badge className="flex items-center gap-1">
+                          <Coffee className="h-3 w-3 mr-1" />
+                          Café da Manhã
+                        </Badge>
+                      )}
+                      {room.estacionamento && (
+                        <Badge className="flex items-center gap-1">
+                          <Car className="h-3 w-3 mr-1" />
+                          Estacionamento
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                </div>
 
                   <div className="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">
-                  {Number.isFinite(room.rating) ? room.rating.toFixed(1) : "Sem avaliação"} avaliação
+                    {Number.isFinite(room.rating) ? room.rating.toFixed(1) : "Sem avaliação"} avaliação
                   </div>
                 </div>
 
@@ -413,41 +323,16 @@ export default function SearchResults() {
                     <p className="font-bold text-xl text-[#0079c2]">{room.totalValue}</p>
                   </div>
 
-                  <Button className="bg-[#0079c2] hover:bg-[#0069b0] text-white"
-                  onClick={() => handleReserve(room)}>
-                    Reservar 
+                  <Button
+                    className="bg-[#0079c2] hover:bg-[#0069b0] text-white"
+                    onClick={() => handleReserve(room)}
+                  >
+                    Reservar
                   </Button>
                 </div>
               </div>
             </div>
           ))}
-
-          {/* Pagination */}
-          <div className="flex justify-center items-center mt-6 gap-2">
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <ChevronsLeft className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            {[1, 2, 3, 4, 5, 6, 7].map((page) => (
-              <Button
-                key={page}
-                variant={currentPage === page ? "default" : "outline"}
-                size="sm"
-                className={`h-8 w-8 ${currentPage === page ? "bg-[#0079c2] text-white" : ""}`}
-                onClick={() => setCurrentPage(page)}
-              >
-                {page}
-              </Button>
-            ))}
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <ChevronsRight className="h-4 w-4" />
-            </Button>
-          </div>
         </div>
 
         {/* Filters Sidebar */}
@@ -497,6 +382,5 @@ export default function SearchResults() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-
