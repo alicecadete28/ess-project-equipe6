@@ -18,7 +18,7 @@ import FotoUpload from "./FotoUpload";
 import axios from "axios";
 import { Upload, Image } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-
+import { useRouter } from "next/navigation";
 const amenities = [
   "Wi-fi",
   "Tv",
@@ -58,6 +58,7 @@ export default function FormAcomodacao() {
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
+  const router = useRouter();
 
   async function onSubmit(values: any) {
     console.log("Botão clicado");
@@ -111,6 +112,7 @@ export default function FormAcomodacao() {
       alert("Acomodação cadastrada com sucesso!");
       form.reset();
       setSelectedAmenities([]);
+      router.push("/");
     } catch (error) {
       console.error("Erro:", error);
       alert("Falha ao cadastrar acomodação.");
