@@ -18,6 +18,7 @@ import FotoUpload from "./FotoUpload";
 import axios from "axios";
 import { Upload, Image } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+
 const amenities = [
   "Wi-fi",
   "Tv",
@@ -128,7 +129,7 @@ export default function FormAcomodacao() {
     );
   };
 
-  console.log(user);
+  console.log(user?.id);
   return (
     <Form {...form}>
       <form

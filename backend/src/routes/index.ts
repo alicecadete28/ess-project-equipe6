@@ -19,9 +19,11 @@ import {
 } from '../controllers/reservationlist.controller';
 import ReservationController from '../controllers/reservation.controller';
 import ReservationService from '../services/reservation.service';
+import PfRepository from '../repositories/pf.repository';
 
 const router = Router();
 const prefix = '/api';
+const pfRepository = new PfRepository();
 
 router.get('/api/buscar-acomodacoes', buscarAcomodacoes);
 router.get('/api/filtrar-acomodacoes', filtrarAcomodacoes);
@@ -60,4 +62,5 @@ export default (app: Express) => {
     prefix,
     new ReservationController(router, di.getService(ReservationService)).router
   );
+  app.use(prefix, router);
 };
