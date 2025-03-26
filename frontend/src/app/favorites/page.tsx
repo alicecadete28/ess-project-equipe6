@@ -5,6 +5,7 @@ import Image from "next/image"
 import { ArrowLeft, Heart, Users, Loader2, AlertCircle, Star, Wifi, Tv, Car, Coffee, Dog, Wind } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "@/hooks/useAuth"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
 // Updated interface to match the room entity structure
 interface Room {
@@ -32,10 +33,12 @@ export default function FavoritesPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [fetchAttempted, setFetchAttempted] = useState(false)
-  const {user} = useAuth();
+  const Dados = useAuth();
+  console.log(Dados);
 
   useEffect(() => {
     // Only run once when component mounts
+    if (!Dados?.isAuthenticated) return
     if (fetchAttempted) return
 
     async function fetchFavorites() {
@@ -44,13 +47,16 @@ export default function FavoritesPage() {
 
       setLoading(true)
       setError(null)
+  
 
       try {
         // Get token from localStorage
         const token = localStorage.getItem("accessToken") as string
         console.log("Token:", token)
-        const user_id = String(user?.id);
-        localStorage.setItem("meuItem", JSON.stringify(user));
+        const user_id = String(Dados.user?.id)
+        console.log(Dados)
+        console.log("user_id",user_id)
+        localStorage.setItem("user_id", user_id)
 
         // Step 1: Fetch list of favorite room IDs
         console.log(user_id)
@@ -63,7 +69,12 @@ export default function FavoritesPage() {
         })
 
         if (!favoritesResponse.ok) {
-          throw new Error(`HTTP error! status: ${favoritesResponse.status}`)
+          console.log(`HTTP error! status: ${favoritesResponse.status}`)
+          setFavoriteIds([])
+          setRooms([])
+          setLoading(false)
+          setFetchAttempted(true)
+          return
         }
 
         const favoritesData = await favoritesResponse.json()
@@ -153,7 +164,7 @@ export default function FavoritesPage() {
     return () => {
       console.log("unmounted")
     }
-  }, []) // Empty dependency array to run only once
+  }, [Dados]) // Empty dependency array to run only once
 
   const handleRetry = () => {
     setFetchAttempted(false) // Reset fetch attempted flag to trigger a new fetch
@@ -214,124 +225,124 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
-      {/* Plain white header */}
-      <header className="h-16 bg-white border-b"></header>
+    <ProtectedRoute><div className="min-h-screen bg-[#fafafa]">
+    {/* Plain white header */}
+    <header className="h-16 bg-white border-b"></header>
 
-      {/* Back button and title */}
-      <div className="p-4 flex items-center">
-        <Link href="#" className="mr-4">
-          <ArrowLeft size={40} className="text-black" />
-        </Link>
-        <button className="bg-[#1976d2] text-white px-16 py-3 rounded-full text-xl">favoritos</button>
-      </div>
-
-      {/* Room cards */}
-      <div className="px-4 py-6 space-y-6">
-        {loading ? (
-          <div className="flex justify-center items-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-[#1976d2]" />
-            <span className="ml-2 text-lg">Carregando favoritos...</span>
-          </div>
-        ) : error ? (
-          <div className="text-center py-12">
-            <div className="flex flex-col items-center justify-center">
-              <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-              <p className="text-lg mb-4">Erro ao carregar favoritos: {error}</p>
-              <button
-                onClick={handleRetry}
-                className="bg-[#1976d2] text-white px-6 py-2 rounded-md hover:bg-[#1565c0] transition-colors"
-              >
-                Tentar novamente
-              </button>
-            </div>
-
-            {/* Show fallback data for testing */}
-            <div className="mt-12 pt-8 border-t border-gray-200">
-              <h3 className="text-lg font-medium mb-6">Dados de exemplo:</h3>
-              {fallbackData.map((room) => (
-                <div
-                  key={room.id}
-                  className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col md:flex-row mb-6"
-                >
-                  <div className="w-full md:w-1/3">
-                    <Image
-                      src={"/placeholder.svg"}
-                      alt={room.description}
-                      width={300}
-                      height={200}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 p-6 flex justify-between items-start">
-                    <div>
-                      <h2 className="text-2xl font-semibold mb-2">{room.description}</h2>
-                      <div className="flex items-center mb-2">
-                        <Users className="mr-2" />
-                        <span>Hóspedes - {room.capacity} pessoas</span>
-                      </div>
-                      <div className="flex items-center mb-2">
-                        <div className="flex mr-2">
-                          {[...Array(room.stars)].map((_, i) => (
-                            <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
-                          ))}
-                        </div>
-                        <span className="text-sm text-gray-600">{room.local}</span>
-                      </div>
-                      {renderAmenities(room)}
-                    </div>
-                    <div className="flex flex-col items-end">
-                      <Heart fill="#ff0707" color="#ff0707" size={40} />
-                      <div className="mt-auto text-xl font-bold">R$ {room.price}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : rooms.length > 0 ? (
-          rooms.map((room) => (
-            <div key={room.id} className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col md:flex-row">
-              <div className="w-full md:w-1/3">
-                <Image
-                  src={"/placeholder.svg?height=200&width=300"}
-                  alt={room.description}
-                  width={300}
-                  height={200}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex-1 p-6 flex justify-between items-start">
-                <div>
-                  <h2 className="text-2xl font-semibold mb-2">{room.description}</h2>
-                  <div className="flex items-center mb-2">
-                    <Users className="mr-2" />
-                    <span>Hóspedes - {room.capacity} pessoas</span>
-                  </div>
-                  <div className="flex items-center mb-2">
-                    <div className="flex mr-2">
-                      {[...Array(room.stars)].map((_, i) => (
-                        <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
-                      ))}
-                    </div>
-                    <span className="text-sm text-gray-600">{room.local}</span>
-                  </div>
-                  {renderAmenities(room)}
-                </div>
-                <div className="flex flex-col items-end">
-                  <Heart fill="#ff0707" color="#ff0707" size={40} />
-                  <div className="mt-auto text-xl font-bold">R$ {room.price}</div>
-                </div>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-lg">Nenhum favorito encontrado.</p>
-          </div>
-        )}
-      </div>
+    {/* Back button and title */}
+    <div className="p-4 flex items-center">
+      <Link href="#" className="mr-4">
+        <ArrowLeft size={40} className="text-black" />
+      </Link>
+      <button className="bg-[#1976d2] text-white px-16 py-3 rounded-full text-xl">favoritos</button>
     </div>
+
+    {/* Room cards */}
+    <div className="px-4 py-6 space-y-6">
+      {loading ? (
+        <div className="flex justify-center items-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-[#1976d2]" />
+          <span className="ml-2 text-lg">Carregando favoritos...</span>
+        </div>
+      ) : error ? (
+        <div className="text-center py-12">
+          <div className="flex flex-col items-center justify-center">
+            <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+            <p className="text-lg mb-4">Erro ao carregar favoritos: {error}</p>
+            <button
+              onClick={handleRetry}
+              className="bg-[#1976d2] text-white px-6 py-2 rounded-md hover:bg-[#1565c0] transition-colors"
+            >
+              Tentar novamente
+            </button>
+          </div>
+
+          {/* Show fallback data for testing */}
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            <h3 className="text-lg font-medium mb-6">Dados de exemplo:</h3>
+            {fallbackData.map((room) => (
+              <div
+                key={room.id}
+                className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col md:flex-row mb-6"
+              >
+                <div className="w-full md:w-1/3">
+                  <Image
+                    src={"/placeholder.svg"}
+                    alt={room.description}
+                    width={300}
+                    height={200}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 p-6 flex justify-between items-start">
+                  <div>
+                    <h2 className="text-2xl font-semibold mb-2">{room.description}</h2>
+                    <div className="flex items-center mb-2">
+                      <Users className="mr-2" />
+                      <span>Hóspedes - {room.capacity} pessoas</span>
+                    </div>
+                    <div className="flex items-center mb-2">
+                      <div className="flex mr-2">
+                        {[...Array(room.stars)].map((_, i) => (
+                          <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
+                        ))}
+                      </div>
+                      <span className="text-sm text-gray-600">{room.local}</span>
+                    </div>
+                    {renderAmenities(room)}
+                  </div>
+                  <div className="flex flex-col items-end">
+                    <Heart fill="#ff0707" color="#ff0707" size={40} />
+                    <div className="mt-auto text-xl font-bold">R$ {room.price}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : rooms.length > 0 ? (
+        rooms.map((room) => (
+          <div key={room.id} className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col md:flex-row">
+            <div className="w-full md:w-1/3">
+              <Image
+                src={"/placeholder.svg?height=200&width=300"}
+                alt={room.description}
+                width={300}
+                height={200}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex-1 p-6 flex justify-between items-start">
+              <div>
+                <h2 className="text-2xl font-semibold mb-2">{room.description}</h2>
+                <div className="flex items-center mb-2">
+                  <Users className="mr-2" />
+                  <span>Hóspedes - {room.capacity} pessoas</span>
+                </div>
+                <div className="flex items-center mb-2">
+                  <div className="flex mr-2">
+                    {[...Array(room.stars)].map((_, i) => (
+                      <Star key={i} size={16} className="fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <span className="text-sm text-gray-600">{room.local}</span>
+                </div>
+                {renderAmenities(room)}
+              </div>
+              <div className="flex flex-col items-end">
+                <Heart fill="#ff0707" color="#ff0707" size={40} />
+                <div className="mt-auto text-xl font-bold">R$ {room.price}</div>
+              </div>
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-lg">Nenhum favorito encontrado.</p>
+        </div>
+      )}
+    </div>
+  </div></ProtectedRoute>
   )
 }
 
