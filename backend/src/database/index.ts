@@ -1,6 +1,7 @@
 import PFEntity from '../entities/pf.entity';
 import ReservationEntity from '../entities/reservation.entity';
 import RoomEntity from '../entities/room.entity';
+import UserEntity from '../entities/user.entity';
 
 export default class Database {
   data: { [key: string]: any[] };
@@ -99,6 +100,14 @@ export default class Database {
         //   cpf: '8888',
         // }),
       ],
+      users: [
+        new UserEntity({
+          id: '12732',
+          email:'bia@example.com',
+          password:'123',
+          type:'pf'
+        }),
+      ],
       pfs: [
         new PFEntity({
           id: '12732',
@@ -107,7 +116,7 @@ export default class Database {
           birth_date: new Date(2000, 0, 9),
           cpf: '28173891',
           phone: '98171-2882',
-          favorites: ['12', '22', '32'],
+          favorites: ['f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1e', 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a'],
           savedRooms: ['12', '222', '32'],
         }),
       ],
