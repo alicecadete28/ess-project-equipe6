@@ -49,11 +49,12 @@ export default function FavoritesPage() {
         // Get token from localStorage
         const token = localStorage.getItem("accessToken") as string
         console.log("Token:", token)
-        const user_id = user?.id;
+        const user_id = String(user?.id);
+        localStorage.setItem("meuItem", JSON.stringify(user));
 
         // Step 1: Fetch list of favorite room IDs
         console.log(user_id)
-        const favoritesResponse = await fetch(`http://localhost:5001/api/favorites/12732`, {
+        const favoritesResponse = await fetch(`http://localhost:5001/api/favorites/${user_id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
