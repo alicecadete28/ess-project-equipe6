@@ -24,12 +24,15 @@ export default function AppHeader() {
             Dest<span className="text-[#0079c2]">CIN</span>ation
           </span>
         </div>
-        {user?.client?.cnpj && (
-          <Button component={Link} href="/accomodation">
-            Publicar Acomodação
-          </Button>
-        )}
-        <UserAuthButton />
+
+        <div className="flex items-center gap-4">
+          {user?.client?.cnpj && (
+            <Button component={Link} href="/accommodation">
+              Publicar Acomodação
+            </Button>
+          )}
+          <UserAuthButton />
+        </div>
       </div>
     </header>
   );

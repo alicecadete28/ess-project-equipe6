@@ -111,6 +111,14 @@ export default function UserAuthButton() {
             </ListItemIcon>
             Pessoa Jurídica
           </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              router.push("/login");
+            }}
+          >
+            <div className="text-blue-500"> Já tenho uma conta!</div>
+          </MenuItem>
         </Menu>
       </>
     );
