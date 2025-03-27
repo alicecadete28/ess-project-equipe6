@@ -231,7 +231,7 @@ export default function FavoritesPage() {
 
     {/* Back button and title */}
     <div className="p-4 flex items-center">
-      <Link href="#" className="mr-4">
+      <Link href="/resultados" className="mr-4">
         <ArrowLeft size={40} className="text-black" />
       </Link>
       <button className="bg-[#1976d2] text-white px-16 py-3 rounded-full text-xl">favoritos</button>
