@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import AppHeader from "@/components/Header"
-import Image from "next/image"
 
 export default function ReservarPage() {
   const router = useRouter()
@@ -12,6 +11,7 @@ export default function ReservarPage() {
   const [quartoSelecionado, setQuartoSelecionado] = useState<any>(null)
 
   useEffect(() => {
+    // Recuperar os dados da reserva
     const dadosReservaStr = sessionStorage.getItem("dadosReserva")
     const quartoSelecionadoStr = sessionStorage.getItem("selectedRoom")
 
@@ -70,10 +70,18 @@ export default function ReservarPage() {
                   <div>
                     <h3 className="font-semibold mb-2">Informações da Estadia:</h3>
                     <ul className="space-y-2">
-                      <li><strong>Data de Ida:</strong> {dadosReserva.data_ida || "Não informado"}</li>
-                      <li><strong>Data de Volta:</strong> {dadosReserva.data_volta || "Não informado"}</li>
-                      <li><strong>Hóspedes:</strong> {dadosReserva.hospedes || "Não informado"}</li>
-                      <li><strong>Preço Total:</strong> {dadosReserva.preco_total || "Não informado"}</li>
+                      <li>
+                        <strong>Data de Ida:</strong> {dadosReserva.data_ida || "Não informado"}
+                      </li>
+                      <li>
+                        <strong>Data de Volta:</strong> {dadosReserva.data_volta || "Não informado"}
+                      </li>
+                      <li>
+                        <strong>Hóspedes:</strong> {dadosReserva.hospedes || "Não informado"}
+                      </li>
+                      <li>
+                        <strong>Preço Total:</strong> {dadosReserva.preco_total || "Não informado"}
+                      </li>
                     </ul>
                   </div>
 
@@ -81,11 +89,21 @@ export default function ReservarPage() {
                     <h3 className="font-semibold mb-2">Informações do Quarto:</h3>
                     {dadosReserva.quarto ? (
                       <ul className="space-y-2">
-                        <li><strong>ID:</strong> {dadosReserva.quarto.id}</li>
-                        <li><strong>Nome:</strong> {dadosReserva.quarto.name}</li>
-                        <li><strong>Descrição:</strong> {dadosReserva.quarto.description}</li>
-                        <li><strong>Preço:</strong> {dadosReserva.quarto.price}</li>
-                        <li><strong>Estrelas:</strong> {dadosReserva.quarto.stars}</li>
+                        <li>
+                          <strong>ID:</strong> {dadosReserva.quarto.id}
+                        </li>
+                        <li>
+                          <strong>Nome:</strong> {dadosReserva.quarto.name}
+                        </li>
+                        <li>
+                          <strong>Descrição:</strong> {dadosReserva.quarto.description}
+                        </li>
+                        <li>
+                          <strong>Preço:</strong> {dadosReserva.quarto.price}
+                        </li>
+                        <li>
+                          <strong>Estrelas:</strong> {dadosReserva.quarto.stars}
+                        </li>
                       </ul>
                     ) : (
                       <p className="text-red-500">Dados do quarto não encontrados em dadosReserva</p>
@@ -112,21 +130,22 @@ export default function ReservarPage() {
 
                 <div>
                   <h3 className="font-semibold mb-2">Informações do Quarto:</h3>
-
-                  <Image
-                    src={`https://picsum.photos/seed/${quartoSelecionado.id}/400/300`}
-                    alt={quartoSelecionado.name}
-                    width={400}
-                    height={300}
-                    className="object-cover rounded-md mb-4"
-                  />
-
                   <ul className="space-y-2">
-                    <li><strong>ID:</strong> {quartoSelecionado.id}</li>
-                    <li><strong>Nome:</strong> {quartoSelecionado.name}</li>
-                    <li><strong>Descrição:</strong> {quartoSelecionado.description}</li>
-                    <li><strong>Preço:</strong> {quartoSelecionado.price}</li>
-                    <li><strong>Estrelas:</strong> {quartoSelecionado.stars}</li>
+                    <li>
+                      <strong>ID:</strong> {quartoSelecionado.id}
+                    </li>
+                    <li>
+                      <strong>Nome:</strong> {quartoSelecionado.name}
+                    </li>
+                    <li>
+                      <strong>Descrição:</strong> {quartoSelecionado.description}
+                    </li>
+                    <li>
+                      <strong>Preço:</strong> {quartoSelecionado.price}
+                    </li>
+                    <li>
+                      <strong>Estrelas:</strong> {quartoSelecionado.stars}
+                    </li>
                     <li>
                       <strong>Características:</strong>
                       <ul className="ml-4 mt-1">

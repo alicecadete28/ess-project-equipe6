@@ -189,13 +189,25 @@ export default function SearchResults() {
           {rooms.map((room) => (
             <div key={room.id} className="flex mb-4 border rounded-md overflow-hidden shadow-md">
               <div className="w-64 h-48 bg-gray-200 flex items-center justify-center">
+              {/* <Image
+                // src={`https://picsum.photos/seed/${room.id}/400/300`}
+                // alt={room.name}
+                // width={400}
+                // height={300}
+                // className="object-cover w-full h-full"
+                src={room.image || "/placeholder.svg"}
+                  alt={room.name}
+                  width={150}
+                  height={150}
+                  className="object-cover w-full h-full"
+              /> */}
               <Image
-                src={`https://picsum.photos/seed/${room.id}/400/300`}
-                alt={room.name}
-                width={400}
-                height={300}
-                className="object-cover w-full h-full"
-              />
+                  src={room.image || "/placeholder.svg"}
+                  alt={room.name}
+                  width={150}
+                  height={150}
+                  className="object-cover w-full h-full"
+                />
               </div>
               <div className="flex-1 p-4">
                 <h2 className="text-xl font-bold text-[#0079c2]">{room.description}</h2>
@@ -291,3 +303,4 @@ export default function SearchResults() {
     </div>
   );
 }
+
