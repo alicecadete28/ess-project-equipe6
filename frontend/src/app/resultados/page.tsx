@@ -173,6 +173,9 @@ export default function SearchResults() {
             <Link href="/favorites" className="flex items-center gap-2 hover:underline">
               <Heart size={18} /> <span>Favoritos</span>
             </Link>
+            <Link href="/login" className="flex items-center gap-2 hover:underline">
+              <LogOut size={18} /> <span>Sign out</span>
+            </Link>
           </div>
         </div>
       </div>
@@ -189,13 +192,13 @@ export default function SearchResults() {
           {rooms.map((room) => (
             <div key={room.id} className="flex mb-4 border rounded-md overflow-hidden shadow-md">
               <div className="w-64 h-48 bg-gray-200 flex items-center justify-center">
-              <Image
-                src={`https://picsum.photos/seed/${room.id}/400/300`}
-                alt={room.name}
-                width={400}
-                height={300}
-                className="object-cover w-full h-full"
-              />
+                <Image
+                  src={room.image || "/placeholder.svg"}
+                  alt={room.name}
+                  width={150}
+                  height={150}
+                  className="object-cover w-full h-full"
+                />
               </div>
               <div className="flex-1 p-4">
                 <h2 className="text-xl font-bold text-[#0079c2]">{room.description}</h2>
@@ -220,9 +223,9 @@ export default function SearchResults() {
                   <span className="ml-2 text-sm font-medium">{room.stars} estrelas</span>
                 </div>
 
-                {/* Comodidades */}
+                {/* Características */}
                 <div className="mt-4">
-                  <h3 className="font-semibold text-sm mb-2">Comodidades:</h3>
+                  <h3 className="font-semibold text-sm mb-2">Características:</h3>
                   <div className="flex flex-wrap gap-2">
                     {room.ar_condicionado && <Badge className="flex items-center gap-1"><Wind className="h-3 w-3 mr-1" /> Ar-condicionado</Badge>}
                     {room.tv && <Badge className="flex items-center gap-1"><Tv className="h-3 w-3 mr-1" /> TV</Badge>}
