@@ -25,6 +25,7 @@ const amenities = [
   "Pet-Friendly",
   "Ar-condicionado",
   "Estacionamento",
+  "Café da Manhã",
 ];
 
 const formSchema = z.object({
@@ -34,7 +35,11 @@ const formSchema = z.object({
     .number()
     .min(1, "A quantidade de hóspedes é no mínimo 1"),
   local: z.string().min(1, "O local é obrigatorio"),
-  stars: z.coerce.number().min(1, "As entrelas devem ser de 1 a 5"),
+  stars: z.coerce
+    .number()
+    .max(5, "As entrelas devem ser de 1 a 5")
+    .min(1, "As entrelas devem ser de 1 a 5"),
+
   avaliacao: z.coerce.number().min(1, "A avaliacao deve ser de 0 a 10"),
   caracteristics: z.string().min(1, "As características são obrigatorias"),
   tipo: z.string().min(1, "O tipo é obrigatorio"),
@@ -83,7 +88,7 @@ export default function FormAcomodacao() {
       tv: selectedAmenities.includes("Tv"),
       wifi: selectedAmenities.includes("Wi-fi"),
       petFriendly: selectedAmenities.includes("Pet-Friendly"),
-      cafeDaManha: false, // Defina como necessário
+      cafeDaManha: selectedAmenities.includes("Café da Manhã"),
       estacionamento: selectedAmenities.includes("Estacionamento"),
     };
 
