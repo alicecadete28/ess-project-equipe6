@@ -46,6 +46,19 @@ const formSchema = z.object({
 });
 
 export default function FormAcomodacao() {
+  async function handleFormSubmit(event: React.FormEvent) {
+    event.preventDefault(); // Impede o envio padrão do formulário
+
+    const isValid = await form.trigger(); // Força a validação
+
+    if (!isValid) {
+      alert("Erro ao publicar acomodação"); // Exibe erro caso haja campos inválidos
+      return;
+    }
+
+    form.handleSubmit(onSubmit)(); // Se for válido, chama a função de envio
+  }
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -66,14 +79,9 @@ export default function FormAcomodacao() {
   const router = useRouter();
 
   async function onSubmit(values: any) {
-    console.log("Botão clicado");
-    setLoading(true);
-
     const dataToSend = {
-      id: crypto.randomUUID(), // Gera um UUID para o id
-      pj_id: user?.id, // Ajuste se necessário
-      // pj_id: "2222",
-
+      id: crypto.randomUUID(),
+      pj_id: user?.id,
       description: values.descricao,
       type: values.tipo, // Pode ajustar conforme necessário
       price: values.preco,
@@ -91,8 +99,6 @@ export default function FormAcomodacao() {
       cafeDaManha: selectedAmenities.includes("Café da Manhã"),
       estacionamento: selectedAmenities.includes("Estacionamento"),
     };
-
-    console.log(dataToSend);
 
     try {
       const token = localStorage.getItem("accessToken") as string;
@@ -136,11 +142,10 @@ export default function FormAcomodacao() {
     );
   };
 
-  console.log(user?.id);
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={handleFormSubmit}
         className="space-y-4 p-4 border rounded-lg"
       >
         <h1 className="font-bold">{user?.client?.name}</h1>

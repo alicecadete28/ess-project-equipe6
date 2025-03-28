@@ -2,6 +2,7 @@
   "name": "frontend-next-ess",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -52,7 +53,8 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "ts-jest": "^29.3.0",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5"
   }
 }
