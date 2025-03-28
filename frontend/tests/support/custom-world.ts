@@ -12,6 +12,10 @@ export interface ICustomWorld extends World {
 }
 
 export class CustomWorld extends World implements ICustomWorld {
+  context?: BrowserContext;
+  page?: Page;
+  playwrightOptions?: PlaywrightTestOptions;
+
   constructor(options: IWorldOptions) {
     super(options);
   }

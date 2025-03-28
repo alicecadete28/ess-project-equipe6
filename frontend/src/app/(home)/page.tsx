@@ -60,12 +60,15 @@ export default function Home() {
     });
 
     try {
-      const response = await fetch(`http://localhost:5001/api/buscar-acomodacoes?${queryParams.toString()}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5001/api/buscar-acomodacoes?${queryParams.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -84,12 +87,15 @@ export default function Home() {
 
       // Salvar os dados no sessionStorage
       sessionStorage.setItem("resultadosBusca", JSON.stringify(resultados));
-      sessionStorage.setItem("parametrosBusca", JSON.stringify({
-        destino: searchQuery,
-        data_ida: checkInDate.toISOString(),
-        data_volta: checkOutDate.toISOString(),
-        num_pessoas: guests,
-      }));
+      sessionStorage.setItem(
+        "parametrosBusca",
+        JSON.stringify({
+          destino: searchQuery,
+          data_ida: checkInDate.toISOString(),
+          data_volta: checkOutDate.toISOString(),
+          num_pessoas: guests,
+        })
+      );
 
       router.push("/resultados");
     } catch (error: any) {
@@ -103,12 +109,12 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col">
-      <AppHeader />
-
       <div className="flex-1 flex items-center justify-center">
         <div className="container mx-auto px-4 flex flex-col items-center">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold mb-2">Encontre sua próxima estadia</h1>
+            <h1 className="text-3xl font-bold mb-2">
+              Encontre sua próxima estadia
+            </h1>
             <p className="text-gray-600">Encontre ofertas de hotéis</p>
           </div>
 
@@ -144,7 +150,11 @@ export default function Home() {
                     />
                   </div>
                   {searchQuery && (
-                    <button className="text-gray-400" onClick={handleClearSearch} aria-label="Limpar busca">
+                    <button
+                      className="text-gray-400"
+                      onClick={handleClearSearch}
+                      aria-label="Limpar busca"
+                    >
                       <X size={16} />
                     </button>
                   )}
@@ -165,7 +175,9 @@ export default function Home() {
                 <DatePicker
                   label="Saída"
                   date={checkOutDate}
-                  onDateChange={(date) => setCheckOutDate(date || getDayAfterTomorrow())}
+                  onDateChange={(date) =>
+                    setCheckOutDate(date || getDayAfterTomorrow())
+                  }
                   minDate={new Date(checkInDate.getTime() + 86400000)}
                 />
               </div>

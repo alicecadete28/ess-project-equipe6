@@ -5,6 +5,7 @@ import FavoriteService from '../services/favorite.service';
 import SavedController from '../controllers/saved.controller';
 import SavedService from '../services/saved.service';
 import { AvaliarAcomodacao } from '../controllers/avaliation.controller';
+import { getRoomById } from '../controllers/getRoom.controller'; 
 
 import { buscarAcomodacoes } from '../controllers/findReservation.controller';
 import { filtrarAcomodacoes } from '../controllers/filter.controller';
@@ -19,15 +20,18 @@ import {
 } from '../controllers/reservationlist.controller';
 import ReservationController from '../controllers/reservation.controller';
 import ReservationService from '../services/reservation.service';
+import PfRepository from '../repositories/pf.repository';
 
 const router = Router();
 const prefix = '/api';
+const pfRepository = new PfRepository();
 
 router.get('/api/buscar-acomodacoes', buscarAcomodacoes);
 router.get('/api/filtrar-acomodacoes', filtrarAcomodacoes);
 router.get('/api/ordenar-acomodacoes', ordenarAcomodacoes);
-router.get('/avaliar-acomodacao', AvaliarAcomodacao);
-router.post('/avaliacoes', AvaliarAcomodacao);
+router.get('/api/avaliar-acomodacao', AvaliarAcomodacao);
+router.get('/api/get-room/:id', getRoomById);
+router.post('/api/avaliacoes', AvaliarAcomodacao);
 router.get('/api/reservations/:roomId/room', getReservationsByRoom);
 router.get('/api/reservations/:pfId/pf', getReservationsByPF);
 
@@ -60,4 +64,5 @@ export default (app: Express) => {
     prefix,
     new ReservationController(router, di.getService(ReservationService)).router
   );
+  app.use(prefix, router);
 };
