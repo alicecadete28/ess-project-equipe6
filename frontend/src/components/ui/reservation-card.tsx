@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import type { Reservation } from "@/components/types/reservation"
+import type { Reservation } from "@/components/types/interface"
 
 interface ReservationCardProps {
   reservation: Reservation

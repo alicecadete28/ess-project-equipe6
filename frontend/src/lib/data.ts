@@ -1,4 +1,4 @@
-import type { Location, Reservation2 } from "@/components/types/reservation"
+import type { Location, Reservation2 } from "@/components/types/interface"
 
 export const locations: Location[] = [
   {

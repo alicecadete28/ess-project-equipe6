@@ -24,26 +24,10 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import AppHeader from "@/components/Header"; // ✅ Importado aqui
 import { Badge } from "@/components/ui/badge"
+import { Room } from "@/components/types/interface";
 
 // Define the room type
-interface Room {
-  id: number;
-  name: string;
-  description: string;
-  dailyRate: string;
-  totalValue: string;
-  image: string;
-  price: number;
-  stars: number;
-  rating: number;
-  caracteristics_ids: string;
-  ar_condicionado?: boolean
-  tv: boolean
-  wifi: boolean
-  petFriendly: boolean
-  cafeDaManha: boolean
-  estacionamento: boolean
-}
+
 
 export default function SearchResults() {
   const router = useRouter()

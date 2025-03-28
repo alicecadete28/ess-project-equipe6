@@ -1,5 +1,5 @@
 import Image from "next/image"
-import type { Location } from "@/components/types/reservation"
+import type { Location } from "@/components/types/interface"
 import { formatCurrency } from "@/lib/utils"
 
 interface LocationDetailProps {

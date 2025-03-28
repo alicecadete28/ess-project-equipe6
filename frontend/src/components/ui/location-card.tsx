@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import type { Location } from "@/components/types/reservation"
+import type { Location } from "@/components/types/interface"
 
 export default function LocationCard({ id, name, address, rating, stars, reservations }: Location) {
   return (

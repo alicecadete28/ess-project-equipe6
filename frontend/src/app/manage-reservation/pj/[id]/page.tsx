@@ -6,7 +6,7 @@ import { getLocationById, getReservationsByLocationId } from "@/lib/data"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import type { Reservation2 } from "@/components/types/reservation"
+import type { Reservation2 } from "@/components/types/interface"
 import { useState } from "react"
 
 export default function LocationPage({ params }: { params: { id: string } }) {

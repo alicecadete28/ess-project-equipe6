@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { ReservationCard } from "@/components/ui/reservation-card"
 import { ReservationDetailsModal } from "@/components/ui/reservation-details-modal"
-import type { Reservation } from "@/components/types/reservation"
+import type { Reservation } from "@/components/types/interface"
 
 // Dados de exemplo das reservas
 const reservationsData: Reservation[] = [

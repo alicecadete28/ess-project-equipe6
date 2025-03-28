@@ -12,6 +12,25 @@ export interface Reservation {
     imageUrl?: string
   }
 
+  export interface Room {
+    id: number;
+    name: string;
+    description: string;
+    dailyRate: string;
+    totalValue: string;
+    image: string;
+    price: number;
+    stars: number;
+    rating: number;
+    caracteristics_ids: string;
+    ar_condicionado?: boolean
+    tv: boolean
+    wifi: boolean
+    petFriendly: boolean
+    cafeDaManha: boolean
+    estacionamento: boolean
+  }
+
   export interface Reservation2 {
     id: string
     guestName: string

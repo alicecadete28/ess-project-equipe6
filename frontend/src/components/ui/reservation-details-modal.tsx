@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import Image from "next/image"
 import { X } from "lucide-react"
-import type { Reservation } from "@/components/types/reservation"
+import type { Reservation } from "@/components/types/interface"
 import { Button } from "@/components/ui/button"
 
 interface ReservationDetailsModalProps {

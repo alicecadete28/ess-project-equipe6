@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import type { Reservation2 } from "@/components/types/reservation"
+import type { Reservation2 } from "@/components/types/interface"
 import { formatCurrency } from "@/lib/utils"
 
 interface ReservationDetailDialogProps {

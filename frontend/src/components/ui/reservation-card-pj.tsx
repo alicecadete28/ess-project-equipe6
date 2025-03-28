@@ -1,5 +1,5 @@
 import Image from "next/image"
-import type { Reservation2 } from "@/components/types/reservation"
+import type { Reservation2 } from "@/components/types/interface"
 import { formatCurrency } from "@/lib/utils"
 import { useState } from "react"
 import ReservationDetailDialog from "@/components/ui/reservation-detail-dialog"
