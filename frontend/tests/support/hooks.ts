@@ -1,26 +1,21 @@
-import { ICustomWorld } from "./custom-world";
-import {
-	ChromiumBrowser,
-	chromium
-} from '@playwright/test'
-import { After, AfterAll, Before, BeforeAll } from '@cucumber/cucumber'
+import { Before, After, setDefaultTimeout } from '@cucumber/cucumber';
+import { chromium } from '@playwright/test';
+import { ICustomWorld } from './custom-world';
 
-let browser: ChromiumBrowser
 
-BeforeAll(async function() {
-    browser = await chromium.launch({ headless: false })
+Before(async function (this: ICustomWorld) {
+  this.context = await chromium.launchPersistentContext('', {
+    headless: true,
   });
-  
-Before(async function(this: ICustomWorld) {
-  this.context = await browser.newContext()
-  this.page = await this.context.newPage()
+  this.page = await this.context.newPage();
 });
 
-After(async function(this: ICustomWorld) {
-  await this.page?.close()
-  await this.context?.close()
-});
-  
-AfterAll(async function() {
-  await browser.close()
-});
+After(async function (this: ICustomWorld) {
+  if (this.page) {
+    // Reload the page
+    await this.page.reload()
+
+    // Optional: wait for the page to be fully loaded
+    await this.page.waitForLoadState("networkidle")
+  }
+})
