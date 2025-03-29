@@ -951,7 +951,7 @@ export default class Database {
           cpf: '28173891',
           phone: '98171-2882',
           favorites: ['f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1e', 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a'],
-          savedRooms: ['12', '222', '32'],
+          savedRooms: ['f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1e'],
         }),
         new PFEntity({
           id: '12733',
