@@ -150,7 +150,7 @@ export default function SearchResults() {
         ...reservaData,
         data_ida: params.data_ida || "",
         data_volta: params.data_volta || "",
-        hospedes: params.num_pessoas || 1,
+        hospedes: params.num_pessoas || "",
       };
     }
     sessionStorage.setItem("dadosReserva", JSON.stringify(reservaData));
