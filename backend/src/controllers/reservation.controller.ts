@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { Result, SuccessResult } from '../utils/result';
 import ReservationService from '../services/reservation.service';
+import Database from '../database';
 import { di } from '../di';
 
 class ReservationController {
@@ -11,6 +12,7 @@ class ReservationController {
   constructor(router: Router, reservationService: ReservationService) {
     this.router = router;
     this.reservationService = reservationService;
+    this.router.get(`${this.prefix}/:reservationId`, (req: Request, res: Response) => this.getReservationDetails(req, res));
     this.initRoutes();
   }
 
@@ -33,6 +35,20 @@ class ReservationController {
       `${this.prefix}/:reservationId/guests`,
       (req: Request, res: Response) => this.updateReservationGuests(req, res)
     );
+  }
+
+  private async getReservationDetails(req: Request, res: Response) {
+    const reservationId = req.params.reservationId;
+    const db = Database.getInstance().data;
+  
+    
+    const reservation = db.reservations.find(r => r.id === reservationId);
+    if (!reservation) return res.status(404).json({ message: "Reserva não encontrada" });
+  
+    const room = db.rooms.find(r => r.id === reservation.room_id);
+    if (!room) return res.status(404).json({ message: "Quarto não encontrado" });
+  
+    return res.json({ reservation, room });
   }
 
   private async createReservation(req: Request, res: Response) {
