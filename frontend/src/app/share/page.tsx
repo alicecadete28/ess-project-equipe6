@@ -63,7 +63,7 @@ export default function HotelDetailPage() {
   const rawVolta = parametros?.data_volta;
   const dataVolta = rawVolta ? new Date(rawVolta).toLocaleDateString("pt-BR") : "Data não disponível";
   const valor = room?.price?.toLocaleString("pt-BR") || "0,00";
-  const hospedes = `${parametros?.hospedes || 1} hóspedes`;
+  const hospedes = `${parametros?.hospedes || 2} hóspedes`;
 
   const Dados = useAuth();
   console.log(Dados);
