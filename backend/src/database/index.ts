@@ -26,9 +26,9 @@ export default class Database {
     Database.getInstance().data = {
       reservations: [
         new ReservationEntity({
-          id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
+          id: '1',
           pf_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1b',
-          room_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a',
+          room_id: 'f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1c',
           check_in: new Date('2025-03-09'),
           check_out: new Date('2025-03-29'),
           guests: 2,
