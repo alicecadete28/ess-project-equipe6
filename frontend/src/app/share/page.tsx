@@ -63,7 +63,7 @@ export default function HotelDetailPage() {
   const rawVolta = parametros?.data_volta;
   const dataVolta = rawVolta ? new Date(rawVolta).toLocaleDateString("pt-BR") : "Data não disponível";
   const valor = room?.price?.toLocaleString("pt-BR") || "0,00";
-  const hospedes = `${parametros?.hospedes || 2} hóspedes`;
+  const hospedes = `${parametros?.num_pessoas || 2} hóspedes`;
 
   const Dados = useAuth();
   console.log(Dados);
@@ -267,18 +267,20 @@ export default function HotelDetailPage() {
         body: JSON.stringify({
           pf_id: user_id,
           room_id: roomId,
-          check_in: dataIda,
-          check_out: dataVolta,
-          guests: hospedes,
+          check_in: parametros?.data_ida,
+          check_out: parametros.data_volta,
+          guests: parametros.num_pessoas,
           total: valor,
           confirmed: false
         })
       })
-  
+      
       const data = await response.json()
-      console.log("id reservation", data)
+      const newReservation = data.data
+      console.log("id reservation", newReservation.id)
+      console.log("resposta", data)
 
-      sessionStorage.setItem("id_reservation", JSON.stringify(data.data));
+      localStorage.setItem("id_reservation", JSON.stringify(newReservation.id));
       router.push("/reservation");
 
     } catch (err) {

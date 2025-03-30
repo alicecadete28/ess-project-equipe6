@@ -62,6 +62,7 @@ export default function ReservationDetails() {
   
   useEffect(() => {
     const id_reservation = localStorage.getItem("id_reservation")
+    console.log("id reserva", id_reservation)
     const token = localStorage.getItem("accessToken");
     const fetchReservation = async () => {
       try {
