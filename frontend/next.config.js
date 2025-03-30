@@ -1,6 +1,8 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-    // suas configs
-  }
-  
-  export default nextConfig
-  
+  images: {
+    domains: ['picsum.photos'],
+  },
+};
+
+export default nextConfig;
