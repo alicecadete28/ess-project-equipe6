@@ -183,7 +183,7 @@ export default function UserAuthButton() {
         <MenuItem
           onClick={() => {
             handleClose();
-            router.push("/reservations");
+            router.push("/manage-reservation/pf"); //precisa ver ser é pf ou pj
           }}
         >
           <ListItemIcon>

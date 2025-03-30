@@ -78,7 +78,7 @@ export function ReservationDetailsModal({
             <div className="w-full md:w-1/3">
               <div className="rounded-lg overflow-hidden">
                 <Image
-                  src={reservation.imageUrl || "/placeholder.svg?height=200&width=200"}
+                  src= "/placeholder.svg?height=200&width=200"
                   alt="Building"
                   width={200}
                   height={200}
@@ -87,21 +87,21 @@ export function ReservationDetailsModal({
               </div>
             </div>
             <div className="w-full md:w-2/3">
-              <h2 className="text-2xl font-bold text-primary mb-2">{reservation.roomName}</h2>
-              <p className="text-gray-700 mb-2">{reservation.address}</p>
-              <p className="text-primary font-medium">Proprietário: {reservation.owner}</p>
+              <h2 className="text-2xl font-bold text-primary mb-2">{reservation.room_id}</h2>
+              {/* <p className="text-gray-700 mb-2">{reservation.address}</p> */}
+              {/* <p className="text-primary font-medium">Proprietário: {reservation.owner}</p> */}
             </div>
           </div>
 
           <div className="mt-8 space-y-2">
             <p className="text-primary text-xl font-medium">Status: {reservation.status}</p>
-            <p className="text-primary font-medium">Data de entrada: {reservation.checkInDate}</p>
-            <p className="text-primary font-medium">Data de saída: {reservation.checkOutDate}</p>
+            <p className="text-primary font-medium">Data de entrada: {reservation.check_in.toLocaleDateString()}</p>
+            <p className="text-primary font-medium">Data de saída: {reservation.check_out.toLocaleDateString()}</p>
           </div>
 
           <div className="mt-8 space-y-2">
-            <p className="text-primary font-medium">Numero de hóspedes: {reservation.guestCount}</p>
-            <p className="text-primary text-xl font-medium">Valor total: {reservation.price}</p>
+            <p className="text-primary font-medium">Numero de hóspedes: {reservation.guests}</p>
+            <p className="text-primary text-xl font-medium">Valor total: {reservation.total}</p>
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">

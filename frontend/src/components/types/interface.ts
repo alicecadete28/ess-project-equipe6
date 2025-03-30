@@ -1,34 +1,46 @@
-export interface Reservation {
+// export interface Reservation {
+//     id: number
+//     roomName: string
+//     address: string
+//     period: string
+//     price: string
+//     status: string
+//     checkInDate: string
+//     checkOutDate: string
+//     guestCount: number
+//     owner: string
+//     imageUrl?: string
+//   }
+
+  export interface Reservation {
     id: number
-    roomName: string
-    address: string
-    period: string
-    price: string
+    pf_id: string
+    room_id: string
+    check_in: Date
+    check_out: Date
+    guests: number
+    total: number
     status: string
-    checkInDate: string
-    checkOutDate: string
-    guestCount: number
-    owner: string
-    imageUrl?: string
+    rating: {stars: number, comment: string}
   }
 
   export interface Room {
-    id: number;
-    name: string;
-    description: string;
-    dailyRate: string;
-    totalValue: string;
-    image: string;
-    price: number;
-    stars: number;
-    rating: number;
-    caracteristics_ids: string;
-    ar_condicionado?: boolean
+    id: string
+    pj_id: string
+    description: string
+    type: string
+    price: number
+    capacity: number
+    caracteristics_ids: string[]
+    local: string
+    stars: number
+    ar_condicionado: boolean
     tv: boolean
     wifi: boolean
     petFriendly: boolean
     cafeDaManha: boolean
     estacionamento: boolean
+    avaliacao: number
   }
 
   export interface Reservation2 {
