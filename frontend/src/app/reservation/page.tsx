@@ -346,6 +346,7 @@ export default function ReservationDetails() {
       </main>
       {/* Guest Counter Popup */}
       <GuestCounter
+        //id= "guest-counter"
         initialCount={guestCount}
         isOpen={isGuestCounterOpen}
         onClose={() => setIsGuestCounterOpen(false)}
