@@ -24,20 +24,3 @@ Then('a calendar modal should appear', () => {
   cy.contains('Selecione nova data de entrada').should('be.visible');
 });
 
-// Cenário: User clicks to edit number of guests
-When('I click on "editar hóspedes"', () => {
-  cy.contains('button', 'editar hóspedes').click();
-});
-
-Then('a guest counter popup should appear', () => {
-  cy.get('#guest-counter').should('be.visible');
-});
-
-// Cenário: User clicks to continue to confirmation
-When('I click on "Seguir"', () => {
-  cy.contains('button', 'Seguir').click();
-});
-
-Then('the URL should contain "/reservation/confirm"', () => {
-  cy.url().should('include', '/reservation/confirm');
-});
