@@ -51,10 +51,10 @@ export default function FormAcomodacao() {
 
     const isValid = await form.trigger(); // Força a validação
 
-    if (!isValid) {
-      alert("Erro ao publicar acomodação"); // Exibe erro caso haja campos inválidos
-      return;
-    }
+    // if (!isValid) {
+    //   alert("Erro ao publicar acomodação"); // Exibe erro caso haja campos inválidos
+    //   return;
+    // }
 
     form.handleSubmit(onSubmit)(); // Se for válido, chama a função de envio
   }

@@ -833,7 +833,7 @@ export default class Database {
           price: 540,
           type: 'Suíte',
           capacity: 4,
-          caracteristics_ids: ['Temática', 'Ideal para crianças'],
+          caracteristics_ids: ['Temática', 'Ideal para crianças', 'Ideal para o seu Pet'],
           local: 'Orlando',
           stars: 4,
           ar_condicionado: true,
