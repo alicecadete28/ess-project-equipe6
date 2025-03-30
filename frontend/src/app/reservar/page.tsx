@@ -4,11 +4,14 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import AppHeader from "@/components/Header"
+import { id } from "date-fns/locale"
 
 export default function ReservarPage() {
   const router = useRouter()
   const [dadosReserva, setDadosReserva] = useState<any>(null)
   const [quartoSelecionado, setQuartoSelecionado] = useState<any>(null)
+  const id_reservation = sessionStorage.getItem("id_reservation")
+
 
   useEffect(() => {
     // Recuperar os dados da reserva
@@ -81,6 +84,9 @@ export default function ReservarPage() {
                       </li>
                       <li>
                         <strong>Preço Total:</strong> {dadosReserva.preco_total || "Não informado"}
+                      </li>
+                      <li>
+                        <strong>id Reservation:</strong> {id_reservation|| "Não informado"}
                       </li>
                     </ul>
                   </div>

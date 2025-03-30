@@ -155,7 +155,7 @@ export default function SearchResults() {
     }
     sessionStorage.setItem("dadosReserva", JSON.stringify(reservaData));
     sessionStorage.setItem("selectedRoom", JSON.stringify(room));
-    router.push("/reservar");
+    router.push("/share");
   };
 
   return (
