@@ -267,7 +267,7 @@ export default function FavoritesPage() {
               >
                 <div className="w-full md:w-1/3">
                   <Image
-                    src={"/placeholder.svg"}
+                    src={`https://picsum.photos/seed/${room.id}/300/200`}
                     alt={room.description}
                     width={300}
                     height={200}
@@ -305,7 +305,7 @@ export default function FavoritesPage() {
           <div key={room.id} className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col md:flex-row">
             <div className="w-full md:w-1/3">
               <Image
-                src={"/placeholder.svg?height=200&width=300"}
+                src={`https://picsum.photos/seed/${room.id}/300/200`}
                 alt={room.description}
                 width={300}
                 height={200}

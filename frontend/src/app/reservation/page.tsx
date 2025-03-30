@@ -238,7 +238,7 @@ export default function ReservationDetails() {
             {/* Hotel Image */}
             <div className="w-full md:w-1/4 flex flex-col">
               <div className="relative rounded-lg overflow-hidden h-48 md:h-40">
-                <Image src="/images/hotel-cin.jpg" alt="Hotel Image" fill className="object-cover" />
+                <Image src="/hotelRoom.png" alt="Hotel Image" fill className="object-cover" />
               </div>
               <div className="mt-2 mb-1 text-left">
                 <span className="text-white text-sm">ótima localização</span>
