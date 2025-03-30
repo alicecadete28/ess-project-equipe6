@@ -74,7 +74,7 @@ export default function ReservationConfirmation() {
   };
 
   useEffect(() => {
-    const id_reservation = '1' // ou localStorage.getItem("id_reservation")
+    const id_reservation = localStorage.getItem("id_reservation")
     const token = localStorage.getItem("accessToken");
   
     const fetchReservation = async () => {
@@ -94,7 +94,11 @@ export default function ReservationConfirmation() {
   
         const data = await response.json();
         console.log("Fetched reservation data [confirm]:", data);
-        setReservation(data.reservation);
+        setReservation({
+          ...data.reservation,
+          total: Number(data.reservation.total),
+          guests: Number(data.reservation.guests),
+        });
         setRoom(data.room);
       } catch (error) {
         console.error("Erro ao buscar dados da reserva na página de confirmação:", error);
@@ -225,7 +229,7 @@ export default function ReservationConfirmation() {
           {/* Right Side - Hotel Image */}
           <div className="md:w-1/3">
             <Image
-              src="/placeholder.svg?height=300&width=300"
+              src="/hotelRoom.png"
               alt="Hotel Centro de Informática"
               width={300}
               height={300}

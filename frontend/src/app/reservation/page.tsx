@@ -61,7 +61,8 @@ export default function ReservationDetails() {
   
   
   useEffect(() => {
-    const id_reservation = localStorage.getItem("id_reservation")
+    const id_reservation = JSON.parse(localStorage.getItem("id_reservation") || "null");
+    console.log("id reserva", id_reservation)
     const token = localStorage.getItem("accessToken");
     const fetchReservation = async () => {
       try {
@@ -80,7 +81,12 @@ export default function ReservationDetails() {
         const data = await response.json();
         console.log("Fetched reservation data:", data); // Log the response to verify its structure
         
-      setReservation(data.reservation);
+        setReservation({
+          ...data.reservation,
+          total: Number(data.reservation.total),
+          guests: Number(data.reservation.guests)
+        });
+        
       setRoom(data.room);
       setGuestCount(data.reservation.guests);
       setCheckIn(data.reservation.check_in ? new Date(data.reservation.check_in) : null);
@@ -112,6 +118,7 @@ export default function ReservationDetails() {
   //const guestCount = reservation?.guests || 1;
 
   const handleNext = () => {
+    localStorage.setItem("id_reservation", reservation?.id || "");
     router.push("/reservation/confirm") // Redirect to the next page
   }
 
@@ -140,7 +147,11 @@ export default function ReservationDetails() {
       const data = await response.json();
       console.log("Reserva atualizada:", data);
   
-      setReservation(data.data); // atualiza o state com os novos dados
+      setReservation({
+        ...data.data,
+        total: Number(data.data.total),
+        guests: Number(data.data.guests),
+      }); // atualiza o state com os novos dados
       setGuestCount(newGuestCount);
       
     } catch (error) {
@@ -175,7 +186,11 @@ export default function ReservationDetails() {
       const data = await response.json();
       console.log("Datas atualizadas:", data);
   
-      setReservation(data.data);
+      setReservation({
+        ...data.data,
+        total: Number(data.data.total),
+        guests: Number(data.data.guests),
+      });
       setCheckIn(new Date(data.data.check_in));
       setCheckOut(new Date(data.data.check_out));
       setIsCalendarOpen(false);
@@ -209,9 +224,13 @@ export default function ReservationDetails() {
       {/* Main Content */}
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-8">
         {/* Back Link */}
-        <Link href="#" className="text-blue-600 hover:underline mb-4 inline-block">
+        <button
+          onClick={() => router.back()}
+          className="text-blue-600 hover:underline mb-4 inline-block"
+        >
           &lt; Detalhes da Reserva
-        </Link>
+        </button>
+              
 
         {/* Hotel Card */}
         <div className="bg-blue-600 text-white rounded-lg p-6 mb-8">
@@ -219,7 +238,7 @@ export default function ReservationDetails() {
             {/* Hotel Image */}
             <div className="w-full md:w-1/4 flex flex-col">
               <div className="relative rounded-lg overflow-hidden h-48 md:h-40">
-                <Image src="/images/hotel-cin.jpg" alt="Hotel Image" fill className="object-cover" />
+                <Image src="/hotelRoom.png" alt="Hotel Image" fill className="object-cover" />
               </div>
               <div className="mt-2 mb-1 text-left">
                 <span className="text-white text-sm">ótima localização</span>
@@ -327,6 +346,7 @@ export default function ReservationDetails() {
       </main>
       {/* Guest Counter Popup */}
       <GuestCounter
+        //id= "guest-counter"
         initialCount={guestCount}
         isOpen={isGuestCounterOpen}
         onClose={() => setIsGuestCounterOpen(false)}
