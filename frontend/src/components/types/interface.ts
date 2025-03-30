@@ -13,7 +13,7 @@
 //   }
 
   export interface Reservation {
-    id: number
+    id: string
     pf_id: string
     room_id: string
     check_in: Date

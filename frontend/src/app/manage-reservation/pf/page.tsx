@@ -11,10 +11,10 @@ import Link from "next/link"
 // import ProtectedRoute from "@/components/ProtectedRoute"
 
 // Dados de exemplo das reservas
-const reservationsFallbackData: [Reservation, Room][] = [
+const reservationsFallbackData: [Reservation, Room][] = [ 
   [
     {
-      id: 1,
+      id: "1",
       pf_id: "aaa",
       room_id: "101",
       check_in: new Date("2025-03-20"),
@@ -45,9 +45,9 @@ const reservationsFallbackData: [Reservation, Room][] = [
   ],
   [
     {
-      id: 2,
+      id: "2",
       pf_id: "UFPE",
-      room_id: "CIn - Sala E122",
+      room_id: "102",
       check_in: new Date("2025-03-26"),
       check_out: new Date("2025-03-30"),
       guests: 2,
@@ -76,9 +76,9 @@ const reservationsFallbackData: [Reservation, Room][] = [
   ],
   [
     {
-      id: 3,
+      id: "3",
       pf_id: "UFPE",
-      room_id: "CIn - Sala E123",
+      room_id: "103",
       check_in: new Date("2025-04-04"),
       check_out: new Date("2025-04-12"),
       guests: 3,
@@ -112,6 +112,7 @@ export default function ReservationsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [presentMockData, setPresentMockData] = useState(false)
   const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null)
+  const [selectedRoom, setSelectedRoom] = useState<Room| null>(null)
   const [rooms, setRooms] = useState<Room[]>([])
   const [reservationsFetched, setReservationsFetched] = useState<Reservation[]>([])
   const [reservationRoomPairs, setReservationRoomPairs] = useState<[Reservation, Room | null][]>([])
@@ -173,8 +174,8 @@ export default function ReservationsPage() {
             return
           }
 
-          setReservationsFetched(reservationsFetched) // ver de juntar os elementos do array numa tupla
-          console.log("Rooms data fetched:", reservationsFetched)
+          setReservationsFetched(reservationsData) // ver de juntar os elementos do array numa tupla
+          console.log("Rooms data fetched:", reservationsData)
 
           const reservationRoomPairsAux: [Reservation, Room | null][] = []
 
@@ -225,8 +226,9 @@ export default function ReservationsPage() {
     setPresentMockData(true) // Reset fetch attempted flag to trigger a new fetch
   }
 
-  const handleCardClick = (reservation: Reservation) => {
+  const handleCardClick = (reservation: Reservation, room: Room) => {
     setSelectedReservation(reservation)
+    setSelectedRoom(room)
     setIsModalOpen(true)
   }
 
@@ -234,16 +236,49 @@ export default function ReservationsPage() {
     setIsModalOpen(false)
   }
 
-  const handleEditReservation = (id: number) => {
+  const handleEditReservation = (id: string) => {
     console.log(`Editing reservation ${id}`)
     setIsModalOpen(false)
     // Implementar lógica de edição aqui
   }
 
-  const handleCancelReservation = (id: number) => {
+  const handleCancelReservation = async (id: string) => {
     console.log(`Canceling reservation ${id}`)
     setIsModalOpen(false)
-    // Implementar lógica de cancelamento aqui
+    
+    try{
+      const token = localStorage.getItem("accessToken") as string 
+          console.log("Token:", token)
+          const user_id = String(Dados.user?.id)
+          console.log(Dados)
+          console.log("user_id",user_id)
+          localStorage.setItem("user_id", user_id)
+
+      const reservationsResponse = await fetch(`http://localhost:5001/api/reservations/${id}/cancel`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: id,
+        })
+      console.log("Response:", reservationsResponse)
+
+      if (!reservationsResponse.ok) {
+        console.log(`HTTP error! status: ${reservationsResponse.status}`)
+        setError("Failed to cancel reservation")
+        return
+      }
+
+    } catch (error) {
+      console.error("Error canceling reservation:", error)
+      setError(error instanceof Error ? error.message : "Failed to cancel reservation")
+    } 
+
+    return () => {
+      console.log("unmounted")
+    }
+    
   }
 
   return (
@@ -274,14 +309,13 @@ export default function ReservationsPage() {
               </div>
             </div>
           ) : reservationsFetched.length > 0 ? (
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                {/* {reservationsFetched.map((reservation) => (
-                  <ReservationCard key={reservation.id} reservation={reservation} onClick={handleCardClick} />
-                ))} */}
-                {reservationRoomPairs.map(([reservation, room], index) => (  //TODO: - verificar se o index é necessário e testar com a parte de aline integrada
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                {reservationRoomPairs
+                  .filter(([reservation]) => reservation.status !== "cancelada")
+                  .map(([reservation, room]) => (
                   <ReservationCard key={reservation.id} reservation={reservation} room={room!} onClick={handleCardClick} />
-                ))}
-              </div>
+                  ))}
+                </div>
           ): presentMockData ? (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               {reservationsFallbackData.map(([reservation, room], index) => (
@@ -305,6 +339,7 @@ export default function ReservationsPage() {
 
       <ReservationDetailsModal
         reservation={selectedReservation}
+        room={selectedRoom}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onEdit={handleEditReservation}

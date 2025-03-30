@@ -6,14 +6,15 @@ import { getLocationById, getReservationsByLocationId } from "@/lib/data"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import type { Reservation2 } from "@/components/types/interface"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { Room, Reservation } from "@/components/types/interface"
 
 export default function LocationPage({ params }: { params: { id: string } }) {
     const location = getLocationById(params.id)
   
     if (!location) {
       return (
+        <div className="min-h-screen bg-gray-50 mt-20">
         <div className="container mx-auto px-4 py-16 text-center">
           <h2 className="text-2xl font-bold text-[#0079c2] mb-4">Localidade não encontrada</h2>
           <p className="mb-8">A localidade que você está procurando não existe ou foi removida.</p>
@@ -21,11 +22,12 @@ export default function LocationPage({ params }: { params: { id: string } }) {
             Voltar para a página inicial
           </Link>
         </div>
+        </div>
       )
     }
   
     const initialReservations = getReservationsByLocationId(params.id)
-    const [reservations, setReservations] = useState<Reservation2[]>(initialReservations)
+    const [reservations, setReservations] = useState<Reservation[]>(initialReservations)
     // const { toast } = useToast()
   
     const handleCancelReservation = (id: string) => {

@@ -3,19 +3,21 @@
 import { useEffect, useRef } from "react"
 import Image from "next/image"
 import { X } from "lucide-react"
-import type { Reservation } from "@/components/types/interface"
+import type { Reservation, Room } from "@/components/types/interface"
 import { Button } from "@/components/ui/button"
 
 interface ReservationDetailsModalProps {
   reservation: Reservation | null
+  room: Room | null
   isOpen: boolean
   onClose: () => void
-  onEdit: (id: number) => void
-  onCancel: (id: number) => void
+  onEdit: (id: string) => void
+  onCancel: (id: string) => void
 }
 
 export function ReservationDetailsModal({
   reservation,
+  room,
   isOpen,
   onClose,
   onEdit,
@@ -87,33 +89,42 @@ export function ReservationDetailsModal({
               </div>
             </div>
             <div className="w-full md:w-2/3">
-              <h2 className="text-2xl font-bold text-primary mb-2">{reservation.room_id}</h2>
+              <h2 className="text-2xl font-bold text-[#0079c2] mb-2">{room?.description}</h2>
               {/* <p className="text-gray-700 mb-2">{reservation.address}</p> */}
               {/* <p className="text-primary font-medium">Proprietário: {reservation.owner}</p> */}
             </div>
           </div>
 
           <div className="mt-8 space-y-2">
-            <p className="text-primary text-xl font-medium">Status: {reservation.status}</p>
-            <p className="text-primary font-medium">Data de entrada: {reservation.check_in.toLocaleDateString()}</p>
-            <p className="text-primary font-medium">Data de saída: {reservation.check_out.toLocaleDateString()}</p>
+            <p className="text-[#0079c2] text-xl font-medium">Status: {reservation.status}</p>
+            <p className="text-[#0079c2] font-medium">Data de entrada: {reservation.check_in.toLocaleDateString()}</p>
+            <p className="text-[#0079c2] font-medium">Data de saída: {reservation.check_out.toLocaleDateString()}</p>
           </div>
 
           <div className="mt-8 space-y-2">
-            <p className="text-primary font-medium">Numero de hóspedes: {reservation.guests}</p>
-            <p className="text-primary text-xl font-medium">Valor total: {reservation.total}</p>
+            <p className="text-[#0079c2] font-medium">Numero de hóspedes: {reservation.guests}</p>
+            <p className="text-[#0079c2] text-xl font-medium">Valor total: {reservation.total}</p>
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
-            <Button className="bg-primary hover:bg-primary-dark text-white px-8" onClick={() => onEdit(reservation.id)}>
+            <Button
+              variant="outline"
+              className="border-[#0079c2] text-[#0079c2] hover:bg-primary/10"
+              onClick={() => onCancel(reservation.id)}
+            >
+              Cancelar reserva
+            </Button>
+            <Button className="bg-[#0079c2] hover:bg-primary-dark text-white px-8" onClick={() => onEdit(reservation.id)}>
               Editar Reserva
             </Button>
             <Button
               variant="outline"
-              className="border-primary text-primary hover:bg-primary/10"
-              onClick={() => onCancel(reservation.id)}
+              className="border-[#0079c2] text-[#0079c2] hover:bg-primary/5"
+              onClick={() => {
+                window.location.href = `/avaliations/${reservation.id}`
+              }}
             >
-              Cancelar reserva
+              Avaliar reserva
             </Button>
           </div>
         </div>

@@ -1,16 +1,16 @@
 import Image from "next/image"
-import type { Reservation2 } from "@/components/types/interface"
+import type { Reservation } from "@/components/types/interface"
 import { formatCurrency } from "@/lib/utils"
 import { useState } from "react"
 import ReservationDetailDialog from "@/components/ui/reservation-detail-dialog"
 
 
-interface ReservationCardProps extends Reservation2 {
+interface ReservationCardProps extends Reservation {
     onCancelReservation: (id: string) => void
   }
   
   export default function ReservationCard(props: ReservationCardProps) {
-    const { guestName, startDate, endDate, guestCount, price, imageUrl, id, onCancelReservation } = props
+    const { pf_id, check_in, check_out, guests, total, id, onCancelReservation } = props
     const [isDialogOpen, setIsDialogOpen] = useState(false)
   
     return (
@@ -22,20 +22,20 @@ interface ReservationCardProps extends Reservation2 {
           <div className="flex">
             <div className="w-1/4">
               <Image
-                src={imageUrl || "/placeholder.svg?height=150&width=150"}
-                alt={guestName}
+                src={"/placeholder.svg?height=150&width=150"}
+                alt={pf_id}
                 width={150}
                 height={150}
                 className="h-full w-full object-cover"
               />
             </div>
             <div className="w-3/4 p-5">
-              <h3 className="text-xl font-bold text-[#0079c2] mb-1">{guestName}</h3>
+              <h3 className="text-xl font-bold text-[#0079c2] mb-1">{pf_id}</h3>
               <p className="text-sm text-[#0079c2] mb-1">
-                {startDate} - {endDate}
+                {check_in.toLocaleDateString()} - {check_out.toLocaleDateString()}
               </p>
-              <p className="text-sm mb-2">{guestCount} hóspedes</p>
-              <p className="font-bold">{formatCurrency(price)}</p>
+              <p className="text-sm mb-2">{guests} hóspedes</p>
+              <p className="font-bold">{formatCurrency(total)}</p>
             </div>
           </div>
         </div>
