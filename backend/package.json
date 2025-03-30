@@ -19,6 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.6",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "env-cmd": "^10.1.0",

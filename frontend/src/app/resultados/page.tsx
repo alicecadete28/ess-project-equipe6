@@ -173,9 +173,6 @@ export default function SearchResults() {
             <Link href="/favorites" className="flex items-center gap-2 hover:underline">
               <Heart size={18} /> <span>Favoritos</span>
             </Link>
-            <Link href="/login" className="flex items-center gap-2 hover:underline">
-              <LogOut size={18} /> <span>Sign out</span>
-            </Link>
           </div>
         </div>
       </div>
@@ -199,13 +196,6 @@ export default function SearchResults() {
                 height={300}
                 className="object-cover w-full h-full"
               /> 
-              {/* <Image
-                  src={room.image || "/placeholder.svg"}
-                  alt={room.name}
-                  width={150}
-                  height={150}
-                  className="object-cover w-full h-full"
-                /> */}
               </div>
               <div className="flex-1 p-4">
                 <h2 className="text-xl font-bold text-[#0079c2]">{room.description}</h2>
