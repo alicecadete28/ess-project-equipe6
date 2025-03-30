@@ -229,7 +229,7 @@ export default function ReservationConfirmation() {
           {/* Right Side - Hotel Image */}
           <div className="md:w-1/3">
             <Image
-              src="/placeholder.svg?height=300&width=300"
+              src="/hotelRoom.png"
               alt="Hotel Centro de Informática"
               width={300}
               height={300}
