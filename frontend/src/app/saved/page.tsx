@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { ArrowLeft, Heart, Users, Loader2, AlertCircle, Star, Wifi, Tv, Car, Coffee, Dog, Wind } from "lucide-react"
+import { ArrowLeft, Bookmark, Users, Loader2, AlertCircle, Star, Wifi, Tv, Car, Coffee, Dog, Wind } from "lucide-react"
 import Link from "next/link"
 import { useAuth } from "@/hooks/useAuth"
 import ProtectedRoute from "@/components/ProtectedRoute"
@@ -27,12 +27,14 @@ interface Room {
   avaliacao: number
 }
 
-export default function FavoritesPage() {
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([])
+export default function SavedPage() {
+  const [savedIds, setSavedIds] = useState<string[]>([])
   const [rooms, setRooms] = useState<Room[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [fetchAttempted, setFetchAttempted] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
+
   const Dados = useAuth();
   console.log(Dados);
 
@@ -41,8 +43,8 @@ export default function FavoritesPage() {
     if (!Dados?.isAuthenticated) return
     if (fetchAttempted) return
 
-    async function fetchFavorites() {
-      console.log("Fetching favorites")
+    async function fetchSaved() {
+      console.log("Fetching saved")
       if (loading) return
 
       setLoading(true)
@@ -58,9 +60,9 @@ export default function FavoritesPage() {
         console.log("user_id",user_id)
         localStorage.setItem("user_id", user_id)
 
-        // Step 1: Fetch list of favorite room IDs
+        // Step 1: Fetch list of saved room IDs
         console.log(user_id)
-        const favoritesResponse = await fetch(`http://localhost:5001/api/favorites/${user_id}`, {
+        const savedResponse = await fetch(`http://localhost:5001/api/saved/${user_id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -68,57 +70,57 @@ export default function FavoritesPage() {
           },
         })
 
-        if (!favoritesResponse.ok) {
-          console.log(`HTTP error! status: ${favoritesResponse.status}`)
-          setFavoriteIds([])
+        if (!savedResponse.ok) {
+          console.log(`HTTP error! status: ${savedResponse.status}`)
+          setSavedIds([])
           setRooms([])
           setLoading(false)
           setFetchAttempted(true)
           return
         }
 
-        const favoritesData = await favoritesResponse.json()
-        console.log("Raw favorites response:", favoritesData)
+        const savedData = await savedResponse.json()
+        console.log("Raw saved response:", savedData)
 
         // Handle different response formats
         let ids: string[] = []
 
-        if (Array.isArray(favoritesData)) {
+        if (Array.isArray(savedData)) {
           // If it's already an array, use it directly
-          ids = favoritesData
-        } else if (favoritesData && typeof favoritesData === "object") {
+          ids = savedData
+        } else if (savedData && typeof savedData === "object") {
           // If it's an object, check if it has a data property or similar
-          if (Array.isArray(favoritesData.data)) {
-            ids = favoritesData.data
-          } else if (Array.isArray(favoritesData.favorites)) {
-            ids = favoritesData.favorites
-          } else if (Array.isArray(favoritesData.ids)) {
-            ids = favoritesData.ids
+          if (Array.isArray(savedData.data)) {
+            ids = savedData.data
+          } else if (Array.isArray(savedData.saved)) {
+            ids = savedData.savedRooms
+          } else if (Array.isArray(savedData.ids)) {
+            ids = savedData.ids
           } else {
             // If it's an object with IDs as keys or values
-            const possibleIds = Object.values(favoritesData).filter(
+            const possibleIds = Object.values(savedData).filter(
               (val) => typeof val === "string" || typeof val === "number",
             )
             if (possibleIds.length > 0) {
               ids = possibleIds.map((id) => String(id))
             }
           }
-        } else if (typeof favoritesData === "string") {
+        } else if (typeof savedData === "string") {
           // If it's a single string ID
-          ids = [favoritesData]
+          ids = [savedData]
         }
 
         if (ids.length === 0) {
-          console.log("No favorite IDs found in response")
-          setFavoriteIds([])
+          console.log("No saved IDs found in response")
+          setSavedIds([])
           setRooms([])
           setLoading(false)
           setFetchAttempted(true)
           return
         }
 
-        setFavoriteIds(ids)
-        console.log("Favorite IDs processed:", ids)
+        setSavedIds(ids)
+        console.log("Saved IDs processed:", ids)
 
         // Step 2: Fetch details for each room
         const roomsData: Room[] = []
@@ -151,15 +153,15 @@ export default function FavoritesPage() {
         setRooms(roomsData)
         console.log("Rooms data fetched:", roomsData)
       } catch (error) {
-        console.error("Error fetching favorites:", error)
-        setError(error instanceof Error ? error.message : "Failed to fetch favorites")
+        console.error("Error fetching savedRooms:", error)
+        setError(error instanceof Error ? error.message : "Failed to fetch savedRooms")
       } finally {
         setLoading(false)
         setFetchAttempted(true)
       }
     }
 
-    fetchFavorites()
+    fetchSaved()
 
     return () => {
       console.log("unmounted")
@@ -234,7 +236,7 @@ export default function FavoritesPage() {
       <Link href="/resultados" className="mr-4">
         <ArrowLeft size={40} className="text-black" />
       </Link>
-      <button className="bg-[#1976d2] text-white px-16 py-3 rounded-full text-xl">Favoritos</button>
+      <button className="bg-[#1976d2] text-white px-16 py-3 rounded-full text-xl">Saved</button>
     </div>
 
     {/* Room cards */}
@@ -242,13 +244,13 @@ export default function FavoritesPage() {
       {loading ? (
         <div className="flex justify-center items-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-[#1976d2]" />
-          <span className="ml-2 text-lg">Carregando favoritos...</span>
+          <span className="ml-2 text-lg">Carregando salvos...</span>
         </div>
       ) : error ? (
         <div className="text-center py-12">
           <div className="flex flex-col items-center justify-center">
             <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-            <p className="text-lg mb-4">Erro ao carregar favoritos: {error}</p>
+            <p className="text-lg mb-4">Erro ao carregar salvos: {error}</p>
             <button
               onClick={handleRetry}
               className="bg-[#1976d2] text-white px-6 py-2 rounded-md hover:bg-[#1565c0] transition-colors"
@@ -292,7 +294,7 @@ export default function FavoritesPage() {
                     {renderAmenities(room)}
                   </div>
                   <div className="flex flex-col items-end">
-                    <Heart fill="#ff0707" color="#ff0707" size={40} />
+                  <Bookmark fill="black" color="black" size={40} />
                     <div className="mt-auto text-xl font-bold">R$ {room.price}</div>
                   </div>
                 </div>
@@ -330,7 +332,7 @@ export default function FavoritesPage() {
                 {renderAmenities(room)}
               </div>
               <div className="flex flex-col items-end">
-                <Heart fill="#ff0707" color="#ff0707" size={40} />
+                <Bookmark fill="black" color="black" size={40} />
                 <div className="mt-auto text-xl font-bold">R$ {room.price}</div>
               </div>
             </div>
@@ -338,7 +340,7 @@ export default function FavoritesPage() {
         ))
       ) : (
         <div className="text-center py-12">
-          <p className="text-lg">Nenhum favorito encontrado.</p>
+          <p className="text-lg">Nenhum quarto salvo encontrado.</p>
         </div>
       )}
     </div>

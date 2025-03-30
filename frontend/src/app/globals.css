@@ -75,3 +75,107 @@
   }
 }
 
+/* Estilos específicos para o calendário */
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #0079c2;
+  --rdp-background-color: #e6f4fa;
+  margin: 0;
+  padding: 16px;
+}
+
+.rdp-months {
+  display: flex;
+  justify-content: center;
+}
+
+.rdp-month {
+  background-color: #fff;
+}
+
+.rdp-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.rdp-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 1em;
+  text-align: left;
+}
+
+.rdp-caption_label {
+  font-weight: 500;
+  font-size: 1rem;
+  text-align: center;
+  flex: 1;
+}
+
+/* Ajuste para os dias da semana */
+.rdp-head_row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8px;
+}
+
+.rdp-head_cell {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+  padding: 8px 0;
+}
+
+/* Ajuste para as linhas de datas */
+.rdp-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 4px;
+}
+
+.rdp-cell {
+  text-align: center;
+  padding: 0;
+}
+
+.rdp-day {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  border-radius: 50%;
+  margin: 0 auto;
+  transition: all 0.2s;
+}
+
+.rdp-day_selected {
+  background-color: var(--rdp-accent-color);
+  color: white;
+}
+
+.rdp-day:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: var(--rdp-background-color);
+}
+
+.rdp-day_today {
+  font-weight: bold;
+  border: 1px solid #ddd;
+}
+
+.rdp-nav_button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid #ddd;
+}
+
+
