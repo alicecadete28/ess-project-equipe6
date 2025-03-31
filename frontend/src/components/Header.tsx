@@ -29,7 +29,7 @@ export default function AppHeader() {
 
         <div className="flex items-center gap-4">
           {user?.client?.cnpj && (
-            <Button component={Link} href="/(home)">
+            <Button component={Link} href="/accommodation">
               Publicar Acomodação
             </Button>
           )}
