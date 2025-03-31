@@ -53,7 +53,7 @@ export default function FavoritesPage() {
         // Get token from localStorage
         const token = localStorage.getItem("accessToken") as string
         console.log("Token:", token)
-        const user_id = String(Dados.user?.id)
+        const user_id = String(Dados.user?.client?.id)
         console.log(Dados)
         console.log("user_id",user_id)
         localStorage.setItem("user_id", user_id)
@@ -291,7 +291,7 @@ export default function FavoritesPage() {
                     </div>
                     {renderAmenities(room)}
                   </div>
-                  <div className="flex flex-col items-end">
+                  <div className="flex flex-col items-end"> 
                     <Heart fill="#ff0707" color="#ff0707" size={40} />
                     <div className="mt-auto text-xl font-bold">R$ {room.price}</div>
                   </div>

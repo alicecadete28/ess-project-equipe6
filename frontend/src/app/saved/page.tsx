@@ -55,7 +55,7 @@ export default function SavedPage() {
         // Get token from localStorage
         const token = localStorage.getItem("accessToken") as string
         console.log("Token:", token)
-        const user_id = String(Dados.user?.id)
+        const user_id = String(Dados.user?.client?.id)
         console.log(Dados)
         console.log("user_id",user_id)
         localStorage.setItem("user_id", user_id)

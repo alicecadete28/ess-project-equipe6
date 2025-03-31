@@ -82,6 +82,8 @@ export default function RegisterPage() {
             cpf: formData.cpf.replace(/\D/g, ""),
             birth_date: formData.birthDate,
             phone: formData.phone.replace(/\D/g, ""),
+            // favorites: [], não é aqui
+            // savedRooms: [],
           },
         }),
         method: "POST",
