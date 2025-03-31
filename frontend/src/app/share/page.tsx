@@ -88,7 +88,7 @@ export default function HotelDetailPage() {
     try {
       const token = localStorage.getItem("accessToken") as string
       console.log("Token:", token)
-      const user_id = String(Dados.user?.id)
+      const user_id = String(Dados.user?.client?.id)
       console.log(Dados)
       console.log("user_id", user_id)
       localStorage.setItem("user_id", user_id)
@@ -133,7 +133,7 @@ export default function HotelDetailPage() {
     try {
       const token = localStorage.getItem("accessToken") as string
       console.log("Token:", token)
-      const user_id = String(Dados.user?.id)
+      const user_id = String(Dados.user?.client?.id)
       console.log(Dados)
       console.log("user_id",user_id)
       localStorage.setItem("user_id", user_id)
@@ -184,7 +184,8 @@ export default function HotelDetailPage() {
   const handleFavoritos = async () => {
     try {
       const token = localStorage.getItem("accessToken") as string
-      const user_id = String(Dados.user?.id)
+      const user_id = String(Dados.user?.client?.id)
+      console.log(Dados)
 
       const response = await fetch(`http://localhost:5001/api/favorites/${user_id}`, {
         method: "GET",
@@ -220,7 +221,7 @@ export default function HotelDetailPage() {
   const handleSaved = async () => {
   try {
     const token = localStorage.getItem("accessToken") as string
-    const user_id = String(Dados.user?.id)
+    const user_id = String(Dados.user?.client?.id)
 
     const response = await fetch(`http://localhost:5001/api/saved/${user_id}`, {
       method: "GET",
@@ -256,7 +257,7 @@ export default function HotelDetailPage() {
   const handleReservar = async () => {
     try {
       const token = localStorage.getItem("accessToken") as string
-      const user_id = String(Dados.user?.id)
+      const user_id = String(Dados.user?.client?.id)
   
       const response = await fetch(`http://localhost:5001/api/reservations`, {
         method: "POST",
@@ -293,7 +294,7 @@ export default function HotelDetailPage() {
     const checkIfFavorite = async () => {
       try {
         const token = localStorage.getItem("accessToken") as string
-        const user_id = String(Dados.user?.id)
+        const user_id = String(Dados.user?.client?.id)
     
         const response = await fetch(`http://localhost:5001/api/favorites/${user_id}`, {
           method: "GET",
@@ -314,7 +315,7 @@ export default function HotelDetailPage() {
     const checkIfSaved= async () => {
       try {
         const token = localStorage.getItem("accessToken") as string
-        const user_id = String(Dados.user?.id)
+        const user_id = String(Dados.user?.client?.id)
     
         const response = await fetch(`http://localhost:5001/api/saved/${user_id}`, {
           method: "GET",
