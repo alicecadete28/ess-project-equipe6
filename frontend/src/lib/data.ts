@@ -1,4 +1,4 @@
-import type { Location, Reservation2, Room } from "@/components/types/interface"
+import type { Location, Reservation, Reservation2, Room } from "@/components/types/interface"
 
 export const locations: Location[] = [
   {
@@ -141,11 +141,36 @@ const roomsFallbackData: Room[] = [
   },
 ]
 
+const reservationFallbackData: Reservation[] = [
+  {
+    id: "101",
+    pf_id: "aaa",
+    room_id: "101",
+    check_in: new Date("2025-03-20"),
+    check_out: new Date("2025-03-22"),
+    guests: 1,
+    total: 103.59,
+    status: "Confirmada",
+    rating: { stars: 5, comment: "Ótima estadia" },
+  },
+  {
+    id: "102",
+    pf_id: "UFPE",
+    room_id: "102",
+    check_in: new Date("2025-03-26"),
+    check_out: new Date("2025-03-30"),
+    guests: 2,
+    total: 457.90,
+    status: "Confirmada",
+    rating: { stars: 4, comment: "Muito bom" },
+  },
+]
+
 export function getLocationById(id: string): Room | undefined {
   return roomsFallbackData.find((location) => location.id === id)
 }
 
-export function getReservationsByLocationId(id: string): Reservation2[] {
-  return reservations2.filter((reservation2) => reservation2.locationId === id)
+export function getReservationsByLocationId(id: string): Reservation[] {
+  return reservationFallbackData.filter((reservation2) => reservation2.id === id)
 }
 
