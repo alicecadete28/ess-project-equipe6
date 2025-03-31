@@ -115,12 +115,12 @@ export function ReservationDetailsModal({
             >
               Cancelar reserva
             </Button>
-            <Button className="bg-[#0079c2] hover:bg-primary-dark text-white px-8" onClick={() => onEdit(reservation.id)}>
+            {/* <Button className="bg-[#0079c2] hover:bg-primary-dark text-white px-8" onClick={() => onEdit(reservation.id)}>
               Editar Reserva
-            </Button>
+            </Button> */}
             <Button
               variant="outline"
-              className="border-[#0079c2] text-[#0079c2] hover:bg-primary/5"
+              className="bg-[#0079c2] hover:bg-primary-dark text-white px-8"
               onClick={() => {
                 window.location.href = `/avaliations?id=${reservation.id}`
               }}

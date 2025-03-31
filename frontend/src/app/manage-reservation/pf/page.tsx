@@ -282,7 +282,7 @@ export default function ReservationsPage() {
   }
 
   return (
-    <ProtectedRoute><div className="min-h-screen bg-gray-50 mt-20">
+    <div className="min-h-screen bg-gray-50 mt-20">
       {/* Title */}
       <div className="container px-4 py-8 mx-auto max-w-7xl">
         <h1 className="text-2xl font-bold text-center text-[#0079c2] mb-12">Suas Reservas</h1>
@@ -317,14 +317,14 @@ export default function ReservationsPage() {
                   ))}
                 </div>
           ): presentMockData ? (
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <h2 className="grid grid-cols-1 gap-8 md:grid-cols-2">
               {reservationsFallbackData.map(([reservation, room], index) => (
                 <ReservationCard key={reservation.id} reservation={reservation} room={room} onClick={handleCardClick} />
               ))}
-            </div>
+            </h2>
           )
           : (
-            <div className="text-center py-12">
+            <h1 className="text-center py-12">
               <p className="text-lg">Nenhuma reserva encontrada.</p>
               {/* <button
                   onClick={handleMock}
@@ -332,7 +332,7 @@ export default function ReservationsPage() {
                 >
                   Mostrar Dados mockados
                 </button> */}
-            </div>
+            </h1>
           )
           }
       </div>
@@ -345,7 +345,7 @@ export default function ReservationsPage() {
         onEdit={handleEditReservation}
         onCancel={handleCancelReservation}
       />
-    </div></ProtectedRoute>
+    </div>
   )
 }
 
