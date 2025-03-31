@@ -37,8 +37,8 @@ const formSchema = z.object({
   local: z.string().min(1, "O local é obrigatorio"),
   stars: z.coerce
     .number()
-    .max(5, "As entrelas devem ser de 1 a 5")
-    .min(1, "As entrelas devem ser de 1 a 5"),
+    .max(5, "As estrelas devem ser de 1 a 5")
+    .min(1, "As estrelas devem ser de 1 a 5"),
 
   avaliacao: z.coerce.number().min(1, "A avaliacao deve ser de 0 a 10"),
   caracteristics: z.string().min(1, "As características são obrigatorias"),
