@@ -77,11 +77,11 @@ export default function Home() {
           console.log("user_id",user_id)
           localStorage.setItem("user_id", user_id)
 
-          console.log(user_id)
-          const locationsResponse = await fetch(`http://localhost:5001/api/rooms/pj/${user_id}/room`, {
+          // console.log(user_id)
+          const locationsResponse = await fetch(`http://localhost:5001/api/rooms/pj/${user_id}`, {
             method: "GET",
             headers: {
-              "Content-Type": "application/json",
+              // "Content-Type": "application/json",
               Authorization: `Bearer ${token}`
             }
           })
@@ -105,7 +105,8 @@ export default function Home() {
             return
           }
           console.log("Data:", locationsData)
-          setRooms(locationsData)
+          setRooms(locationsData.data)
+          console.log("Rooms:", rooms)
           setFetchAttempted(true)
         } catch (error) {
           // setError(error.message)

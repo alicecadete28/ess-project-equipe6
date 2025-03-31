@@ -16,10 +16,10 @@ export function ReservationCard({ reservation, room, onClick }: ReservationCardP
       className="overflow-hidden bg-white rounded-lg shadow-md transition-all hover:shadow-lg cursor-pointer"
       onClick={() => onClick(reservation, room)}
     >
-      <div className="flex flex-col md:flex-row">
+      <div  className="flex flex-col md:flex-row">
         <div className="w-full md:w-1/3">
           <Image
-            src={"/placeholder.svg?height=200&width=200"}
+            src={`https://picsum.photos/seed/${room!.id}/400/300`}
             alt="Building" 
             width={200}
             height={200}

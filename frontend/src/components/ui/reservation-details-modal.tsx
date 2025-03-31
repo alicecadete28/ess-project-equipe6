@@ -81,7 +81,7 @@ export function ReservationDetailsModal({
             <div className="w-full md:w-1/3">
               <div className="rounded-lg overflow-hidden">
                 <Image
-                  src= "/placeholder.svg?height=200&width=200"
+                  src={`https://picsum.photos/seed/${room!.id}/400/300`}
                   alt="Building"
                   width={200}
                   height={200}
@@ -122,7 +122,7 @@ export function ReservationDetailsModal({
               variant="outline"
               className="border-[#0079c2] text-[#0079c2] hover:bg-primary/5"
               onClick={() => {
-                window.location.href = `/avaliations/${reservation.id}`
+                window.location.href = `/avaliations?id=${reservation.id}`
               }}
             >
               Avaliar reserva

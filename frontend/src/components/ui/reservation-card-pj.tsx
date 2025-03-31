@@ -11,7 +11,7 @@ interface ReservationCardProps extends Reservation {
   }
   
   export default function ReservationCard(props: ReservationCardProps) {
-    const { pf_id, check_in, check_out, guests, total, id, onCancelReservation } = props
+    const { pf_id, check_in, check_out, guests, total, id, status,onCancelReservation } = props
     const [isDialogOpen, setIsDialogOpen] = useState(false)
   
     return (
@@ -35,8 +35,9 @@ interface ReservationCardProps extends Reservation {
               <p className="text-sm text-[#0079c2] mb-1">
                 {format(new Date(check_in), "dd/MM/yyyy")} - {format(new Date(check_out), "dd/MM/yyyy")}
               </p>
-              <p className="text-sm mb-2">{guests} hóspedes</p>
-              <p className="font-bold">{formatCurrency(total)}</p>
+              <p className="text-[#0079c2] mb-2">{status} hóspedes</p>
+              <p className="text-[#0079c2] mb-2">{guests} hóspedes</p>
+              <p className="text-[#0079c2] font-bold">{formatCurrency(total)}</p>
             </div>
           </div>
         </div>
