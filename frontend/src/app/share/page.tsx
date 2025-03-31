@@ -365,7 +365,7 @@ export default function HotelDetailPage() {
           <div className="grid grid-cols-12 gap-2 mb-6">
             <div className="col-span-8 row-span-2">
               <Image
-                src="/placeholder.svg?height=400&width=600"
+                src={`https://picsum.photos/seed/${roomId}/600/400`}
                 alt="Hotel pool view"
                 width={600}
                 height={400}
@@ -374,7 +374,7 @@ export default function HotelDetailPage() {
             </div>
             <div className="col-span-4">
               <Image
-                src="/placeholder.svg?height=200&width=300"
+                src="/hotelRoom.png"
                 alt="Hotel room"
                 width={300}
                 height={200}
@@ -383,7 +383,7 @@ export default function HotelDetailPage() {
             </div>
             <div className="col-span-4 relative">
               <Image
-                src="/placeholder.svg?height=200&width=300"
+                src="/hotelBreakfast.jpg"
                 alt="Hotel food"
                 width={300}
                 height={200}
