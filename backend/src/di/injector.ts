@@ -1,3 +1,5 @@
+import { EmailService } from '../services/email.service';
+
 export default class Injector {
   private services: Map<Function, any> = new Map();
   private repositories: Map<Function, any> = new Map();

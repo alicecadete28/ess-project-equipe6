@@ -14,6 +14,10 @@ class PfRepository extends BaseRepository<PfEntity> {
     return await this.findOne((item) => item.id === id);
   }
 
+  public async getPfByUserId(userId: string): Promise<PfEntity | null> {
+    return await this.findOne((item) => item.user_id === userId);
+  }
+
   public async getPfByCpf(cpf: string): Promise<PfEntity | null> {
     return await this.findOne((item) => item.cpf === cpf);
   }

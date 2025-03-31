@@ -16,7 +16,7 @@ class TestController {
 
   private initRoutes() {
     this.router.get(this.prefix, (req: Request, res: Response) =>
-      this.getTests(req, res )
+      this.getTests(req, res)
     );
 
     this.router.get(`${this.prefix}/others`, (req: Request, res: Response) =>
