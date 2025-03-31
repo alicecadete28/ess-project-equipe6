@@ -6,11 +6,14 @@ import { X } from "lucide-react"
 import type { Reservation, Room } from "@/components/types/interface"
 import { Button } from "@/components/ui/button"
 import { format } from 'date-fns'
+import { reservationsFallbackData } from "@/lib/data"
+import { is } from "date-fns/locale"
 
 interface ReservationDetailsModalProps {
   reservation: Reservation | null
   room: Room | null
   isOpen: boolean
+  isUsingMock: boolean
   onClose: () => void
   onEdit: (id: string) => void
   onCancel: (id: string) => void
@@ -20,6 +23,7 @@ export function ReservationDetailsModal({
   reservation,
   room,
   isOpen,
+  isUsingMock,
   onClose,
   onEdit,
   onCancel,
@@ -62,6 +66,19 @@ export function ReservationDetailsModal({
       document.removeEventListener("keydown", handleEscKey)
     }
   }, [isOpen, onClose])
+
+  const handleLocalCancel = (id: string) => {
+    if (isUsingMock) {
+    reservationsFallbackData.map(([reservation, room]) => {
+          if (reservation.id === id) {
+            reservation.status = "cancelada"
+            // room.description = "Sala cancelada"
+          }
+        })
+    } else {
+        
+    }
+  }
 
   if (!isOpen || !reservation) return null
 
@@ -107,25 +124,12 @@ export function ReservationDetailsModal({
             <p className="text-[#0079c2] text-xl font-medium">Valor total: {reservation.total}</p>
           </div>
 
-          <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
-            <Button
-              variant="outline"
-              className="border-[#0079c2] text-[#0079c2] hover:bg-primary/10"
-              onClick={() => onCancel(reservation.id)}
-            >
+          <div className="mt-8 flex justify-center">
+            <Button className="bg-[#0079c2] hover:bg-primary-dark text-white px-8" onClick={() => {
+                onCancel(reservation.id)
+                // handleLocalCancel(reservation.id)
+                }}>
               Cancelar reserva
-            </Button>
-            {/* <Button className="bg-[#0079c2] hover:bg-primary-dark text-white px-8" onClick={() => onEdit(reservation.id)}>
-              Editar Reserva
-            </Button> */}
-            <Button
-              variant="outline"
-              className="bg-[#0079c2] hover:bg-primary-dark text-white px-8"
-              onClick={() => {
-                window.location.href = `/avaliations?id=${reservation.id}`
-              }}
-            >
-              Avaliar reserva
             </Button>
           </div>
         </div>

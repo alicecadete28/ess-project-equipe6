@@ -169,10 +169,10 @@ export default function SearchResults() {
             <Home size={18} /> <span>Voltar para a tela inicial</span>
           </Link>
           <div className="flex items-center gap-6">
-            <Link href="/saved" className="flex items-center gap-2 hover:underline">
+            <Link href="/saved" id= "botaoSalvos" className="flex items-center gap-2 hover:underline">
               <Bookmark size={18} /> <span>Salvos</span>
             </Link>
-            <Link href="/favorites" className="flex items-center gap-2 hover:underline">
+            <Link href="/favorites" id= "botaoFavoritos" className="flex items-center gap-2 hover:underline">
               <Heart size={18} /> <span>Favoritos</span>
             </Link>
           </div>

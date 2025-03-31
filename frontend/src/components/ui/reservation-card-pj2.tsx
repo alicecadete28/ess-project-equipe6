@@ -29,7 +29,7 @@ export function ReservationCard({ reservation, room, onClick }: ReservationCardP
         <div className="flex flex-col justify-between w-full p-6 md:w-2/3">
           <div>
             <h2 className="mb-2 text-xl font-bold text-[#0079c2]">{room.description}</h2>
-            {/* <p className="text-sm text-gray-700">{reservation.address}</p> */}
+            <p className="text-sm text-gray-700">Id do hóspede: {reservation.pf_id}</p>
           </div>
           <div className="mt-4">
             <p className="font-medium text-[#0079c2]">Entrada: {format(new Date(reservation.check_in), "dd/MM/yyyy")} </p>

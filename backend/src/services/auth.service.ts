@@ -94,4 +94,16 @@ export class AuthService {
       throw new Error('Token inválido ou expirado');
     }
   }
+
+  async getPf(id: string): Promise<PFEntity | null> {
+    const client = await this.pfRepository.getPfById(id);
+
+    return client;
+  }
+
+  async getPj(id: string): Promise<PJEntity | null> {
+    const client = await this.pjRepository.getPjById(id);
+
+    return client;
+  }
 }

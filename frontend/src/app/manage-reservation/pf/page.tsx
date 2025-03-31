@@ -261,7 +261,6 @@ export default function ReservationsPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: id,
         })
       console.log("Response:", reservationsResponse)
 
@@ -283,7 +282,7 @@ export default function ReservationsPage() {
   }
 
   return (
-    <ProtectedRoute><div className="min-h-screen bg-gray-50 mt-20">
+    <div className="min-h-screen bg-gray-50 mt-20">
       {/* Title */}
       <div className="container px-4 py-8 mx-auto max-w-7xl">
         <h1 className="text-2xl font-bold text-center text-[#0079c2] mb-12">Suas Reservas</h1>
@@ -309,31 +308,31 @@ export default function ReservationsPage() {
                 </button>
               </div>
             </div>
-          ) : reservationsFetched.length > 0 ? (
+          ) : reservationRoomPairs.filter(([reservation]) => reservation.status !== "canceled").length > 0 ? (
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                 {reservationRoomPairs
-                  .filter(([reservation]) => reservation.status !== "cancelada")
+                  .filter(([reservation]) => reservation.status !== "canceled")
                   .map(([reservation, room]) => (
                   <ReservationCard key={reservation.id} reservation={reservation} room={room!} onClick={handleCardClick} />
                   ))}
                 </div>
           ): presentMockData ? (
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            <h2 className="grid grid-cols-1 gap-8 md:grid-cols-2">
               {reservationsFallbackData.map(([reservation, room], index) => (
                 <ReservationCard key={reservation.id} reservation={reservation} room={room} onClick={handleCardClick} />
               ))}
-            </div>
+            </h2>
           )
           : (
-            <div className="text-center py-12">
+            <h1 className="text-center py-12">
               <p className="text-lg">Nenhuma reserva encontrada.</p>
-              <button
+              {/* <button
                   onClick={handleMock}
                   className="bg-[#1976d2] text-white px-6 py-2 rounded-md hover:bg-[#1565c0] transition-colors"
                 >
                   Mostrar Dados mockados
-                </button>
-            </div>
+                </button> */}
+            </h1>
           )
           }
       </div>
@@ -346,7 +345,7 @@ export default function ReservationsPage() {
         onEdit={handleEditReservation}
         onCancel={handleCancelReservation}
       />
-    </div></ProtectedRoute>
+    </div>
   )
 }
 

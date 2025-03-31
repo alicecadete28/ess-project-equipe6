@@ -35,6 +35,11 @@ class ReservationController {
       `${this.prefix}/:reservationId/guests`,
       (req: Request, res: Response) => this.updateReservationGuests(req, res)
     );
+
+    this.router.patch(
+      `${this.prefix}/:reservationId/cancel`,
+      (req: Request, res: Response) => this.updateReservationStatus(req, res)
+    );
   }
 
   private async getReservationDetails(req: Request, res: Response) {
@@ -102,6 +107,18 @@ class ReservationController {
       await this.reservationService.updateReservationGuests(
         req.params.reservationId,
         guests
+      );
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: updatedReservation,
+    }).handle(res);
+  }
+
+  private async updateReservationStatus(req: Request, res: Response) { //Mudar para o estado de cancelado
+    const updatedReservation =
+      await this.reservationService.cancelReservation(
+        req.params.reservationId,
       );
 
     return new SuccessResult({

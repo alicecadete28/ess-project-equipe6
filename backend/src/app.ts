@@ -10,11 +10,7 @@ import Database from './database';
 const app: express.Express = express();
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: '*',
-  })
-);
+app.use(cors());
 
 setupRoutes(app);
 
