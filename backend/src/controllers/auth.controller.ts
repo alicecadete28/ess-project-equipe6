@@ -23,6 +23,9 @@ export class AuthController {
       this.validateRegister.bind(this),
       this.register.bind(this)
     );
+
+    this.router.get(`/pf/:id`, this.getPf.bind(this));
+    this.router.get(`/pj/:id`, this.getPj.bind(this));
   }
 
   private async login(req: Request, res: Response) {
@@ -177,5 +180,27 @@ export class AuthController {
       }
       next();
     };
+  }
+
+  private async getPf(req: Request, res: Response) {
+    const { id } = req.query;
+
+    const client = await this.authService.getPf(id as string);
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: client,
+    }).handle(res);
+  }
+
+  private async getPj(req: Request, res: Response) {
+    const { id } = req.query;
+
+    const client = await this.authService.getPj(id as string);
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: client,
+    }).handle(res);
   }
 }
