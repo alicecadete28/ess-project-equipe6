@@ -27,7 +27,7 @@ export function ConfirmationModal({ isOpen, onClose }: ConfirmationModalProps) {
   const handleGoToReservations = () => {
     // Navigate to reservations page
     onClose()
-    router.push('/reservations')
+    router.push('/manage-reservation/pf')
   }
 
   if (!isOpen) return null

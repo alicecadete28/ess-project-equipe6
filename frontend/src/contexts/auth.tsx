@@ -8,6 +8,7 @@ import { createContext, useEffect, useState, type ReactNode } from "react";
 // Define user type
 export type User = {
   id: string;
+  type?: string;
   email: string;
   name?: string;
   client?: Record<string, any>;
@@ -93,6 +94,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       // Mock successful login
       const newUser: User = {
         id: data.id,
+        type: data.type,
         email: data?.email || "",
         name: data?.email?.split("@")[0],
         client: data.client,

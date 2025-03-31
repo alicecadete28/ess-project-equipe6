@@ -18,9 +18,11 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import AppHeader from "@/components/Header";
-import { Badge } from "@/components/ui/badge";
+import AppHeader from "@/components/Header"; // ✅ Importado aqui
+import { Badge } from "@/components/ui/badge"
+// import { Room } from "@/components/types/interface";
 
+// Define the room type
 interface Room {
   id: number;
   name: string;

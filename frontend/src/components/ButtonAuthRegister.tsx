@@ -182,14 +182,15 @@ export default function UserAuthButton() {
 
         <MenuItem
           onClick={() => {
-            handleClose();
-            router.push("/reservations");
+            handleClose(); //precisa ver ser é pf ou pj
+            if (user?.type === "pj") router.push("/manage-reservation/pj2");
+            else router.push("/manage-reservation/pf");
           }}
         >
           <ListItemIcon>
             <Settings size={18} />
           </ListItemIcon>
-          Minhas Reservas
+          {user?.type == "pf" ? "Minhas Reservas" : "Meus quartos"}
         </MenuItem>
 
         <MenuItem
