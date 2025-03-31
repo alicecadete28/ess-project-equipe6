@@ -122,7 +122,7 @@ export function ReservationDetailsModal({
               variant="outline"
               className="border-[#0079c2] text-[#0079c2] hover:bg-primary/5"
               onClick={() => {
-                window.location.href = `/avaliations/${reservation.id}`
+                window.location.href = `/avaliations?id=${reservation.id}`
               }}
             >
               Avaliar reserva
