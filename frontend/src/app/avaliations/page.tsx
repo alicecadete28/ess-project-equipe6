@@ -1,88 +1,102 @@
-"use client";
-import React from "react";
-import { useState } from "react";
-import { AlertCircle, CheckCircle2, Star, X } from "lucide-react";
+"use client"
+import { useState, useEffect } from "react"
+import { AlertCircle, CheckCircle2, Star, X } from "lucide-react"
+import { useSearchParams } from "next/navigation"
 
-export default function avaliations() {
-  const [rating, setRating] = useState(0);
-  const [hoveredRating, setHoveredRating] = useState(0);
-  const [comment, setComment] = useState("");
-  const [showError, setShowError] = useState(false);
+export default function Avaliations() {
+  const [rating, setRating] = useState(0)
+  const [hoveredRating, setHoveredRating] = useState(0)
+  const [comment, setComment] = useState("")
+  const [showError, setShowError] = useState(false)
   const [errorMessage, setErrorMessage] = useState(
-    "Por favor, selecione uma classificação por estrelas antes de enviar sua avaliação."
-  );
-  const [submitting, setSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+    "Por favor, selecione uma classificação por estrelas antes de enviar sua avaliação.",
+  )
+  const [submitting, setSubmitting] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [reservationId, setReservationId] = useState("")
+
+  // Get the ID from URL search params
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    // Extract the ID from the URL
+    const id = searchParams.get("id")
+    if (id) {
+      setReservationId(id)
+    }
+  }, [searchParams])
 
   const handleSubmit = async () => {
     // Validate rating
     if (rating === 0) {
-      setShowError(true);
-      return;
+      setShowError(true)
+      return
+    }
+
+    // Validate reservation ID
+    if (!reservationId) {
+      setErrorMessage("ID da reserva não encontrado. Por favor, tente novamente.")
+      setShowError(true)
+      return
     }
 
     // Start submission
-    setSubmitting(true);
+    setSubmitting(true)
 
     try {
       // Prepare review data
       const reviewData = {
         num_estrelas: Number(rating),
         comentario: comment,
-      };
+      }
 
-      const token = localStorage.getItem("accessToken") as string;
-      console.log("Token:", token);
-      // Submit to backend using POST request
-      const response = await fetch(
-        "http://localhost:5001/api/avaliacoes?id=f5b0e3d2-4b6f-4d8f-8f5a-7b1a5b2f8a1a",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(reviewData),
-        }
-      );
+      const token = localStorage.getItem("accessToken") as string
+      console.log("Token:", token)
+      console.log("Submitting review for reservation ID:", reservationId)
+
+      // Submit to backend using POST request with the ID from URL
+      const response = await fetch(`http://localhost:5001/api/avaliacoes?id=${reservationId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(reviewData),
+      })
 
       if (!response.ok) {
         // Handle error response
-        const errorData = await response.json();
-        throw new Error(response.statusText);
+        const errorData = await response.json()
+        throw new Error(response.statusText)
       }
 
       // Handle success
-      const result = await response.json();
-      console.log("Review submitted successfully:", result);
+      const result = await response.json()
+      console.log("Review submitted successfully:", result)
 
       // Show success message
-      setShowSuccess(true);
+      setShowSuccess(true)
 
       // Reset form
-      setRating(0);
-      setComment("");
+      setRating(0)
+      setComment("")
     } catch (error) {
-      console.error("Error submitting review:", error);
+      console.error("Error submitting review:", error)
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Ocorreu um erro ao enviar sua avaliação. Tente novamente."
-      );
-      setShowError(true);
+        error instanceof Error ? error.message : "Ocorreu um erro ao enviar sua avaliação. Tente novamente.",
+      )
+      setShowError(true)
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen bg-[#ffffff]">
       {/* Main Content */}
       <main className="flex items-center justify-center p-4 min-h-screen">
         <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md border border-[#e0e0e0]">
-          <h1 className="mb-6 text-xl font-semibold text-center text-[#1d1b20]">
-            Avalie Sua Estadia
-          </h1>
+          <h1 className="mb-6 text-xl font-semibold text-center text-[#1d1b20]">Avalie Sua Estadia</h1>
 
           {/* Star Rating */}
           <div className="flex justify-center gap-2 mb-8">
@@ -109,10 +123,7 @@ export default function avaliations() {
 
           {/* Comment Section */}
           <div className="mb-4">
-            <label
-              htmlFor="comment"
-              className="block mb-2 text-sm text-[#505050]"
-            >
+            <label htmlFor="comment" className="block mb-2 text-sm text-[#505050]">
               Deixe um comentário (Opcional)
             </label>
             <input
@@ -131,9 +142,7 @@ export default function avaliations() {
             onClick={handleSubmit}
             disabled={submitting}
             className={`w-full py-3 text-white ${
-              submitting
-                ? "bg-[#1976d2]/70 cursor-not-allowed"
-                : "bg-[#1976d2] hover:bg-[#1976d2]/90"
+              submitting ? "bg-[#1976d2]/70 cursor-not-allowed" : "bg-[#1976d2] hover:bg-[#1976d2]/90"
             } rounded-md transition-colors flex justify-center items-center`}
           >
             {submitting ? (
@@ -144,14 +153,7 @@ export default function avaliations() {
                   fill="none"
                   viewBox="0 0 24 24"
                 >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path
                     className="opacity-75"
                     fill="currentColor"
@@ -184,9 +186,7 @@ export default function avaliations() {
                 <AlertCircle className="w-6 h-6 text-red-600" />
               </div>
 
-              <h3 className="mb-2 text-lg font-medium text-[#1d1b20]">
-                Avaliação necessária
-              </h3>
+              <h3 className="mb-2 text-lg font-medium text-[#1d1b20]">Avaliação necessária</h3>
 
               <p className="mb-4 text-center text-[#505050]">{errorMessage}</p>
 
@@ -218,13 +218,10 @@ export default function avaliations() {
                 <CheckCircle2 className="w-6 h-6 text-green-600" />
               </div>
 
-              <h3 className="mb-2 text-lg font-medium text-[#1d1b20]">
-                Avaliação enviada
-              </h3>
+              <h3 className="mb-2 text-lg font-medium text-[#1d1b20]">Avaliação enviada</h3>
 
               <p className="mb-4 text-center text-[#505050]">
-                Obrigado por compartilhar sua opinião! Sua avaliação foi enviada
-                com sucesso.
+                Obrigado por compartilhar sua opinião! Sua avaliação foi enviada com sucesso.
               </p>
 
               <button
@@ -238,5 +235,6 @@ export default function avaliations() {
         </div>
       )}
     </div>
-  );
+  )
 }
+

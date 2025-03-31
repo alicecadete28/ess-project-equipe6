@@ -261,7 +261,6 @@ export default function ReservationsPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: id,
         })
       console.log("Response:", reservationsResponse)
 
@@ -309,10 +308,10 @@ export default function ReservationsPage() {
                 </button>
               </div>
             </div>
-          ) : reservationsFetched.length > 0 ? (
+          ) : reservationRoomPairs.filter(([reservation]) => reservation.status !== "canceled").length > 0 ? (
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                 {reservationRoomPairs
-                  .filter(([reservation]) => reservation.status !== "cancelada")
+                  .filter(([reservation]) => reservation.status !== "canceled")
                   .map(([reservation, room]) => (
                   <ReservationCard key={reservation.id} reservation={reservation} room={room!} onClick={handleCardClick} />
                   ))}
@@ -327,12 +326,12 @@ export default function ReservationsPage() {
           : (
             <div className="text-center py-12">
               <p className="text-lg">Nenhuma reserva encontrada.</p>
-              <button
+              {/* <button
                   onClick={handleMock}
                   className="bg-[#1976d2] text-white px-6 py-2 rounded-md hover:bg-[#1565c0] transition-colors"
                 >
                   Mostrar Dados mockados
-                </button>
+                </button> */}
             </div>
           )
           }

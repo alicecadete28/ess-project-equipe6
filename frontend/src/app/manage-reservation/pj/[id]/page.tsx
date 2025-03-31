@@ -8,10 +8,74 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Room, Reservation } from "@/components/types/interface"
+import { useRouter } from 'next/router';
+import { useAuth } from "@/hooks/useAuth"
 
 export default function LocationPage({ params }: { params: { id: string } }) {
     const location = getLocationById(params.id)
-  
+    const router = useRouter();
+    const { id } = router.query; // Obtém o ID dinâmico da URL
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [fetchAttempted, setFetchAttempted] = useState(false)
+    const Dados = useAuth()
+    const [rooms, setRooms] = useState<Room[]>([])
+
+    useEffect(() => {
+      if (!Dados?.isAuthenticated) return
+      if (fetchAttempted) return
+      
+      setLoading(true)
+      setError(null)
+
+      async function fetchRoom() {
+
+        const token = localStorage.getItem("accessToken") as string
+          console.log("Token:", token)
+          const user_id = String(Dados.user?.id)
+          console.log(Dados)
+          console.log("user_id",user_id)
+          localStorage.setItem("user_id", user_id)
+
+        try{
+          const roomResponse = await fetch(`http://localhost:5001/api/rooms/${id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          })
+
+          console.log("Room response:", roomResponse)
+            if (!roomResponse.ok) {
+              console.error(`Failed to fetch room ${id}: ${roomResponse.status}`)
+              // continue // Skip this room but continue with others
+              setLoading(false)
+              setFetchAttempted(true)
+              return
+            }
+
+            const roomData = await roomResponse.json()
+            console.log("Room data:", roomData)
+            setRooms(roomData.data)
+            
+
+        } catch (error) {
+          console.error("Error fetching favorites:", error)
+          setError(error instanceof Error ? error.message : "Failed to fetch favorites")
+        } finally {
+          setLoading(false)
+          setFetchAttempted(true)
+        }
+
+          fetchRoom()
+
+          return () => {
+            console.log("unmounted")
+          }
+      }
+    }, [Dados])
+
     if (!location) {
       return (
         <div className="min-h-screen bg-gray-50 mt-20">
