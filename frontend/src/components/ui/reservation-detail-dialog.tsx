@@ -1,10 +1,11 @@
 "use client"
 
-import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialoga"
+import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import type { Reservation } from "@/components/types/interface"
 import { formatCurrency } from "@/lib/utils"
+import { format } from 'date-fns'
 
 interface ReservationDetailDialogProps {
   reservation: Reservation
@@ -43,10 +44,10 @@ export default function ReservationDetailDialog({
                   <span className="text-[#0079c2]">Status:</span> Confirmada
                 </p>
                 <p>
-                  <span className="text-[#0079c2]">Data de entrada:</span> {reservation.check_in.toLocaleDateString()}
+                  <span className="text-[#0079c2]">Data de entrada:</span> {format(new Date(reservation.check_in), "dd/MM/yyyy")}
                 </p>
                 <p>
-                  <span className="text-[#0079c2]">Data de saída:</span> {reservation.check_out.toLocaleDateString()}
+                  <span className="text-[#0079c2]">Data de saída:</span> {format(new Date(reservation.check_out), "dd/MM/yyyy")}
                 </p>
                 <p className="text-2xl mt-8">
                   <span className="text-[#0079c2]">Total:</span> {formatCurrency(reservation.total)}
