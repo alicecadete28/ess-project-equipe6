@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import type { Reservation, Room } from "@/components/types/interface"
+import { format } from 'date-fns'
 
 interface ReservationCardProps {
   reservation: Reservation
@@ -31,8 +32,8 @@ export function ReservationCard({ reservation, room, onClick }: ReservationCardP
             {/* <p className="text-sm text-gray-700">{reservation.address}</p> */}
           </div>
           <div className="mt-4">
-            <p className="font-medium text-[#0079c2]">Entrada: {reservation.check_in.toLocaleDateString()} </p>
-            <p className="font-medium text-[#0079c2]">Saída: {reservation.check_out.toLocaleDateString()}</p>
+            <p className="font-medium text-[#0079c2]">Entrada: {format(new Date(reservation.check_in), "dd/MM/yyyy")} </p>
+            <p className="font-medium text-[#0079c2]">Saída: {format(new Date(reservation.check_out), "dd/MM/yyyy")}</p>
             <p className="font-medium text-[#0079c2]">Valor: R$ {reservation.total}</p>
           </div>
         </div>

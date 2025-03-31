@@ -3,6 +3,7 @@ import type { Reservation } from "@/components/types/interface"
 import { formatCurrency } from "@/lib/utils"
 import { useState } from "react"
 import ReservationDetailDialog from "@/components/ui/reservation-detail-dialog"
+import { format } from 'date-fns'
 
 
 interface ReservationCardProps extends Reservation {
@@ -32,7 +33,7 @@ interface ReservationCardProps extends Reservation {
             <div className="w-3/4 p-5">
               <h3 className="text-xl font-bold text-[#0079c2] mb-1">{pf_id}</h3>
               <p className="text-sm text-[#0079c2] mb-1">
-                {check_in.toLocaleDateString()} - {check_out.toLocaleDateString()}
+                {format(new Date(check_in), "dd/MM/yyyy")} - {format(new Date(check_out), "dd/MM/yyyy")}
               </p>
               <p className="text-sm mb-2">{guests} hóspedes</p>
               <p className="font-bold">{formatCurrency(total)}</p>

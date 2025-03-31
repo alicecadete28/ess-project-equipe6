@@ -5,6 +5,7 @@ import Image from "next/image"
 import { X } from "lucide-react"
 import type { Reservation, Room } from "@/components/types/interface"
 import { Button } from "@/components/ui/button"
+import { format } from 'date-fns'
 
 interface ReservationDetailsModalProps {
   reservation: Reservation | null
@@ -97,8 +98,8 @@ export function ReservationDetailsModal({
 
           <div className="mt-8 space-y-2">
             <p className="text-[#0079c2] text-xl font-medium">Status: {reservation.status}</p>
-            <p className="text-[#0079c2] font-medium">Data de entrada: {reservation.check_in.toLocaleDateString()}</p>
-            <p className="text-[#0079c2] font-medium">Data de saída: {reservation.check_out.toLocaleDateString()}</p>
+            <p className="text-[#0079c2] font-medium">Data de entrada: {format(new Date(reservation.check_in), "dd/MM/yyyy")}</p>
+            <p className="text-[#0079c2] font-medium">Data de saída: {format(new Date(reservation.check_out), "dd/MM/yyyy")}</p>
           </div>
 
           <div className="mt-8 space-y-2">

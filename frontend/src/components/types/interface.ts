@@ -16,8 +16,8 @@
     id: string
     pf_id: string
     room_id: string
-    check_in: Date
-    check_out: Date
+    check_in: Date | string
+    check_out: Date | string
     guests: number
     total: number
     status: string

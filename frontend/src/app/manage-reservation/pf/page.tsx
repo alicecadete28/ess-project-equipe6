@@ -176,10 +176,11 @@ export default function ReservationsPage() {
 
           setReservationsFetched(reservationsData) // ver de juntar os elementos do array numa tupla
           console.log("Rooms data fetched:", reservationsData)
+          console.log("reservation datas fetched:", reservationsFetched)
 
           const reservationRoomPairsAux: [Reservation, Room | null][] = []
 
-          for (const reservation of reservationsFetched){
+          for (const reservation of reservationsData){
             const roomResponse = await fetch(`http://localhost:5001/api/get-room/${reservation.room_id}`, {
               method: "GET",
               headers: {
@@ -187,7 +188,7 @@ export default function ReservationsPage() {
                 Authorization: `Bearer ${token}`,
               },
             })
-
+            console.log("Room response:", roomResponse)
             if (!roomResponse.ok) {
               console.error(`Failed to fetch room ${reservation.room_id}: ${roomResponse.status}`)
               continue // Skip this room but continue with others
@@ -253,7 +254,7 @@ export default function ReservationsPage() {
           console.log(Dados)
           console.log("user_id",user_id)
           localStorage.setItem("user_id", user_id)
-
+      console.log("token", token)
       const reservationsResponse = await fetch(`http://localhost:5001/api/reservations/${id}/cancel`, {
         method: "PATCH",
         headers: {
